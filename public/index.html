@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRT Trading Journal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* ... (your existing CSS – unchanged) ... */
+    :root {
+      --bg: #fcfdff;
+      --card-bg: #ffffff;
+      --text: #1a202c;
+      --text-secondary: #64748b;
+      --accent: #5d93f5;
+      --accent-dark: #3a72e0;
+      --success: #4ade80;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --border: #e2e8f0;
+      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ===== AUTH SCREEN ===== */
+    #authScreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f9fbff 0%, #f0f5ff 100%);
+      padding: 20px;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .auth-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 52px 44px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(20px);
+      animation: slideUp 0.6s ease forwards 0.2s;
+    }
+
+    @keyframes slideUp { to { transform: translateY(0); } }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--accent), var(--accent-dark));
+    }
+
+    .logo {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(93, 147, 245, 0.22);
+    }
+
+    .logo-text {
+      background: linear-gradient(to right, var(--accent-dark), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .auth-card h2 {
+      font-size: 26px;
+      margin-bottom: 26px;
+      color: var(--text);
+      font-weight: 700;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fafcff;
+      color: var(--text);
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(93, 147, 245, 0.18);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary { 
+      background: linear-gradient(to right, var(--accent), var(--accent-dark)); 
+      color: white; 
+    }
+    .btn-primary:hover { 
+      opacity: 0.94; 
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(93, 147, 245, 0.28);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      margin-top: 16px;
+    }
+    .btn-outline:hover { 
+      background: rgba(93, 147, 245, 0.07); 
+    }
+
+    .toggle-form {
+      margin-top: 26px;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+    .toggle-form a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .toggle-form a:hover {
+      text-decoration: underline;
+    }
+
+    .form-container {
+      display: none;
+    }
+    .form-container.active {
+      display: block;
+      animation: formFade 0.4s ease;
+    }
+
+    @keyframes formFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== MAIN APP ===== */
+    #mainApp {
+      display: none;
+      opacity: 0;
+      animation: mainFadeIn 0.6s ease forwards;
+    }
+
+    @keyframes mainFadeIn { to { opacity: 1; } }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0 28px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      font-size: 19px;
+      flex-shrink: 0;
+      animation: pulseAvatar 2s infinite;
+    }
+
+    @keyframes pulseAvatar {
+      0% { box-shadow: 0 0 0 0 rgba(93, 147, 245, 0.4); }
+      70% { box-shadow: 0 0 0 9px rgba(93, 147, 245, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(93, 147, 245, 0); }
+    }
+
+    #userName {
+      font-weight: 700;
+      font-size: 17px;
+      font-family: 'Sora', sans-serif;
+    }
+
+    #userRole {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .view-toggle {
+      display: flex;
+      background: #f9fbfe;
+      padding: 5px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 7px rgba(0,0,0,0.03);
+    }
+
+    .view-btn {
+      padding: 9px 22px;
+      border-radius: 12px;
+      background: transparent;
+      border: none;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .view-btn.active {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 3px 10px rgba(93, 147, 245, 0.22);
+    }
+
+    .metrics-title {
+      font-size: 19px;
+      font-weight: 700;
+      margin: 30px 0 18px;
+      font-family: 'Sora', sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .metrics-title::before {
+      content: '';
+      width: 3.5px;
+      height: 19px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(15px);
+      animation: cardSlideUp 0.5s ease forwards;
+    }
+
+    @keyframes cardSlideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 9px 26px rgba(0,0,0,0.09);
+    }
+
+    .card h3 {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      margin-bottom: 11px;
+      font-weight: 600;
+    }
+
+    .metric {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Sora', sans-serif;
+      line-height: 1.25;
+    }
+
+    .positive { color: var(--success); }
+    .negative { color: var(--danger); }
+    .neutral { color: var(--warning); }
+
+    .section {
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 30px;
+      margin: 30px 0;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: sectionSlide 0.6s ease forwards;
+    }
+
+    @keyframes sectionSlide {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .section:nth-of-type(1) { animation-delay: 0.2s; }
+    .section:nth-of-type(2) { animation-delay: 0.3s; }
+    .section:nth-of-type(3) { animation-delay: 0.4s; }
+
+    .section-title {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 22px;
+      font-family: 'Sora', sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .client-controls {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 15px;
+      background: #f9fbfe;
+      border-radius: 16px;
+      margin: 18px 0;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards 0.3s;
+    }
+
+    .client-controls label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .client-controls select,
+    .client-controls input {
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 14.5px;
+      min-width: 190px;
+    }
+
+    .chart-container {
+      height: 350px;
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 26px;
+      margin: 26px 0;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-top: 16px;
+    }
+
+    th, td {
+      padding: 15px 18px;
+      text-align: left;
+    }
+
+    th {
+      background: #f9fbfe;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    tr {
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    tr.appear {
+      animation: rowAppear 0.4s ease forwards;
+    }
+
+    @keyframes rowAppear {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    tr:hover {
+      background: #fafcff;
+    }
+
+    #clientList { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="logo">
+      <div class="logo-icon">📈</div>
+      <div class="logo-text">CRT Journal</div>
+    </div>
+
+    <div id="loginForm" class="form-container active">
+      <h2>Welcome Back</h2>
+      <div class="form-group">
+        <label for="loginEmail">Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@trader.com" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="off"/>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="handleLogin()">Sign In</button>
+      <div class="toggle-form">
+        Don’t have an account? <a onclick="showForm('register')">Register</a>
+      </div>
+    </div>
+
+    <div id="registerForm" class="form-container">
+      <h2>Create Account</h2>
+      <div class="form-group">
+        <label for="regName">Full Name</label>
+        <input type="text" id="regName" placeholder="John Trader" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="regEmail">Email Address</label>
+        <input type="email" id="regEmail" placeholder="you@trader.com" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" placeholder="••••••••" autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label for="regBalance">Starting Balance ($)</label>
+        <input type="number" id="regBalance" placeholder="10000" min="0" step="100" value="10000"/>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="handleRegister()">Create Account</button>
+      <div class="toggle-form">
+        Already have an account? <a onclick="showForm('login')">Sign In</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" class="container">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📈</div>
+      <div class="logo-text">CRT Journal</div>
+    </div>
+    <div class="user-info">
+      <div class="avatar" id="userInitial">U</div>
+      <div>
+        <div id="userName">User</div>
+        <div id="userRole"></div>
+      </div>
+      <button class="btn btn-outline" onclick="logout()" style="padding:10px 20px; font-size:15px;">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-header">
+    <h2 class="section-title">📊 Performance Dashboard</h2>
+    <div class="view-toggle" id="viewToggle" style="display:none;">
+      <button class="view-btn active" data-view="my">My Journal</button>
+      <button class="view-btn" data-view="all">All Clients</button>
+    </div>
+  </div>
+
+  <div class="client-controls" id="clientControls" style="display:none;">
+    <label>👤 Client:
+      <select id="clientSelect" onchange="switchClient(this.value)"></select>
+    </label>
+    <label>💰 Starting Balance:
+      <input type="number" id="startingBalance" step="100" min="0" 
+             onchange="updateStartingBalance(this.value)" placeholder="10000">
+    </label>
+  </div>
+
+  <div class="section" id="tradeForm">
+    <h3 class="section-title">➕ Add New Trade</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 16px;">
+      <input type="text" id="symbol" placeholder="Symbol (e.g. BTC)" />
+      <input type="date" id="tradeDate" />
+      <input type="number" id="entry" placeholder="Entry Price" step="0.01" />
+      <input type="number" id="sl" placeholder="Stop Loss" step="0.01" />
+      <input type="number" id="exit" placeholder="Exit Price" step="0.01" />
+      <input type="number" id="size" placeholder="Position Size" step="0.01" />
+      <input type="number" id="risk" placeholder="Risk ($)" step="0.01" readonly style="background:#f1f5f9;" />
+      <button type="button" onclick="addTradeFromForm()" style="grid-column: span 2; padding:14px; font-weight:600;">Add Trade</button>
+    </div>
+  </div>
+
+  <div id="myPerformance">
+    <h3 class="metrics-title">📈 My Trading Performance</h3>
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>📊 Total Trades</h3>
+        <div class="metric" id="totalTrades">0</div>
+      </div>
+      <div class="card">
+        <h3>✅ Win Rate</h3>
+        <div class="metric" id="winRate">0%</div>
+      </div>
+      <div class="card">
+        <h3>🔁 Profit Factor</h3>
+        <div class="metric neutral" id="profitFactor">0.00</div>
+      </div>
+      <div class="card">
+        <h3>💰 Net P&L</h3>
+        <div class="metric positive" id="totalPnL">$0.00</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">📉 Equity Curve</h3>
+      <div class="chart-container">
+        <canvas id="equityChart"></canvas>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">📋 Recent Trades</h3>
+      <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+        <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" style="flex:1; min-width:200px; padding:12px; border-radius:14px; border:1px solid var(--border);"/>
+        <input type="date" id="filterStart" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border);"/>
+        <input type="date" id="filterEnd" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border);"/>
+        <button type="button" onclick="resetFilters()" style="padding:12px 20px; background:var(--accent); color:white; border:none; border-radius:14px; font-weight:600;">Reset</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Symbol</th><th>Entry</th><th>SL</th><th>Exit</th><th>P&L</th><th>R:R</th>
+          </tr>
+        </thead>
+        <tbody id="tradeList"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="clientList" style="display:none;">
+    <h3 class="metrics-title">👥 All Clients Performance</h3>
+    <div class="section">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Starting Balance</th>
+            <th>Total Trades</th>
+            <th>Win Rate</th>
+            <th>Net P&L</th>
+            <th>Profit Factor</th>
+          </tr>
+        </thead>
+        <tbody id="clientTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // === SUPABASE CONFIG ===
+  // 👇 REPLACE WITH YOUR OWN PROJECT URL AND ANON KEY
+  const supabaseUrl = 'https://YOUR_PROJECT.supabase.co';
+  const supabaseAnonKey = 'YOUR_ANON_KEY';
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  let currentUser = null;
+  let currentUserId = null;
+  let trades = [];
+  let filteredTrades = [];
+  let equityChart = null;
+  let allUsers = [];
+
+  // =============== AUTH UI ===============
+  function showForm(formType) {
+    document.querySelectorAll('.form-container').forEach(form => {
+      form.classList.remove('active');
+    });
+    document.getElementById(formType + 'Form').classList.add('active');
+  }
+
+  // =============== AUTH LOGIC ===============
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) {
+      alert('Please enter email and password.');
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert('❌ ' + (error.message || 'Invalid credentials.'));
+      return;
+    }
+
+    await initApp();
+  }
+
+  async function handleRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const balance = parseFloat(document.getElementById('regBalance').value) || 10000;
+
+    if (!name || !email || !password) {
+      alert('Please fill all fields.');
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name, balance }
+      }
+    });
+
+    if (error) {
+      alert('❌ ' + error.message);
+      return;
+    }
+
+    // After signup, insert into users table (if not done via trigger)
+    const { error: dbError } = await supabase
+      .from('users')
+      .insert({ id: data.user.id, email, name, balance });
+
+    if (dbError) {
+      console.warn('User may already exist:', dbError);
+    }
+
+    alert('✅ Account created! Please check your email for confirmation (if required).');
+    showForm('login');
+  }
+
+  // =============== MAIN APP ===============
+  async function initApp() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      alert('Not authenticated');
+      return;
+    }
+
+    const user = session.user;
+    currentUser = user;
+    currentUserId = user.id;
+
+    // Fetch user profile
+    const { data: profile, error } = await supabase
+      .from('users')
+      .select('name, balance, role')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      console.error('Profile fetch error:', error);
+      return;
+    }
+
+    const name = profile.name || user.email.split('@')[0];
+    const role = profile.role === 'admin' ? 'Administrator' : 'Trader';
+    const isAdmin = profile.role === 'admin';
+
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    document.getElementById('userName').textContent = name;
+    document.getElementById('userRole').textContent = role;
+    document.getElementById('userInitial').textContent = name[0].toUpperCase();
+
+    if (isAdmin) {
+      document.getElementById('viewToggle').style.display = 'flex';
+      document.getElementById('clientControls').style.display = 'flex';
+      setupViewToggle();
+      await loadAllClientsView();
+    } else {
+      document.getElementById('viewToggle').style.display = 'none';
+      document.getElementById('clientControls').style.display = 'none';
+      document.getElementById('clientList').style.display = 'none';
+      await loadClientTrades(currentUserId);
+    }
+
+    document.getElementById('tradeDate').valueAsDate = new Date();
+  }
+
+  function setupViewToggle() {
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (btn.dataset.view === 'my') {
+          document.getElementById('myPerformance').style.display = 'block';
+          document.getElementById('clientList').style.display = 'none';
+          loadClientTrades(currentUserId);
+        } else {
+          document.getElementById('myPerformance').style.display = 'none';
+          document.getElementById('clientList').style.display = 'block';
+          renderAllClientsTable();
+        }
+      });
+    });
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    currentUser = null;
+    currentUserId = null;
+    if (equityChart) equityChart.destroy();
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('authScreen').style.display = 'flex';
+    ['loginEmail','loginPassword','regName','regEmail','regPassword','regBalance'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    showForm('login');
+  }
+
+  // =============== TRADES & BALANCE ===============
+  async function loadClientTrades(userId) {
+    const { data: user, error: userErr } = await supabase
+      .from('users')
+      .select('balance')
+      .eq('id', userId)
+      .single();
+
+    if (userErr) return console.error(userErr);
+
+    const { data, error } = await supabase
+      .from('trades')
+      .select('*')
+      .eq('user_id', userId)
+      .order('date', { ascending: false });
+
+    if (error) return console.error(error);
+
+    trades = data || [];
+    filteredTrades = [...trades];
+    document.getElementById('startingBalance').value = user.balance || 10000;
+    render();
+  }
+
+  async function updateStartingBalance(value) {
+    const balance = parseFloat(value) || 10000;
+    const { error } = await supabase
+      .from('users')
+      .update({ balance })
+      .eq('id', currentUserId);
+
+    if (error) {
+      alert('Failed to update balance');
+      return;
+    }
+    render();
+  }
+
+  ['entry', 'sl', 'size'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      const entry = parseFloat(document.getElementById('entry').value);
+      const sl = parseFloat(document.getElementById('sl').value);
+      const size = parseFloat(document.getElementById('size').value);
+      if (!isNaN(entry) && !isNaN(sl) && !isNaN(size) && size > 0) {
+        const risk = Math.abs(entry - sl) * size;
+        document.getElementById('risk').value = risk.toFixed(2);
+      }
+    });
+  });
+
+  async function addTradeFromForm() {
+    const symbol = document.getElementById('symbol').value.trim().toUpperCase();
+    const date = document.getElementById('tradeDate').value;
+    const entry = parseFloat(document.getElementById('entry').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+    const exit = parseFloat(document.getElementById('exit').value);
+    const size = parseFloat(document.getElementById('size').value);
+    const riskInput = document.getElementById('risk').value;
+    const risk = parseFloat(riskInput);
+
+    if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size) || isNaN(risk)) {
+      alert('Please fill all fields correctly.');
+      return;
+    }
+    if (size <= 0 || risk <= 0) {
+      alert('Size and Risk must be greater than 0.');
+      return;
+    }
+
+    const pnl = (exit - entry) * size;
+    const rr = risk !== 0 ? (pnl / risk).toFixed(2) : '0.00';
+
+    const { error } = await supabase
+      .from('trades')
+      .insert({
+        user_id: currentUserId,
+        symbol,
+        date,
+        entry,
+        sl,
+        exit,
+        size,
+        pnl,
+        risk,
+        rr
+      });
+
+    if (error) {
+      alert('Failed to add trade: ' + error.message);
+      return;
+    }
+
+    loadClientTrades(currentUserId);
+
+    ['symbol','entry','sl','exit','size','risk'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  }
+
+  function applyFilters() {
+    const symbol = document.getElementById('filterSymbol').value.trim().toUpperCase();
+    const start = document.getElementById('filterStart').value;
+    const end = document.getElementById('filterEnd').value;
+
+    filteredTrades = trades.filter(t => {
+      if (symbol && !t.symbol.includes(symbol)) return false;
+      if (start && t.date < start) return false;
+      if (end && t.date > end) return false;
+      return true;
+    });
+
+    renderTable();
+    updateMetrics();
+    updateChart();
+  }
+
+  function resetFilters() {
+    document.getElementById('filterSymbol').value = '';
+    document.getElementById('filterStart').value = '';
+    document.getElementById('filterEnd').value = '';
+    filteredTrades = [...trades];
+    render();
+  }
+
+  function render() {
+    renderTable();
+    updateMetrics();
+    updateChart();
+  }
+
+  function renderTable() {
+    const list = document.getElementById('tradeList');
+    list.innerHTML = '';
+    const sorted = [...filteredTrades].sort((a, b) => new Date(b.date) - new Date(a.date));
+    sorted.forEach((t, i) => {
+      const row = list.insertRow();
+      const pnlClass = t.pnl >= 0 ? 'positive' : 'negative';
+      row.innerHTML = `
+        <td>${t.date}</td>
+        <td>${t.symbol}</td>
+        <td>${t.entry.toFixed(2)}</td>
+        <td>${t.sl.toFixed(2)}</td>
+        <td>${t.exit.toFixed(2)}</td>
+        <td class="${pnlClass}">$${t.pnl.toFixed(2)}</td>
+        <td class="${pnlClass}">${t.rr}R</td>
+      `;
+      setTimeout(() => row.classList.add('appear'), i * 50);
+    });
+  }
+
+  function updateMetrics() {
+    const n = filteredTrades.length;
+    if (n === 0) {
+      document.getElementById('totalTrades').textContent = '0';
+      document.getElementById('winRate').textContent = '0%';
+      document.getElementById('profitFactor').textContent = '0.00';
+      document.getElementById('totalPnL').textContent = '$0.00';
+      document.getElementById('totalPnL').className = 'metric';
+      return;
+    }
+
+    const wins = filteredTrades.filter(t => t.pnl > 0);
+    const losses = filteredTrades.filter(t => t.pnl < 0);
+    const winCount = wins.length;
+    const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
+    const totalPnL = grossProfit - grossLoss;
+    const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
+
+    document.getElementById('totalTrades').textContent = n;
+    document.getElementById('winRate').textContent = `${((winCount / n) * 100).toFixed(1)}%`;
+    document.getElementById('profitFactor').textContent = profitFactor;
+    document.getElementById('totalPnL').textContent = `$${totalPnL.toFixed(2)}`;
+    document.getElementById('totalPnL').className = totalPnL >= 0 ? 'metric positive' : 'metric negative';
+  }
+
+  function updateChart() {
+    const ctx = document.getElementById('equityChart').getContext('2d');
+    if (equityChart) equityChart.destroy();
+
+    // Get starting balance from current user
+    const startingBalance = parseFloat(document.getElementById('startingBalance').value) || 10000;
+    const sorted = [...filteredTrades].sort((a, b) => new Date(a.date) - new Date(b.date));
+    const labels = sorted.map(t => t.date);
+    let equity = startingBalance;
+    const data = sorted.map(t => {
+      equity += t.pnl;
+      return equity;
+    });
+
+    equityChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Equity Curve',
+          data: data,
+          borderColor: '#5d93f5',
+          backgroundColor: 'rgba(93, 147, 245, 0.1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Equity: $${context.parsed.y.toFixed(2)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color: '#f1f5f9' } },
+          y: { 
+            grid: { color: '#f1f5f9' },
+            ticks: { callback: v => '$' + v.toFixed(0) }
+          }
+        }
+      }
+    });
+  }
+
+  // =============== ADMIN VIEW ===============
+  async function loadAllClientsView() {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, email, name, balance, role')
+      .neq('role', 'admin'); // exclude self if needed
+
+    if (error) return console.error(error);
+    allUsers = data;
+
+    const select = document.getElementById('clientSelect');
+    select.innerHTML = '';
+    allUsers.forEach(user => {
+      const option = document.createElement('option');
+      option.value = user.id;
+      option.textContent = user.name || user.email;
+      select.appendChild(option);
+    });
+
+    if (allUsers.length > 0) {
+      currentUserId = allUsers[0].id;
+      loadClientTrades(currentUserId);
+    }
+  }
+
+  function switchClient(userId) {
+    currentUserId = userId;
+    loadClientTrades(userId);
+  }
+
+  async function renderAllClientsTable() {
+    const table = document.getElementById('clientTable');
+    table.innerHTML = '';
+
+    for (let i = 0; i < allUsers.length; i++) {
+      const user = allUsers[i];
+      const { data: trades, error } = await supabase
+        .from('trades')
+        .select('pnl')
+        .eq('user_id', user.id);
+
+      if (error || trades.length === 0) continue;
+
+      const wins = trades.filter(t => t.pnl > 0);
+      const losses = trades.filter(t => t.pnl < 0);
+      const winRate = trades.length ? ((wins.length / trades.length) * 100).toFixed(1) + '%' : '0%';
+      const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+      const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
+      const netPnL = grossProfit - grossLoss;
+      const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
+
+      const row = table.insertRow();
+      const pnlClass = netPnL >= 0 ? 'positive' : 'negative';
+      row.innerHTML = `
+        <td>${user.name || user.email}</td>
+        <td>$${(user.balance || 10000).toFixed(0)}</td>
+        <td>${trades.length}</td>
+        <td>${winRate}</td>
+        <td class="${pnlClass}">$${netPnL.toFixed(2)}</td>
+        <td>${profitFactor}</td>
+      `;
+      setTimeout(() => row.classList.add('appear'), i * 60);
+    }
+  }
+
+  // Auto-login if session exists
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && !currentUser) {
+      initApp();
+    }
+  });
+</script>
+</body>
+</html>
