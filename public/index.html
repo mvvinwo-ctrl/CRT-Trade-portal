@@ -977,46 +977,46 @@
   }
 
   // 🔥 NO AUTO CALC — manual only
-  async function addTradeFromForm() {
-    const symbol = document.getElementById('symbol').value.trim().toUpperCase();
-    const date = document.getElementById('tradeDate').value;
-    const entry = parseFloat(document.getElementById('entry').value);
-    const tp = parseFloat(document.getElementById('tp').value);
-    const sl = parseFloat(document.getElementById('sl').value);
-    const lotSize = parseFloat(document.getElementById('lotSize').value);
-    if (!symbol || !date || isNaN(entry) || isNaN(tp) || isNaN(sl) || isNaN(lotSize)) {
-      alert('Please fill all fields correctly.');
-      return;
-    }
-    if (lotSize <= 0) {
-      alert('Lot size must be greater than 0.');
-      return;
-    }
-    const { error } = await supabase
-      .from('trades')
-      .insert({
-        user_id: currentUserId,
-        symbol,
-        date,
-        entry,
-        sl,
-        exit: tp,
-        size: lotSize,
-        pnl: null,
-        risk: null
-      });
-    if (error) {
-      alert('Failed to add trade: ' + error.message);
-      return;
-    }
-    loadClientTrades(currentUserId);
-    // Reset form
-    ['symbol','entry','tp','sl','lotSize'].forEach(id => {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('profitDisplay').textContent = '—';
-    document.getElementById('slAmountDisplay').textContent = '—';
+async function addTradeFromForm() {
+  const symbol = document.getElementById('symbol').value.trim().toUpperCase();
+  const date = document.getElementById('tradeDate').value;
+  const entry = parseFloat(document.getElementById('entry').value);
+  const sl = parseFloat(document.getElementById('sl').value);
+  const tp = parseFloat(document.getElementById('tp').value); // or 'exit'
+  const lotSize = parseFloat(document.getElementById('lotSize').value);
+
+  if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(tp) || isNaN(lotSize)) {
+    alert('Please fill all fields correctly.');
+    return;
   }
+  if (lotSize <= 0) {
+    alert('Lot size must be greater than 0.');
+    return;
+  }
+
+  // 🔥 Use 0 instead of null to satisfy NOT NULL constraint
+  const { error } = await supabase
+    .from('trades')
+    .insert({
+      user_id: currentUserId,
+      symbol,
+      date,
+      entry,
+      sl,
+      exit: tp,
+      size: lotSize,
+      pnl: 0,     // ✅ Placeholder — user can edit later
+      risk: 0     // ✅ Placeholder
+    });
+
+  if (error) {
+    alert('Failed to add trade: ' + error.message);
+    return;
+  }
+
+  loadClientTrades(currentUserId);
+  // Reset form...
+}
 
   function applyFilters() {
     const symbol = document.getElementById('filterSymbol').value.trim().toUpperCase();
@@ -1201,3 +1201,4 @@
 </script>
 </body>
 </html>
+
