@@ -982,11 +982,12 @@ async function addTradeFromForm() {
   const date = document.getElementById('tradeDate').value;
   const entry = parseFloat(document.getElementById('entry').value);
   const sl = parseFloat(document.getElementById('sl').value);
-  const exit = parseFloat(document.getElementById('exit').value);
+  const exit = parseFloat(document.getElementById('exit').value); // TP
   const size = parseFloat(document.getElementById('size').value);
 
+  // Basic validation
   if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size)) {
-    alert('Please fill all fields correctly.');
+    alert('Please fill all fields with valid numbers.');
     return;
   }
   if (size <= 0) {
@@ -994,23 +995,8 @@ async function addTradeFromForm() {
     return;
   }
 
-  // 🔒 Always calculate risk and pnl safely
-  const risk = Math.abs(entry - sl) * size;
-  const pnl = (exit - entry) * size;
-
-  // 🔒 Always produce a valid rr string — never null
-  let rr = '0.00';
-  if (risk > 0) {
-    rr = (pnl / risk).toFixed(2);
-  } else if (pnl > 0) {
-    rr = '∞';
-  } else if (pnl < 0) {
-    rr = '-∞';
-  } // else: rr = '0.00' (already set)
-
-  // Optional: validate risk > 0 if your business logic requires it
-  // But if DB allows rr='0.00', it's fine.
-
+  // 🔥 MANUAL MODE: Do NOT calculate pnl/risk/rr
+  // Send safe defaults that satisfy NOT NULL constraints
   const { error } = await supabase
     .from('trades')
     .insert({
@@ -1021,24 +1007,28 @@ async function addTradeFromForm() {
       sl,
       exit,
       size,
-      pnl: parseFloat(pnl.toFixed(2)),
-      risk: parseFloat(risk.toFixed(2)),
-      rr: rr // ✅ Always a string: "0.00", "2.50", "∞", etc.
+      pnl: 0.00,        // ✅ Placeholder (NOT NULL)
+      risk: 0.00,       // ✅ Placeholder
+      rr: '0.00'        // ✅ Placeholder (text field)
     });
 
   if (error) {
-    alert('Failed to add trade: ' + error.message);
+    console.error('Insert error:', error);
+    alert('Failed to add trade: ' + (error.message || 'Unknown error'));
     return;
   }
 
+  // Success
   loadClientTrades(currentUserId);
   // Reset form
   ['symbol','entry','sl','exit','size'].forEach(id => {
     document.getElementById(id).value = '';
   });
-  updateTradePreview();
+  // Reset display values
+  document.getElementById('riskDisplay').textContent = '$0.00';
+  document.getElementById('pnlDisplay').textContent = '$0.00';
+  document.getElementById('rrDisplay').textContent = '0.00';
 }
-
   function resetFilters() {
     document.getElementById('filterSymbol').value = '';
     document.getElementById('filterStart').value = '';
@@ -1207,6 +1197,7 @@ async function addTradeFromForm() {
 </script>
 </body>
 </html>
+
 
 
 
