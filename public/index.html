@@ -3,29 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CRT Trading Journal</title>
+  <title>CRT Trading Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg: #0f172a; /* slate-900 */
-      --card-bg: #1e293b; /* slate-800 */
-      --text: #f1f5f9; /* slate-100 */
-      --text-secondary: #94a3b8; /* slate-400 */
-      --accent: #3b82f6; /* blue-500 */
-      --accent-dark: #2563eb; /* blue-600 */
-      --success: #4ade80;
-      --danger: #f87171;
-      --warning: #fbbf24;
-      --border: #334155; /* slate-700 */
-      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+      --bg: #000000; /* Pure Black */
+      --card-bg: #0a0a0f; /* Deep Space Blue */
+      --text: #ffffff;
+      --text-secondary: #b3b3b3;
+      --accent-gold: #ffd700; /* Radiant Gold */
+      --accent-teal: #00f3d0; /* Electric Teal */
+      --accent-pink: #ff00ff; /* Neon Pink */
+      --border: #1a1a2e;
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+      --glow: 0 0 15px rgba(255, 215, 0, 0.4);
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      --input-bg: #1a2332;
-      --input-border: #334155;
-      --btn-hover: rgba(59, 130, 246, 0.1);
-      --card-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      --input-bg: #0d0d15;
+      --input-border: #2a2a3a;
+      --btn-hover: rgba(255, 215, 0, 0.1);
+      --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      --success: #00ff9d; /* Emerald Glow */
+      --danger: #ff3a3a; /* Crimson Flash */
+      --warning: #ffcc00; /* Amber Shine */
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,6 +38,7 @@
       color: var(--text);
       min-height: 100vh;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
     .container {
@@ -50,7 +53,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
+      background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
       padding: 20px;
       opacity: 0;
       animation: fadeIn 0.8s ease forwards;
@@ -70,6 +73,8 @@
       overflow: hidden;
       transform: translateY(20px);
       animation: slideUp 0.6s ease forwards 0.2s;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
     }
 
     @keyframes slideUp { to { transform: translateY(0); } }
@@ -81,7 +86,7 @@
       left: 0;
       width: 100%;
       height: 5px;
-      background: linear-gradient(to right, var(--accent), var(--accent-dark));
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
     }
 
     .logo {
@@ -93,12 +98,14 @@
       justify-content: center;
       gap: 14px;
       font-family: 'Sora', sans-serif;
+      color: var(--accent-gold);
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
     }
 
     .logo-icon {
       width: 48px;
       height: 48px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-teal));
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -106,14 +113,15 @@
       color: white;
       font-weight: bold;
       font-size: 24px;
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
     }
 
     .logo-text {
-      background: linear-gradient(to right, var(--accent-dark), var(--accent));
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
     }
 
     .auth-card h2 {
@@ -122,6 +130,7 @@
       color: var(--text);
       font-weight: 700;
       font-family: 'Sora', sans-serif;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
     }
 
     .form-group {
@@ -141,17 +150,18 @@
       width: 100%;
       padding: 15px 18px;
       border-radius: 14px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--input-border);
       background: var(--input-bg);
       color: var(--text);
       font-size: 16px;
       transition: var(--transition);
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
     }
 
     .form-group input:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.1);
     }
 
     .btn {
@@ -164,25 +174,30 @@
       cursor: pointer;
       transition: var(--transition);
       font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .btn-primary { 
-      background: linear-gradient(to right, var(--accent), var(--accent-dark)); 
-      color: white; 
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal)); 
+      color: #000;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
     }
     .btn-primary:hover { 
       opacity: 0.94; 
       transform: translateY(-2px);
-      box-shadow: 0 5px 14px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
     }
     .btn-outline {
       background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
       margin-top: 16px;
     }
     .btn-outline:hover { 
       background: var(--btn-hover); 
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
     }
 
     .toggle-form {
@@ -191,14 +206,16 @@
       color: var(--text-secondary);
     }
     .toggle-form a {
-      color: var(--accent);
+      color: var(--accent-gold);
       text-decoration: none;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
     .toggle-form a:hover {
       text-decoration: underline;
+      color: var(--accent-teal);
     }
 
     .form-container {
@@ -243,27 +260,30 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-teal));
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      color: white;
+      color: #000;
       font-size: 19px;
       flex-shrink: 0;
       animation: pulseAvatar 2s infinite;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
     }
 
     @keyframes pulseAvatar {
-      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
-      70% { box-shadow: 0 0 0 9px rgba(59, 130, 246, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); }
+      70% { box-shadow: 0 0 0 9px rgba(255, 215, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
     }
 
     #userName {
       font-weight: 700;
       font-size: 17px;
       font-family: 'Sora', sans-serif;
+      color: var(--accent-gold);
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
     #userRole {
@@ -302,9 +322,9 @@
     }
 
     .view-btn.active {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+      background: var(--accent-gold);
+      color: #000;
+      box-shadow: 0 3px 10px rgba(255, 215, 0, 0.3);
     }
 
     .metrics-title {
@@ -316,14 +336,16 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
     .metrics-title::before {
       content: '';
       width: 3.5px;
       height: 19px;
-      background: var(--accent);
+      background: var(--accent-gold);
       border-radius: 2px;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
     }
 
     .dashboard-grid {
@@ -342,6 +364,19 @@
       opacity: 0;
       transform: translateY(15px);
       animation: cardSlideUp 0.5s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      opacity: 0.7;
     }
 
     @keyframes cardSlideUp {
@@ -355,7 +390,7 @@
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 9px 26px rgba(0,0,0,0.2);
+      box-shadow: 0 9px 26px rgba(0,0,0,0.4), 0 0 20px rgba(255, 215, 0, 0.2);
     }
 
     .card h3 {
@@ -370,11 +405,12 @@
       font-weight: 800;
       font-family: 'Sora', sans-serif;
       line-height: 1.25;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
-    .positive { color: var(--success); }
-    .negative { color: var(--danger); }
-    .neutral { color: var(--warning); }
+    .positive { color: var(--success); text-shadow: 0 0 8px rgba(0, 255, 157, 0.5); }
+    .negative { color: var(--danger); text-shadow: 0 0 8px rgba(255, 58, 58, 0.5); }
+    .neutral { color: var(--warning); text-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
 
     .section {
       background: var(--card-bg);
@@ -386,6 +422,19 @@
       opacity: 0;
       transform: translateX(-20px);
       animation: sectionSlide 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      opacity: 0.5;
     }
 
     @keyframes sectionSlide {
@@ -405,6 +454,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
     .client-controls {
@@ -418,6 +468,7 @@
       margin: 18px 0;
       opacity: 0;
       animation: fadeIn 0.5s ease forwards 0.3s;
+      border: 1px solid var(--border);
     }
 
     .client-controls label {
@@ -437,6 +488,7 @@
       color: var(--text);
       font-size: 14.5px;
       min-width: 190px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
 
     .chart-container {
@@ -447,6 +499,7 @@
       margin: 26px 0;
       box-shadow: var(--card-shadow);
       border: 1px solid var(--border);
+      position: relative;
     }
 
     table {
@@ -458,6 +511,7 @@
       overflow: hidden;
       box-shadow: var(--card-shadow);
       margin-top: 16px;
+      border: 1px solid var(--border);
     }
 
     th, td {
@@ -472,6 +526,7 @@
       font-size: 13.5px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border);
     }
 
     tr {
@@ -489,7 +544,7 @@
     }
 
     tr:hover {
-      background: #161e2e;
+      background: #0d0d15;
     }
 
     #clientList { display: none; }
@@ -501,6 +556,18 @@
       padding: 28px;
       box-shadow: var(--card-shadow);
       border: 1px solid var(--border);
+      position: relative;
+    }
+
+    #tradeForm::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      opacity: 0.7;
     }
 
     #tradeForm .section-title {
@@ -509,6 +576,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
     .trade-form-grid {
@@ -529,23 +597,25 @@
       color: var(--text-secondary);
       font-weight: 600;
       display: block;
+      text-shadow: 0 0 3px rgba(255, 215, 0, 0.2);
     }
 
     .trade-input input {
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
-      border: 1px solid var(--border);
+      border: 1px solid var(--input-border);
       background: var(--input-bg);
       color: var(--text);
       font-size: 15px;
       transition: var(--transition);
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
     }
 
     .trade-input input:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.1);
     }
 
     .trade-summary {
@@ -553,9 +623,10 @@
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 16px;
       padding: 16px;
-      background: #1a2332;
+      background: #0d0d15;
       border-radius: 14px;
       margin-top: 16px;
+      border: 1px solid var(--border);
     }
 
     .summary-item {
@@ -568,23 +639,25 @@
       font-size: 13px;
       color: var(--text-secondary);
       font-weight: 600;
+      text-shadow: 0 0 3px rgba(255, 215, 0, 0.2);
     }
 
     .summary-value {
       font-size: 18px;
       font-weight: 700;
       font-family: 'Sora', sans-serif;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
     }
 
-    .summary-value.positive { color: var(--success); }
-    .summary-value.negative { color: var(--danger); }
-    .summary-value.neutral { color: var(--warning); }
+    .summary-value.positive { color: var(--success); text-shadow: 0 0 8px rgba(0, 255, 157, 0.5); }
+    .summary-value.negative { color: var(--danger); text-shadow: 0 0 8px rgba(255, 58, 58, 0.5); }
+    .summary-value.neutral { color: var(--warning); text-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
 
     .add-trade-btn {
       width: 100%;
       padding: 14px;
-      background: linear-gradient(to right, var(--accent), var(--accent-dark));
-      color: white;
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      color: #000;
       border: none;
       border-radius: 14px;
       font-size: 16px;
@@ -592,12 +665,180 @@
       cursor: pointer;
       transition: var(--transition);
       margin-top: 16px;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .add-trade-btn:hover {
       opacity: 0.95;
       transform: translateY(-2px);
-      box-shadow: 0 5px 14px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    /* ===== LOGO STYLING ===== */
+    .crt-logo {
+      width: 280px;
+      height: auto;
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 20px rgba(0, 243, 208, 0.3));
+      animation: glowPulse 3s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 20px rgba(0, 243, 208, 0.3)); }
+      100% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 30px rgba(0, 243, 208, 0.5)); }
+    }
+
+    .logo-placeholder {
+      width: 100%;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
+      border-radius: 24px;
+      margin: 20px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .logo-placeholder::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==') no-repeat center center;
+      background-size: contain;
+      opacity: 0.1;
+    }
+
+    /* ===== CUSTOM CARD STYLES FOR METRICS ===== */
+    .metric-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      opacity: 0.7;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 9px 26px rgba(0,0,0,0.4), 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .metric-card h3 {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      margin-bottom: 11px;
+      font-weight: 600;
+    }
+
+    .metric-card .metric {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'Sora', sans-serif;
+      line-height: 1.25;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+
+    .metric-card .positive { color: var(--success); text-shadow: 0 0 8px rgba(0, 255, 157, 0.5); }
+    .metric-card .negative { color: var(--danger); text-shadow: 0 0 8px rgba(255, 58, 58, 0.5); }
+    .metric-card .neutral { color: var(--warning); text-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
+
+    /* ===== CHART STYLING ===== */
+    .chart-container canvas {
+      border-radius: 16px;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    }
+
+    .chart-title::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: var(--accent-gold);
+      border-radius: 2px;
+    }
+
+    /* ===== TABLE STYLING ===== */
+    .table-header {
+      background: var(--input-bg);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-row {
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .table-row.appear {
+      animation: rowAppear 0.4s ease forwards;
+    }
+
+    @keyframes rowAppear {
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .table-row:hover {
+      background: #0d0d15;
+    }
+
+    .pnl-positive { color: var(--success); text-shadow: 0 0 5px rgba(0, 255, 157, 0.5); }
+    .pnl-negative { color: var(--danger); text-shadow: 0 0 5px rgba(255, 58, 58, 0.5); }
+    .rr-positive { color: var(--success); }
+    .rr-negative { color: var(--danger); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+      color: var(--accent-teal);
     }
   </style>
 </head>
@@ -607,8 +848,7 @@
 <div id="authScreen">
   <div class="auth-card">
     <div class="logo">
-      <div class="logo-icon">📈</div>
-      <div class="logo-text">CRT Journal</div>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAyODAgMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==" alt="CRT Trading Logo" class="crt-logo" style="width: 200px; height: auto;"/>
     </div>
 
     <div id="loginForm" class="form-container active">
@@ -657,8 +897,7 @@
 <div id="mainApp" class="container">
   <header>
     <div class="logo">
-      <div class="logo-icon">📈</div>
-      <div class="logo-text">CRT Journal</div>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAyODAgMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==" alt="CRT Trading Logo" class="crt-logo" style="width: 200px; height: auto;"/>
     </div>
     <div class="user-info">
       <div class="avatar" id="userInitial">U</div>
@@ -739,19 +978,19 @@
   <div id="myPerformance">
     <h3 class="metrics-title">📈 My Trading Performance</h3>
     <div class="dashboard-grid">
-      <div class="card">
+      <div class="metric-card">
         <h3>📊 Total Trades</h3>
         <div class="metric" id="totalTrades">0</div>
       </div>
-      <div class="card">
+      <div class="metric-card">
         <h3>✅ Win Rate</h3>
         <div class="metric" id="winRate">0%</div>
       </div>
-      <div class="card">
+      <div class="metric-card">
         <h3>🔁 Profit Factor</h3>
         <div class="metric neutral" id="profitFactor">0.00</div>
       </div>
-      <div class="card">
+      <div class="metric-card">
         <h3>💰 Net P&L</h3>
         <div class="metric positive" id="totalPnL">$0.00</div>
       </div>
@@ -770,7 +1009,7 @@
         <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" style="flex:1; min-width:200px; padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
         <input type="date" id="filterStart" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
         <input type="date" id="filterEnd" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
-        <button type="button" onclick="resetFilters()" style="padding:12px 20px; background:var(--accent); color:white; border:none; border-radius:14px; font-weight:600;">Reset</button>
+        <button type="button" onclick="resetFilters()" style="padding:12px 20px; background:var(--accent-gold); color:#000; border:none; border-radius:14px; font-weight:600;">Reset</button>
       </div>
       <table>
         <thead>
@@ -801,6 +1040,10 @@
       </table>
     </div>
   </div>
+
+  <footer>
+    © 2025 CRT Trading Portal • Built with <span style="color: var(--accent-gold);">✨</span> for elite traders
+  </footer>
 </div>
 
 <script>
@@ -1128,7 +1371,8 @@
     const sorted = [...filteredTrades].sort((a, b) => new Date(b.date) - new Date(a.date));
     sorted.forEach((t, i) => {
       const row = list.insertRow();
-      const pnlClass = t.pnl >= 0 ? 'positive' : 'negative';
+      const pnlClass = t.pnl >= 0 ? 'pnl-positive' : 'pnl-negative';
+      const rrClass = t.pnl >= 0 ? 'rr-positive' : 'rr-negative';
       row.innerHTML = `
         <td>${t.date}</td>
         <td>${t.symbol}</td>
@@ -1136,7 +1380,7 @@
         <td>${t.sl.toFixed(2)}</td>
         <td>${t.exit.toFixed(2)}</td>
         <td class="${pnlClass}">$${t.pnl.toFixed(2)}</td>
-        <td class="${pnlClass}">${t.rr}R</td>
+        <td class="${rrClass}">${t.rr}R</td>
       `;
       setTimeout(() => row.classList.add('appear'), i * 50);
     });
@@ -1188,8 +1432,8 @@
         datasets: [{
           label: 'Equity Curve',
           data: data,
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: '#ffd700',
+          backgroundColor: 'rgba(255, 215, 0, 0.1)',
           borderWidth: 3,
           fill: true,
           tension: 0.4
@@ -1209,9 +1453,9 @@
           }
         },
         scales: {
-          x: { grid: { color: '#334155' } },
+          x: { grid: { color: '#1a1a2e' } },
           y: { 
-            grid: { color: '#334155' },
+            grid: { color: '#1a1a2e' },
             ticks: { callback: v => '$' + v.toFixed(0) }
           }
         }
@@ -1271,7 +1515,7 @@
       const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
 
       const row = table.insertRow();
-      const pnlClass = netPnL >= 0 ? 'positive' : 'negative';
+      const pnlClass = netPnL >= 0 ? 'pnl-positive' : 'pnl-negative';
       row.innerHTML = `
         <td>${user.name || user.email}</td>
         <td>$${(user.balance || 10000).toFixed(0)}</td>
