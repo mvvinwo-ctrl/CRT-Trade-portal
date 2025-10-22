@@ -982,19 +982,35 @@ async function addTradeFromForm() {
   const date = document.getElementById('tradeDate').value;
   const entry = parseFloat(document.getElementById('entry').value);
   const sl = parseFloat(document.getElementById('sl').value);
-  const tp = parseFloat(document.getElementById('tp').value); // or 'exit'
-  const lotSize = parseFloat(document.getElementById('lotSize').value);
+  const exit = parseFloat(document.getElementById('exit').value);
+  const size = parseFloat(document.getElementById('size').value);
 
-  if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(tp) || isNaN(lotSize)) {
+  if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size)) {
     alert('Please fill all fields correctly.');
     return;
   }
-  if (lotSize <= 0) {
-    alert('Lot size must be greater than 0.');
+  if (size <= 0) {
+    alert('Position size must be greater than 0.');
     return;
   }
 
-  // 🔥 Use 0 instead of null to satisfy NOT NULL constraint
+  // 🔒 Always calculate risk and pnl safely
+  const risk = Math.abs(entry - sl) * size;
+  const pnl = (exit - entry) * size;
+
+  // 🔒 Always produce a valid rr string — never null
+  let rr = '0.00';
+  if (risk > 0) {
+    rr = (pnl / risk).toFixed(2);
+  } else if (pnl > 0) {
+    rr = '∞';
+  } else if (pnl < 0) {
+    rr = '-∞';
+  } // else: rr = '0.00' (already set)
+
+  // Optional: validate risk > 0 if your business logic requires it
+  // But if DB allows rr='0.00', it's fine.
+
   const { error } = await supabase
     .from('trades')
     .insert({
@@ -1003,21 +1019,8 @@ async function addTradeFromForm() {
       date,
       entry,
       sl,
-      exit: tp,
-      size: lotSize,
-      pnl: 0,     // ✅ Placeholder — user can edit later
-      risk: 0     // ✅ Placeholder
-    });
-
-  if (error) {
-    alert('Failed to add trade: ' + error.message);
-    return;
-  }
-
-  loadClientTrades(currentUserId);
-  // Reset form...
-}
-
+      exit,
+      size
   function applyFilters() {
     const symbol = document.getElementById('filterSymbol').value.trim().toUpperCase();
     const start = document.getElementById('filterStart').value;
@@ -1201,4 +1204,5 @@ async function addTradeFromForm() {
 </script>
 </body>
 </html>
+
 
