@@ -14,14 +14,11 @@
       --text: #ffffff;
       --text-secondary: #b3b3b3;
       --accent-gold: #ffd700;
-      --accent-teal: #00f3d0;
       --border: #1a1a2e;
       --shadow: 0 8px 32px rgba(0,0,0,0.5);
-      --glow: 0 0 15px rgba(255, 215, 0, 0.4);
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       --input-bg: #0d0d15;
       --input-border: #2a2a3a;
-      --btn-hover: rgba(255, 215, 0, 0.1);
       --card-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -74,7 +71,7 @@
       left: 0;
       width: 100%;
       height: 5px;
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      background: var(--accent-gold);
     }
     .logo {
       font-size: 36px;
@@ -87,26 +84,6 @@
       font-family: 'Sora', sans-serif;
       color: var(--accent-gold);
       text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    }
-    .logo-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--accent-gold), var(--accent-teal));
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 24px;
-      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
-    }
-    .logo-text {
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
     }
     .auth-card h2 {
       font-size: 26px;
@@ -157,7 +134,7 @@
       letter-spacing: 1px;
     }
     .btn-primary { 
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal)); 
+      background: var(--accent-gold); 
       color: #000;
       box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
     }
@@ -173,9 +150,8 @@
       margin-top: 16px;
     }
     .btn-outline:hover { 
-      background: var(--btn-hover); 
-      border-color: var(--accent-teal);
-      color: var(--accent-teal);
+      background: rgba(255, 215, 0, 0.1);
+      color: var(--accent-gold);
     }
     .toggle-form {
       margin-top: 26px;
@@ -189,10 +165,6 @@
       cursor: pointer;
       transition: var(--transition);
       text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-    }
-    .toggle-form a:hover {
-      text-decoration: underline;
-      color: var(--accent-teal);
     }
     .form-container {
       display: none;
@@ -231,7 +203,7 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-gold), var(--accent-teal));
+      background: var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -239,13 +211,7 @@
       color: #000;
       font-size: 19px;
       flex-shrink: 0;
-      animation: pulseAvatar 2s infinite;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-    }
-    @keyframes pulseAvatar {
-      0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); }
-      70% { box-shadow: 0 0 0 9px rgba(255, 215, 0, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
     }
     #userName {
       font-weight: 700;
@@ -334,16 +300,12 @@
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      background: var(--accent-gold);
       opacity: 0.7;
     }
     @keyframes cardSlideUp {
       to { opacity: 1; transform: translateY(0); }
     }
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-    .card:nth-child(4) { animation-delay: 0.4s; }
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 9px 26px rgba(0,0,0,0.4), 0 0 20px rgba(255, 215, 0, 0.2);
@@ -382,15 +344,12 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      background: var(--accent-gold);
       opacity: 0.5;
     }
     @keyframes sectionSlide {
       to { opacity: 1; transform: translateX(0); }
     }
-    .section:nth-of-type(1) { animation-delay: 0.2s; }
-    .section:nth-of-type(2) { animation-delay: 0.3s; }
-    .section:nth-of-type(3) { animation-delay: 0.4s; }
     .section-title {
       font-size: 21px;
       font-weight: 700;
@@ -443,45 +402,6 @@
       border: 1px solid var(--border);
       position: relative;
     }
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: var(--card-bg);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      margin-top: 16px;
-      border: 1px solid var(--border);
-    }
-    th, td {
-      padding: 15px 18px;
-      text-align: left;
-    }
-    th {
-      background: var(--input-bg);
-      color: var(--text-secondary);
-      font-weight: 700;
-      font-size: 13.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      border-bottom: 1px solid var(--border);
-    }
-    tr {
-      transition: var(--transition);
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-    tr.appear {
-      animation: rowAppear 0.4s ease forwards;
-    }
-    @keyframes rowAppear {
-      to { opacity: 1; transform: translateX(0); }
-    }
-    tr:hover {
-      background: #0d0d15;
-    }
-    #clientList { display: none; }
 
     /* ===== TRADE FORM ===== */
     #tradeForm {
@@ -499,7 +419,7 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      background: var(--accent-gold);
       opacity: 0.7;
     }
     #tradeForm .section-title {
@@ -574,60 +494,78 @@
     }
     .add-trade-btn {
       width: 100%;
-      padding: 14px;
-      background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+      padding: 16px;
+      background: var(--accent-gold);
       color: #000;
       border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 18px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
-      margin-top: 16px;
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      margin-top: 20px;
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      font-family: 'Sora', sans-serif;
     }
     .add-trade-btn:hover {
       opacity: 0.95;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
     }
 
-    /* ===== OTHER STYLES (LOGO, TABLE, CHART, FOOTER) ===== */
-    .crt-logo {
-      width: 280px;
-      height: auto;
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 20px rgba(0, 243, 208, 0.3));
-      animation: glowPulse 3s infinite alternate;
-    }
-    @keyframes glowPulse {
-      0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)) drop-shadow(0 0 20px rgba(0, 243, 208, 0.3)); }
-      100% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 30px rgba(0, 243, 208, 0.5)); }
-    }
-    .logo-placeholder {
+    /* ===== TABLE STYLING ===== */
+    table {
       width: 100%;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #000000 0%, #0a0a0f 100%);
-      border-radius: 24px;
-      margin: 20px 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--card-bg);
+      border-radius: 16px;
       overflow: hidden;
-      position: relative;
+      box-shadow: var(--card-shadow);
+      margin-top: 16px;
+      border: 1px solid var(--border);
     }
-    .logo-placeholder::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyODAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==') no-repeat center center;
-      background-size: contain;
-      opacity: 0.1;
+    th, td {
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 15px;
     }
+    th {
+      background: var(--input-bg);
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border);
+    }
+    tr {
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    tr.appear {
+      animation: rowAppear 0.4s ease forwards;
+    }
+    @keyframes rowAppear {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    tr:hover td {
+      background: #0d0d15;
+      color: var(--accent-gold);
+      box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.1);
+    }
+    .table-container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* ===== CHART & FOOTER ===== */
     .chart-container canvas {
       border-radius: 16px;
     }
@@ -648,26 +586,6 @@
       background: var(--accent-gold);
       border-radius: 2px;
     }
-    .table-header {
-      background: var(--input-bg);
-      color: var(--text-secondary);
-      font-weight: 700;
-      font-size: 13.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      border-bottom: 1px solid var(--border);
-    }
-    .table-row {
-      transition: var(--transition);
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-    .table-row.appear {
-      animation: rowAppear 0.4s ease forwards;
-    }
-    .table-row:hover {
-      background: #0d0d15;
-    }
     footer {
       margin-top: 40px;
       padding: 20px;
@@ -684,7 +602,6 @@
     }
     footer a:hover {
       text-decoration: underline;
-      color: var(--accent-teal);
     }
   </style>
 </head>
@@ -692,9 +609,7 @@
 <!-- AUTH SCREEN -->
 <div id="authScreen">
   <div class="auth-card">
-    <div class="logo">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAyODAgMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==" alt="CRT Trading Logo" class="crt-logo" style="width: 200px; height: auto;"/>
-    </div>
+    <div class="logo">CRT TRADING</div>
     <div id="loginForm" class="form-container active">
       <h2>Welcome Back</h2>
       <div class="form-group">
@@ -739,9 +654,7 @@
 <!-- MAIN APP -->
 <div id="mainApp" class="container">
   <header>
-    <div class="logo">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAyODAgMjAwIj48cmVjdCB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGExZiIvPjx0ZXh0IHg9IjE0MCIgeT0iMTAwIiBmb250LWZhbWlseT0iU29yYSwgQ29tZm9ydGFhIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCI+Q1JUIFRyYWRpbmcgTG9nbyAobm90IGxvYWQgZGVtb24pPC90ZXh0Pjwvc3ZnPg==" alt="CRT Trading Logo" class="crt-logo" style="width: 200px; height: auto;"/>
-    </div>
+    <div class="logo">CRT TRADING</div>
     <div class="user-info">
       <div class="avatar" id="userInitial">U</div>
       <div>
@@ -770,12 +683,13 @@
     </label>
   </div>
 
-  <div class="section" id="tradeForm">
+  <!-- ✅ UPDATED TRADE FORM -->
+  <div id="tradeForm" class="section">
     <h3 class="section-title">➕ Add New Trade</h3>
     <div class="trade-form-grid">
       <div class="trade-input">
         <label>Symbol</label>
-        <input type="text" id="symbol" placeholder="BTC, AAPL, etc." />
+        <input type="text" id="symbol" placeholder="e.g., XAUUSD" />
       </div>
       <div class="trade-input">
         <label>Date</label>
@@ -799,7 +713,7 @@
       </div>
     </div>
 
-    <!-- Manual display only – no auto calc -->
+    <!-- Manual display only -->
     <div class="trade-summary">
       <div class="summary-item">
         <span class="summary-label">Profit ($)</span>
@@ -811,7 +725,7 @@
       </div>
     </div>
 
-    <button class="add-trade-btn" onclick="addTradeFromForm()">➕ Add Trade</button>
+    <button class="add-trade-btn" onclick="addTradeFromForm()">➕ ADD TRADE</button>
   </div>
 
   <div id="myPerformance">
@@ -842,22 +756,36 @@
       </div>
     </div>
 
+    <!-- ✅ UPDATED RECENT TRADES -->
     <div class="section">
       <h3 class="section-title">📋 Recent Trades</h3>
-      <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
-        <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" style="flex:1; min-width:200px; padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
-        <input type="date" id="filterStart" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
-        <input type="date" id="filterEnd" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
-        <button type="button" onclick="resetFilters()" style="padding:12px 20px; background:var(--accent-gold); color:#000; border:none; border-radius:14px; font-weight:600;">Reset</button>
+      <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+        <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" 
+               style="flex:1; min-width:200px; padding:14px 18px; border-radius:16px; border:1px solid var(--border); background:var(--input-bg); color:white; font-size:15px;"/>
+        <input type="date" id="filterStart" oninput="applyFilters()" 
+               style="padding:14px 18px; border-radius:16px; border:1px solid var(--border); background:var(--input-bg); color:white; font-size:15px;"/>
+        <input type="date" id="filterEnd" oninput="applyFilters()" 
+               style="padding:14px 18px; border-radius:16px; border:1px solid var(--border); background:var(--input-bg); color:white; font-size:15px;"/>
+        <button type="button" onclick="resetFilters()" 
+                style="padding:14px 24px; background: var(--accent-gold); color:#000; border:none; border-radius:16px; font-weight:700; font-size:15px; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);">
+          Reset
+        </button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th><th>Symbol</th><th>Entry</th><th>SL</th><th>TP</th><th>Profit</th>
-          </tr>
-        </thead>
-        <tbody id="tradeList"></tbody>
-      </table>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Symbol</th>
+              <th>Entry</th>
+              <th>SL</th>
+              <th>TP</th>
+              <th>P&L ($)</th>
+            </tr>
+          </thead>
+          <tbody id="tradeList"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -945,7 +873,7 @@
     if (dbError) {
       console.warn('User may already exist:', dbError);
     }
-    alert('✅ Account created! Please check your email for confirmation.');
+    alert('✅ Account created!');
     showForm('login');
   }
 
@@ -1064,7 +992,6 @@
       alert('Lot size must be greater than 0.');
       return;
     }
-    // Profit and SL amount are NOT auto-calculated — stored as null or user-provided later
     const { error } = await supabase
       .from('trades')
       .insert({
@@ -1073,9 +1000,9 @@
         date,
         entry,
         sl,
-        exit: tp, // TP = exit
+        exit: tp,
         size: lotSize,
-        pnl: null, // will be calculated on backend or manually later
+        pnl: null,
         risk: null
       });
     if (error) {
@@ -1254,13 +1181,12 @@
       const netPnL = grossProfit - grossLoss;
       const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
       const row = table.insertRow();
-      const pnlClass = netPnL >= 0 ? 'pnl-positive' : 'pnl-negative';
       row.innerHTML = `
         <td>${user.name || user.email}</td>
         <td>$${(user.balance || 10000).toFixed(0)}</td>
         <td>${trades.length}</td>
         <td>${winRate}</td>
-        <td class="${pnlClass}">$${netPnL.toFixed(2)}</td>
+        <td>$${netPnL.toFixed(2)}</td>
         <td>${profitFactor}</td>
       `;
       setTimeout(() => row.classList.add('appear'), i * 60);
