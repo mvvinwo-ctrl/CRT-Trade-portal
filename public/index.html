@@ -683,7 +683,7 @@
     </label>
   </div>
 
-  <!-- ✅ UPDATED TRADE FORM -->
+  <!-- ✅ TRADE FORM WITH AUTO CALC -->
   <div id="tradeForm" class="section">
     <h3 class="section-title">➕ Add New Trade</h3>
     <div class="trade-form-grid">
@@ -713,7 +713,6 @@
       </div>
     </div>
 
-    <!-- Manual display only -->
     <div class="trade-summary">
       <div class="summary-item">
         <span class="summary-label">Profit ($)</span>
@@ -722,6 +721,10 @@
       <div class="summary-item">
         <span class="summary-label">SL Amount ($)</span>
         <span class="summary-value" id="slAmountDisplay">—</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">R:R</span>
+        <span class="summary-value" id="rrDisplay">—</span>
       </div>
     </div>
 
@@ -756,7 +759,6 @@
       </div>
     </div>
 
-    <!-- ✅ UPDATED RECENT TRADES -->
     <div class="section">
       <h3 class="section-title">📋 Recent Trades</h3>
       <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
@@ -976,59 +978,112 @@
     render();
   }
 
-  // 🔥 NO AUTO CALC — manual only
-async function addTradeFromForm() {
-  const symbol = document.getElementById('symbol').value.trim().toUpperCase();
-  const date = document.getElementById('tradeDate').value;
-  const entry = parseFloat(document.getElementById('entry').value);
-  const sl = parseFloat(document.getElementById('sl').value);
-  const exit = parseFloat(document.getElementById('exit').value); // TP
-  const size = parseFloat(document.getElementById('size').value);
+  // 🔥 REAL-TIME CALCULATIONS
+  function updateTradePreview() {
+    const entry = parseFloat(document.getElementById('entry').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+    const tp = parseFloat(document.getElementById('tp').value);
+    const lotSize = parseFloat(document.getElementById('lotSize').value);
 
-  // Basic validation
-  if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size)) {
-    alert('Please fill all fields with valid numbers.');
-    return;
-  }
-  if (size <= 0) {
-    alert('Position size must be greater than 0.');
-    return;
-  }
+    let slAmount = 0;
+    let profit = 0;
+    let rr = '—';
 
-  // 🔥 MANUAL MODE: Do NOT calculate pnl/risk/rr
-  // Send safe defaults that satisfy NOT NULL constraints
-  const { error } = await supabase
-    .from('trades')
-    .insert({
-      user_id: currentUserId,
-      symbol,
-      date,
-      entry,
-      sl,
-      exit,
-      size,
-      pnl: 0.00,        // ✅ Placeholder (NOT NULL)
-      risk: 0.00,       // ✅ Placeholder
-      rr: '0.00'        // ✅ Placeholder (text field)
-    });
+    if (!isNaN(entry) && !isNaN(sl) && !isNaN(lotSize) && lotSize > 0) {
+      slAmount = Math.abs(entry - sl) * lotSize;
+      document.getElementById('slAmountDisplay').textContent = `$${slAmount.toFixed(2)}`;
+    }
 
-  if (error) {
-    console.error('Insert error:', error);
-    alert('Failed to add trade: ' + (error.message || 'Unknown error'));
-    return;
+    if (!isNaN(entry) && !isNaN(tp) && !isNaN(lotSize) && lotSize > 0) {
+      profit = (tp - entry) * lotSize;
+      document.getElementById('profitDisplay').textContent = `$${profit.toFixed(2)}`;
+      if (slAmount > 0) {
+        rr = (profit / slAmount).toFixed(2);
+      } else if (profit !== 0) {
+        rr = profit > 0 ? '∞' : '-∞';
+      }
+      document.getElementById('rrDisplay').textContent = rr;
+    }
   }
 
-  // Success
-  loadClientTrades(currentUserId);
-  // Reset form
-  ['symbol','entry','sl','exit','size'].forEach(id => {
-    document.getElementById(id).value = '';
+  ['entry', 'sl', 'tp', 'lotSize'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateTradePreview);
   });
-  // Reset display values
-  document.getElementById('riskDisplay').textContent = '$0.00';
-  document.getElementById('pnlDisplay').textContent = '$0.00';
-  document.getElementById('rrDisplay').textContent = '0.00';
-}
+
+  // ✅ ADD TRADE WITH VALID VALUES
+  async function addTradeFromForm() {
+    const symbol = document.getElementById('symbol').value.trim().toUpperCase();
+    const date = document.getElementById('tradeDate').value;
+    const entry = parseFloat(document.getElementById('entry').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+    const tp = parseFloat(document.getElementById('tp').value);
+    const lotSize = parseFloat(document.getElementById('lotSize').value);
+
+    if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(tp) || isNaN(lotSize)) {
+      alert('Please fill all fields correctly.');
+      return;
+    }
+    if (lotSize <= 0) {
+      alert('Lot size must be greater than 0.');
+      return;
+    }
+
+    const slAmount = Math.abs(entry - sl) * lotSize;
+    const profit = (tp - entry) * lotSize;
+    let rr = '0.00';
+    if (slAmount > 0) {
+      rr = (profit / slAmount).toFixed(2);
+    } else if (profit > 0) {
+      rr = '∞';
+    } else if (profit < 0) {
+      rr = '-∞';
+    }
+
+    const { error } = await supabase
+      .from('trades')
+      .insert({
+        user_id: currentUserId,
+        symbol,
+        date,
+        entry,
+        sl,
+        exit: tp,
+        size: lotSize,
+        pnl: parseFloat(profit.toFixed(2)),
+        risk: parseFloat(slAmount.toFixed(2)),
+        rr: rr.toString()
+      });
+
+    if (error) {
+      alert('Failed to add trade: ' + error.message);
+      return;
+    }
+
+    // ✅ INSTANT UPDATE — NO REFRESH
+    loadClientTrades(currentUserId);
+
+    // Reset form
+    ['symbol','entry','sl','tp','lotSize'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('profitDisplay').textContent = '—';
+    document.getElementById('slAmountDisplay').textContent = '—';
+    document.getElementById('rrDisplay').textContent = '—';
+  }
+
+  function applyFilters() {
+    const symbol = document.getElementById('filterSymbol').value.trim().toUpperCase();
+    const start = document.getElementById('filterStart').value;
+    const end = document.getElementById('filterEnd').value;
+    filteredTrades = trades.filter(t => {
+      if (symbol && !t.symbol.includes(symbol)) return false;
+      if (start && t.date < start) return false;
+      if (end && t.date > end) return false;
+      return true;
+    });
+    render();
+  }
+
   function resetFilters() {
     document.getElementById('filterSymbol').value = '';
     document.getElementById('filterStart').value = '';
@@ -1052,10 +1107,10 @@ async function addTradeFromForm() {
       row.innerHTML = `
         <td>${t.date}</td>
         <td>${t.symbol}</td>
-        <td>${t.entry?.toFixed(2) || '—'}</td>
-        <td>${t.sl?.toFixed(2) || '—'}</td>
-        <td>${t.exit?.toFixed(2) || '—'}</td>
-        <td>$${t.pnl?.toFixed(2) || '—'}</td>
+        <td>${t.entry?.toFixed(2)}</td>
+        <td>${t.sl?.toFixed(2)}</td>
+        <td>${t.exit?.toFixed(2)}</td>
+        <td>$${t.pnl?.toFixed(2)}</td>
       `;
       setTimeout(() => row.classList.add('appear'), i * 50);
     });
@@ -1073,8 +1128,8 @@ async function addTradeFromForm() {
     const wins = filteredTrades.filter(t => t.pnl > 0);
     const losses = filteredTrades.filter(t => t.pnl < 0);
     const winCount = wins.length;
-    const grossProfit = wins.reduce((sum, t) => sum + (t.pnl || 0), 0);
-    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + (t.pnl || 0), 0));
+    const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
     const totalPnL = grossProfit - grossLoss;
     const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
     document.getElementById('totalTrades').textContent = n;
@@ -1091,7 +1146,7 @@ async function addTradeFromForm() {
     const labels = sorted.map(t => t.date);
     let equity = startingBalance;
     const data = sorted.map(t => {
-      equity += t.pnl || 0;
+      equity += t.pnl;
       return equity;
     });
     equityChart = new Chart(ctx, {
@@ -1197,7 +1252,3 @@ async function addTradeFromForm() {
 </script>
 </body>
 </html>
-
-
-
-
