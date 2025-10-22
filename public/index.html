@@ -9,20 +9,23 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* ... (your existing CSS – unchanged) ... */
     :root {
-      --bg: #fcfdff;
-      --card-bg: #ffffff;
-      --text: #1a202c;
-      --text-secondary: #64748b;
-      --accent: #5d93f5;
-      --accent-dark: #3a72e0;
+      --bg: #0f172a; /* slate-900 */
+      --card-bg: #1e293b; /* slate-800 */
+      --text: #f1f5f9; /* slate-100 */
+      --text-secondary: #94a3b8; /* slate-400 */
+      --accent: #3b82f6; /* blue-500 */
+      --accent-dark: #2563eb; /* blue-600 */
       --success: #4ade80;
       --danger: #f87171;
       --warning: #fbbf24;
-      --border: #e2e8f0;
-      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+      --border: #334155; /* slate-700 */
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
       --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --input-bg: #1a2332;
+      --input-border: #334155;
+      --btn-hover: rgba(59, 130, 246, 0.1);
+      --card-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,7 +50,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, #f9fbff 0%, #f0f5ff 100%);
+      background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
       padding: 20px;
       opacity: 0;
       animation: fadeIn 0.8s ease forwards;
@@ -103,7 +106,7 @@
       color: white;
       font-weight: bold;
       font-size: 24px;
-      box-shadow: 0 4px 10px rgba(93, 147, 245, 0.22);
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
     }
 
     .logo-text {
@@ -139,7 +142,7 @@
       padding: 15px 18px;
       border-radius: 14px;
       border: 1px solid var(--border);
-      background: #fafcff;
+      background: var(--input-bg);
       color: var(--text);
       font-size: 16px;
       transition: var(--transition);
@@ -148,7 +151,7 @@
     .form-group input:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(93, 147, 245, 0.18);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
     }
 
     .btn {
@@ -170,7 +173,7 @@
     .btn-primary:hover { 
       opacity: 0.94; 
       transform: translateY(-2px);
-      box-shadow: 0 5px 14px rgba(93, 147, 245, 0.28);
+      box-shadow: 0 5px 14px rgba(59, 130, 246, 0.4);
     }
     .btn-outline {
       background: transparent;
@@ -179,7 +182,7 @@
       margin-top: 16px;
     }
     .btn-outline:hover { 
-      background: rgba(93, 147, 245, 0.07); 
+      background: var(--btn-hover); 
     }
 
     .toggle-form {
@@ -252,9 +255,9 @@
     }
 
     @keyframes pulseAvatar {
-      0% { box-shadow: 0 0 0 0 rgba(93, 147, 245, 0.4); }
-      70% { box-shadow: 0 0 0 9px rgba(93, 147, 245, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(93, 147, 245, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+      70% { box-shadow: 0 0 0 9px rgba(59, 130, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
     }
 
     #userName {
@@ -279,11 +282,11 @@
 
     .view-toggle {
       display: flex;
-      background: #f9fbfe;
+      background: var(--input-bg);
       padding: 5px;
       border-radius: 16px;
       border: 1px solid var(--border);
-      box-shadow: 0 2px 7px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 7px rgba(0,0,0,0.2);
     }
 
     .view-btn {
@@ -301,7 +304,7 @@
     .view-btn.active {
       background: var(--accent);
       color: white;
-      box-shadow: 0 3px 10px rgba(93, 147, 245, 0.22);
+      box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
     }
 
     .metrics-title {
@@ -333,7 +336,7 @@
       background: var(--card-bg);
       border-radius: 18px;
       padding: 26px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-shadow);
       transition: var(--transition);
       border: 1px solid var(--border);
       opacity: 0;
@@ -352,7 +355,7 @@
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 9px 26px rgba(0,0,0,0.09);
+      box-shadow: 0 9px 26px rgba(0,0,0,0.2);
     }
 
     .card h3 {
@@ -378,7 +381,7 @@
       border-radius: 22px;
       padding: 30px;
       margin: 30px 0;
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-shadow);
       border: 1px solid var(--border);
       opacity: 0;
       transform: translateX(-20px);
@@ -410,7 +413,7 @@
       align-items: center;
       flex-wrap: wrap;
       padding: 15px;
-      background: #f9fbfe;
+      background: var(--input-bg);
       border-radius: 16px;
       margin: 18px 0;
       opacity: 0;
@@ -430,7 +433,8 @@
       padding: 11px 16px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: white;
+      background: var(--input-bg);
+      color: var(--text);
       font-size: 14.5px;
       min-width: 190px;
     }
@@ -441,7 +445,7 @@
       border-radius: 22px;
       padding: 26px;
       margin: 26px 0;
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-shadow);
       border: 1px solid var(--border);
     }
 
@@ -452,7 +456,7 @@
       background: var(--card-bg);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-shadow);
       margin-top: 16px;
     }
 
@@ -462,7 +466,7 @@
     }
 
     th {
-      background: #f9fbfe;
+      background: var(--input-bg);
       color: var(--text-secondary);
       font-weight: 700;
       font-size: 13.5px;
@@ -485,10 +489,116 @@
     }
 
     tr:hover {
-      background: #fafcff;
+      background: #161e2e;
     }
 
     #clientList { display: none; }
+
+    /* ===== TRADE FORM UPGRADE ===== */
+    #tradeForm {
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+    }
+
+    #tradeForm .section-title {
+      margin-bottom: 24px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trade-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .trade-input {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .trade-input label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      display: block;
+    }
+
+    .trade-input input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 15px;
+      transition: var(--transition);
+    }
+
+    .trade-input input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .trade-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 16px;
+      background: #1a2332;
+      border-radius: 14px;
+      margin-top: 16px;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .summary-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .summary-value.positive { color: var(--success); }
+    .summary-value.negative { color: var(--danger); }
+    .summary-value.neutral { color: var(--warning); }
+
+    .add-trade-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, var(--accent), var(--accent-dark));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 16px;
+    }
+
+    .add-trade-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(59, 130, 246, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -580,16 +690,50 @@
 
   <div class="section" id="tradeForm">
     <h3 class="section-title">➕ Add New Trade</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 16px;">
-      <input type="text" id="symbol" placeholder="Symbol (e.g. BTC)" />
-      <input type="date" id="tradeDate" />
-      <input type="number" id="entry" placeholder="Entry Price" step="0.01" />
-      <input type="number" id="sl" placeholder="Stop Loss" step="0.01" />
-      <input type="number" id="exit" placeholder="Exit Price" step="0.01" />
-      <input type="number" id="size" placeholder="Position Size" step="0.01" />
-      <input type="number" id="risk" placeholder="Risk ($)" step="0.01" readonly style="background:#f1f5f9;" />
-      <button type="button" onclick="addTradeFromForm()" style="grid-column: span 2; padding:14px; font-weight:600;">Add Trade</button>
+
+    <div class="trade-form-grid">
+      <div class="trade-input">
+        <label>Symbol</label>
+        <input type="text" id="symbol" placeholder="BTC, AAPL, etc." />
+      </div>
+      <div class="trade-input">
+        <label>Date</label>
+        <input type="date" id="tradeDate" />
+      </div>
+      <div class="trade-input">
+        <label>Entry Price</label>
+        <input type="number" id="entry" placeholder="0.00" step="0.01" />
+      </div>
+      <div class="trade-input">
+        <label>Stop Loss</label>
+        <input type="number" id="sl" placeholder="0.00" step="0.01" />
+      </div>
+      <div class="trade-input">
+        <label>Take Profit</label>
+        <input type="number" id="exit" placeholder="0.00" step="0.01" />
+      </div>
+      <div class="trade-input">
+        <label>Position Size</label>
+        <input type="number" id="size" placeholder="0.00" step="0.01" />
+      </div>
     </div>
+
+    <div class="trade-summary">
+      <div class="summary-item">
+        <span class="summary-label">Risk ($)</span>
+        <span class="summary-value" id="riskDisplay">$0.00</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">P&L ($)</span>
+        <span class="summary-value" id="pnlDisplay">$0.00</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">R:R</span>
+        <span class="summary-value" id="rrDisplay">0.00</span>
+      </div>
+    </div>
+
+    <button class="add-trade-btn" onclick="addTradeFromForm()">➕ Add Trade</button>
   </div>
 
   <div id="myPerformance">
@@ -623,15 +767,15 @@
     <div class="section">
       <h3 class="section-title">📋 Recent Trades</h3>
       <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
-        <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" style="flex:1; min-width:200px; padding:12px; border-radius:14px; border:1px solid var(--border);"/>
-        <input type="date" id="filterStart" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border);"/>
-        <input type="date" id="filterEnd" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border);"/>
+        <input type="text" id="filterSymbol" placeholder="Filter by symbol" oninput="applyFilters()" style="flex:1; min-width:200px; padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
+        <input type="date" id="filterStart" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
+        <input type="date" id="filterEnd" oninput="applyFilters()" style="padding:12px; border-radius:14px; border:1px solid var(--border); background:var(--input-bg); color:white;"/>
         <button type="button" onclick="resetFilters()" style="padding:12px 20px; background:var(--accent); color:white; border:none; border-radius:14px; font-weight:600;">Reset</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Date</th><th>Symbol</th><th>Entry</th><th>SL</th><th>Exit</th><th>P&L</th><th>R:R</th>
+            <th>Date</th><th>Symbol</th><th>Entry</th><th>SL</th><th>TP</th><th>P&L</th><th>R:R</th>
           </tr>
         </thead>
         <tbody id="tradeList"></tbody>
@@ -661,7 +805,6 @@
 
 <script>
   // === SUPABASE CONFIG ===
-  // 👇 REPLACE WITH YOUR OWN PROJECT URL AND ANON KEY
   const supabaseUrl = 'https://skejswjowceevzkloiog.supabase.co';
   const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWpzd2pvd2NlZXZ6a2xvaW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNDg0NDYsImV4cCI6MjA3NjYyNDQ0Nn0.Q9LSKeEkOO7FZv3SOKvJa8efksRfGFYrvZDKlQmKTqk';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -727,7 +870,6 @@
       return;
     }
 
-    // After signup, insert into users table (if not done via trigger)
     const { error: dbError } = await supabase
       .from('users')
       .insert({ id: data.user.id, email, name, balance });
@@ -752,7 +894,6 @@
     currentUser = user;
     currentUserId = user.id;
 
-    // Fetch user profile
     const { data: profile, error } = await supabase
       .from('users')
       .select('name, balance, role')
@@ -858,16 +999,41 @@
     render();
   }
 
-  ['entry', 'sl', 'size'].forEach(id => {
-    document.getElementById(id).addEventListener('input', () => {
-      const entry = parseFloat(document.getElementById('entry').value);
-      const sl = parseFloat(document.getElementById('sl').value);
-      const size = parseFloat(document.getElementById('size').value);
-      if (!isNaN(entry) && !isNaN(sl) && !isNaN(size) && size > 0) {
-        const risk = Math.abs(entry - sl) * size;
-        document.getElementById('risk').value = risk.toFixed(2);
+  // 🔥 REAL-TIME CALCULATIONS FOR TRADE FORM
+  function updateTradePreview() {
+    const entry = parseFloat(document.getElementById('entry').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+    const exit = parseFloat(document.getElementById('exit').value);
+    const size = parseFloat(document.getElementById('size').value);
+
+    let risk = 0;
+    let pnl = 0;
+    let rr = '0.00';
+
+    if (!isNaN(entry) && !isNaN(sl) && !isNaN(size) && size > 0) {
+      risk = Math.abs(entry - sl) * size;
+      document.getElementById('riskDisplay').textContent = `$${risk.toFixed(2)}`;
+      document.getElementById('riskDisplay').className = 'summary-value';
+    }
+
+    if (!isNaN(entry) && !isNaN(exit) && !isNaN(size) && size > 0) {
+      pnl = (exit - entry) * size;
+      document.getElementById('pnlDisplay').textContent = `$${pnl.toFixed(2)}`;
+      document.getElementById('pnlDisplay').className = pnl >= 0 ? 'summary-value positive' : 'summary-value negative';
+
+      if (risk > 0) {
+        rr = (pnl / risk).toFixed(2);
+      } else if (pnl !== 0) {
+        rr = pnl > 0 ? '∞' : '-∞';
       }
-    });
+      document.getElementById('rrDisplay').textContent = rr;
+      document.getElementById('rrDisplay').className = pnl >= 0 ? 'summary-value positive' : 'summary-value negative';
+    }
+  }
+
+  // Attach listeners
+  ['entry', 'sl', 'exit', 'size'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateTradePreview);
   });
 
   async function addTradeFromForm() {
@@ -877,20 +1043,24 @@
     const sl = parseFloat(document.getElementById('sl').value);
     const exit = parseFloat(document.getElementById('exit').value);
     const size = parseFloat(document.getElementById('size').value);
-    const riskInput = document.getElementById('risk').value;
-    const risk = parseFloat(riskInput);
 
-    if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size) || isNaN(risk)) {
+    if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(exit) || isNaN(size)) {
       alert('Please fill all fields correctly.');
       return;
     }
-    if (size <= 0 || risk <= 0) {
-      alert('Size and Risk must be greater than 0.');
+    if (size <= 0) {
+      alert('Position size must be greater than 0.');
       return;
     }
 
+    const risk = Math.abs(entry - sl) * size;
     const pnl = (exit - entry) * size;
-    const rr = risk !== 0 ? (pnl / risk).toFixed(2) : '0.00';
+    const rr = risk > 0 ? (pnl / risk).toFixed(2) : (pnl !== 0 ? (pnl > 0 ? '∞' : '-∞') : '0.00');
+
+    if (risk <= 0) {
+      alert('Risk must be greater than $0. Check your SL and entry.');
+      return;
+    }
 
     const { error } = await supabase
       .from('trades')
@@ -902,9 +1072,9 @@
         sl,
         exit,
         size,
-        pnl,
-        risk,
-        rr
+        pnl: parseFloat(pnl.toFixed(2)),
+        risk: parseFloat(risk.toFixed(2)),
+        rr: rr
       });
 
     if (error) {
@@ -914,9 +1084,11 @@
 
     loadClientTrades(currentUserId);
 
-    ['symbol','entry','sl','exit','size','risk'].forEach(id => {
+    // Reset form
+    ['symbol','entry','sl','exit','size'].forEach(id => {
       document.getElementById(id).value = '';
     });
+    updateTradePreview(); // reset display
   }
 
   function applyFilters() {
@@ -1000,7 +1172,6 @@
     const ctx = document.getElementById('equityChart').getContext('2d');
     if (equityChart) equityChart.destroy();
 
-    // Get starting balance from current user
     const startingBalance = parseFloat(document.getElementById('startingBalance').value) || 10000;
     const sorted = [...filteredTrades].sort((a, b) => new Date(a.date) - new Date(b.date));
     const labels = sorted.map(t => t.date);
@@ -1017,8 +1188,8 @@
         datasets: [{
           label: 'Equity Curve',
           data: data,
-          borderColor: '#5d93f5',
-          backgroundColor: 'rgba(93, 147, 245, 0.1)',
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
           borderWidth: 3,
           fill: true,
           tension: 0.4
@@ -1038,9 +1209,9 @@
           }
         },
         scales: {
-          x: { grid: { color: '#f1f5f9' } },
+          x: { grid: { color: '#334155' } },
           y: { 
-            grid: { color: '#f1f5f9' },
+            grid: { color: '#334155' },
             ticks: { callback: v => '$' + v.toFixed(0) }
           }
         }
@@ -1053,7 +1224,7 @@
     const { data, error } = await supabase
       .from('users')
       .select('id, email, name, balance, role')
-      .neq('role', 'admin'); // exclude self if needed
+      .neq('role', 'admin');
 
     if (error) return console.error(error);
     allUsers = data;
@@ -1113,7 +1284,6 @@
     }
   }
 
-  // Auto-login if session exists
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && !currentUser) {
       initApp();
@@ -1121,6 +1291,4 @@
   });
 </script>
 </body>
-
 </html>
-
