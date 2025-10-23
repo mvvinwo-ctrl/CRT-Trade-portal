@@ -799,6 +799,7 @@
 </div>
 
 <script>
+  <script>
   // === SUPABASE CONFIG ===
   const supabaseUrl = 'https://skejswjowceevzkloiog.supabase.co';
   const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWpzd2pvd2NlZXZ6a2xvaW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNDg0NDYsImV4cCI6MjA3NjYyNDQ0Nn0.Q9LSKeEkOO7FZv3SOKvJa8efksRfGFYrvZDKlQmKTqk';
@@ -846,25 +847,27 @@
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {  { name, balance } }
+      options: { data: { name, balance } } // ✅ Fixed: proper metadata
     });
     if (error) {
       alert('❌ ' + error.message);
       return;
     }
+    // Optional: insert into users table if not auto-created
     const { error: dbError } = await supabase
       .from('users')
-      .insert({ id: data.user.id, email, name, balance });
-    if (dbError) {
-      console.warn('User may already exist:', dbError);
+      .insert({ id: data.user.id, email, name, balance })
+      .select();
+    if (dbError && !dbError.message.includes('duplicate')) {
+      console.warn('User insert warning:', dbError);
     }
-    alert('✅ Account created!');
+    alert('✅ Account created! Please log in.');
     showForm('login');
   }
 
   // =============== MAIN APP ===============
   async function initApp() {
-    const {  { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession(); // ✅ Fixed destructuring
     if (!session) return alert('Not authenticated');
     const user = session.user;
     currentUser = user;
@@ -874,7 +877,22 @@
       .select('name, balance, role')
       .eq('id', user.id)
       .single();
-    if (error) return console.error('Profile fetch error:', error);
+    if (error) {
+      console.error('Profile fetch error:', error);
+      // Fallback if profile not found
+      const name = user.user_metadata?.name || user.email.split('@')[0];
+      const role = 'Trader';
+      await supabase.from('users').insert({ id: user.id, email: user.email, name, balance: 10000, role });
+      document.getElementById('authScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      document.getElementById('userName').textContent = name;
+      document.getElementById('userRole').textContent = role;
+      document.getElementById('userInitial').textContent = name[0].toUpperCase();
+      document.getElementById('startingBalance').value = 10000;
+      await loadClientTrades(currentUserId);
+      document.getElementById('tradeDate').valueAsDate = new Date();
+      return;
+    }
     const name = profile.name || user.email.split('@')[0];
     const role = profile.role === 'admin' ? 'Administrator' : 'Trader';
     const isAdmin = profile.role === 'admin';
@@ -1137,11 +1155,11 @@
     });
     equityChart = new Chart(ctx, {
       type: 'line',
-       {
+      data: {
         labels: labels,
         datasets: [{
           label: 'Equity Curve',
-           data,
+          data: data,
           borderColor: '#D4B08C',
           backgroundColor: 'rgba(212, 176, 140, 0.1)',
           borderWidth: 3,
@@ -1205,11 +1223,24 @@
     table.innerHTML = '';
     for (let i = 0; i < allUsers.length; i++) {
       const user = allUsers[i];
-      const {  trades, error } = await supabase
+      const { data: trades, error } = await supabase
         .from('trades')
         .select('pnl')
         .eq('user_id', user.id);
-      if (error || trades.length === 0) continue;
+      if (error || !trades || trades.length === 0) {
+        // Still show user with 0 trades
+        const row = table.insertRow();
+        row.innerHTML = `
+          <td>${user.name || user.email}</td>
+          <td>$${(user.balance || 10000).toFixed(0)}</td>
+          <td>0</td>
+          <td>0%</td>
+          <td>$0.00</td>
+          <td>0.00</td>
+        `;
+        setTimeout(() => row.classList.add('appear'), i * 60);
+        continue;
+      }
       const wins = trades.filter(t => t.pnl > 0);
       const losses = trades.filter(t => t.pnl < 0);
       const winRate = trades.length ? ((wins.length / trades.length) * 100).toFixed(1) + '%' : '0%';
@@ -1230,11 +1261,26 @@
     }
   }
 
+  // Auto-init if already logged in
+  (async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await initApp();
+    }
+  })();
+
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && !currentUser) {
       initApp();
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      currentUserId = null;
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('authScreen').style.display = 'flex';
+      showForm('login');
     }
   });
 </script>
 </body>
 </html>
+
