@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -433,7 +434,8 @@
       color: var(--text-secondary);
       font-weight: 600;
     }
-    .trade-input input {
+    .trade-input input,
+    .trade-input select {
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
@@ -443,36 +445,11 @@
       font-size: 15px;
       transition: var(--transition);
     }
-    .trade-input input:focus {
+    .trade-input input:focus,
+    .trade-input select:focus {
       outline: none;
       border-color: var(--accent-gold);
       box-shadow: 0 0 0 3px rgba(212, 176, 140, 0.2);
-    }
-    .trade-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      padding: 16px;
-      background: var(--input-bg);
-      border-radius: 14px;
-      margin-top: 16px;
-      border: 1px solid var(--border);
-    }
-    .summary-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .summary-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      font-weight: 600;
-    }
-    .summary-value {
-      font-size: 18px;
-      font-weight: 700;
-      font-family: 'Sora', sans-serif;
-      color: var(--accent-gold);
     }
     .add-trade-btn {
       width: 100%;
@@ -585,6 +562,102 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* ===== NEW TRADE CARD LAYOUT ===== */
+    .trade-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+    }
+    .trade-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+    }
+    .trade-field {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+    }
+    .trade-field i {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .trade-value {
+      flex: 1;
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .tag {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .tag-green {
+      background: var(--win-bg);
+      color: #2e7d32;
+    }
+    .tag-red {
+      background: var(--loss-bg);
+      color: #c62828;
+    }
+    .tag-purple {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+    .tag-yellow {
+      background: #fff8e1;
+      color: #ff8f00;
+    }
+    .tag-blue {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    .tag-gray {
+      background: #eeeeee;
+      color: #616161;
+    }
+    .media-icons {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .media-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .add-property {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .add-property:hover {
+      color: var(--accent-gold);
+    }
   </style>
 </head>
 <body>
@@ -665,52 +738,125 @@
     </label>
   </div>
 
-  <!-- ✅ TRADE FORM WITH AUTO CALC -->
+  <!-- ✅ NEW TRADE FORM - MANUAL INPUT ONLY -->
   <div id="tradeForm" class="section">
-    <h3 class="section-title">➕ Add New Trade</h3>
-    <div class="trade-form-grid">
-      <div class="trade-input">
-        <label>Symbol</label>
-        <input type="text" id="symbol" placeholder="e.g., XAUUSD" />
+    <h3 class="section-title">➕ Add New Trade (Manual Entry)</h3>
+
+    <div class="trade-card">
+      <h3>TRADE</h3>
+
+      <div class="trade-field">
+        <i>📅</i>
+        <span class="trade-value">
+          <input type="date" id="tradeDate" style="width:100%; border:none; background:transparent;" required/>
+        </span>
       </div>
-      <div class="trade-input">
-        <label>Date</label>
-        <input type="date" id="tradeDate" />
+
+      <div class="trade-field">
+        <i>📆</i>
+        <span class="trade-value">
+          <input type="text" id="tradeDay" placeholder="Wednesday" style="width:100%; border:none; background:transparent;"/>
+        </span>
       </div>
-      <div class="trade-input">
-        <label>Entry Price</label>
-        <input type="number" id="entry" placeholder="0.00" step="0.01" />
+
+      <div class="trade-field">
+        <i>💸</i>
+        <span class="trade-value">
+          <input type="text" id="tradePair" placeholder="XAUUSD" style="width:100%; border:none; background:transparent;"/>
+        </span>
       </div>
-      <div class="trade-input">
-        <label>Take Profit</label>
-        <input type="number" id="tp" placeholder="0.00" step="0.01" />
+
+      <div class="trade-field">
+        <i>⏰</i>
+        <span class="trade-value">
+          <input type="text" id="tradeTime" placeholder="NewYork Session" style="width:100%; border:none; background:transparent;"/>
+        </span>
       </div>
-      <div class="trade-input">
-        <label>Stop Loss</label>
-        <input type="number" id="sl" placeholder="0.00" step="0.01" />
+
+      <div class="trade-field">
+        <i>📈</i>
+        <span class="trade-value">
+          <input type="text" id="tradePosition" placeholder="Buy/Long" style="width:100%; border:none; background:transparent;"/>
+        </span>
       </div>
-      <div class="trade-input">
-        <label>Lot Size</label>
-        <input type="number" id="lotSize" placeholder="0.01" step="0.01" min="0.01" />
+
+      <div class="trade-field">
+        <i>🎯</i>
+        <span class="trade-value">
+          <input type="text" id="tradeEntryModel" placeholder="MsNr | Quarterly Theory | CRT [Candle Range Theory]" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>🔑</i>
+        <span class="trade-value">
+          <input type="text" id="tradeHTFKeyLevel" placeholder="RBS [Resistance Become Support]" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>🤝</i>
+        <span class="trade-value">
+          <input type="text" id="tradeConfluence" placeholder="QM • Ts • FVG • Breakout" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>⏱️</i>
+        <span class="trade-value">
+          <input type="text" id="tradeTimeframe" placeholder="H4 M15 M5" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>✅❌</i>
+        <span class="trade-value">
+          <select id="tradeWinLose" style="width:100%; border:none; background:transparent;">
+            <option value="">Select Win/Lose</option>
+            <option value="Win">Win</option>
+            <option value="Lose">Lose</option>
+          </select>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>⚖️</i>
+        <span class="trade-value">
+          <input type="text" id="tradeRiskReward" placeholder="1:3.1" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>💰</i>
+        <span class="trade-value">
+          <input type="number" id="tradePnL" placeholder="Profit/Loss ($)" step="0.01" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>📌</i>
+        <span class="trade-value">
+          <input type="number" id="tradeEntry" placeholder="Entry Level" step="0.01" style="width:100%; border:none; background:transparent;"/>
+        </span>
+      </div>
+
+      <div class="trade-field">
+        <i>📎</i>
+        <span class="trade-value">
+          <div class="media-icons">
+            <div class="media-icon">📷</div>
+            <div class="media-icon">📊</div>
+            <div class="media-icon">📝</div>
+          </div>
+        </span>
+      </div>
+
+      <div class="add-property">
+        <i>➕</i> Tambahkan properti
       </div>
     </div>
 
-    <div class="trade-summary">
-      <div class="summary-item">
-        <span class="summary-label">Profit ($)</span>
-        <span class="summary-value" id="profitDisplay">—</span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">SL Amount ($)</span>
-        <span class="summary-value" id="slAmountDisplay">—</span>
-      </div>
-      <div class="summary-item">
-        <span class="summary-label">R:R</span>
-        <span class="summary-value" id="rrDisplay">—</span>
-      </div>
-    </div>
-
-    <button class="add-trade-btn" onclick="addTradeFromForm()">➕ ADD TRADE</button>
+    <button class="add-trade-btn" onclick="addTradeManually()">➕ ADD TRADE</button>
   </div>
 
   <div id="myPerformance">
@@ -762,8 +908,7 @@
               <th>Date</th>
               <th>Symbol</th>
               <th>Entry</th>
-              <th>SL</th>
-              <th>TP</th>
+              <th>Win/Lose</th>
               <th>P&L ($)</th>
             </tr>
           </thead>
@@ -853,7 +998,6 @@
       alert('❌ ' + error.message);
       return;
     }
-    // Insert into users table
     const { error: dbError } = await supabase
       .from('users')
       .insert({ id: data.user.id, email, name, balance, role: 'Trader' });
@@ -866,7 +1010,7 @@
 
   // =============== MAIN APP ===============
   async function initApp() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {  { session } } = await supabase.auth.getSession();
     if (!session) {
       document.getElementById('authScreen').style.display = 'flex';
       document.getElementById('mainApp').style.display = 'none';
@@ -876,8 +1020,7 @@
     currentUser = user;
     currentUserId = user.id;
     
-    // Fetch user profile
-    const { data: profile, error } = await supabase
+    const {  profile, error } = await supabase
       .from('users')
       .select('name, balance, role')
       .eq('id', user.id)
@@ -885,7 +1028,6 @@
 
     let name, role;
     if (error || !profile) {
-      // Fallback: create profile if missing
       name = user.user_metadata?.name || user.email.split('@')[0];
       role = 'Trader';
       await supabase.from('users').insert({
@@ -954,7 +1096,7 @@
 
   // =============== TRADES & BALANCE ===============
   async function loadClientTrades(userId) {
-    const { data: user, error: userErr } = await supabase
+    const {  user, error: userErr } = await supabase
       .from('users')
       .select('balance')
       .eq('id', userId)
@@ -991,80 +1133,50 @@
     render();
   }
 
-  // 🔥 REAL-TIME CALCULATIONS
-  function updateTradePreview() {
-    const entry = parseFloat(document.getElementById('entry').value);
-    const sl = parseFloat(document.getElementById('sl').value);
-    const tp = parseFloat(document.getElementById('tp').value);
-    const lotSize = parseFloat(document.getElementById('lotSize').value);
-
-    let slAmount = 0;
-    let profit = 0;
-    let rr = '—';
-
-    if (!isNaN(entry) && !isNaN(sl) && !isNaN(lotSize) && lotSize > 0) {
-      slAmount = Math.abs(entry - sl) * lotSize;
-      document.getElementById('slAmountDisplay').textContent = `$${slAmount.toFixed(2)}`;
-    }
-
-    if (!isNaN(entry) && !isNaN(tp) && !isNaN(lotSize) && lotSize > 0) {
-      profit = (tp - entry) * lotSize;
-      document.getElementById('profitDisplay').textContent = `$${profit.toFixed(2)}`;
-      if (slAmount > 0) {
-        rr = (profit / slAmount).toFixed(2);
-      } else if (profit !== 0) {
-        rr = profit > 0 ? '∞' : '-∞';
-      }
-      document.getElementById('rrDisplay').textContent = rr;
-    }
-  }
-
-  ['entry', 'sl', 'tp', 'lotSize'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateTradePreview);
-  });
-
-  // ✅ ADD TRADE WITH VALID VALUES
-  async function addTradeFromForm() {
-    const symbol = document.getElementById('symbol').value.trim().toUpperCase();
+  // ✅ MANUAL TRADE ENTRY (NO AUTO CALCULATION)
+  async function addTradeManually() {
     const date = document.getElementById('tradeDate').value;
-    const entry = parseFloat(document.getElementById('entry').value);
-    const sl = parseFloat(document.getElementById('sl').value);
-    const tp = parseFloat(document.getElementById('tp').value);
-    const lotSize = parseFloat(document.getElementById('lotSize').value);
+    const day = document.getElementById('tradeDay').value.trim();
+    const pair = document.getElementById('tradePair').value.trim().toUpperCase();
+    const time = document.getElementById('tradeTime').value.trim();
+    const position = document.getElementById('tradePosition').value.trim();
+    const entryModel = document.getElementById('tradeEntryModel').value.trim();
+    const htfKeyLevel = document.getElementById('tradeHTFKeyLevel').value.trim();
+    const confluence = document.getElementById('tradeConfluence').value.trim();
+    const timeframe = document.getElementById('tradeTimeframe').value.trim();
+    const winLose = document.getElementById('tradeWinLose').value;
+    const riskReward = document.getElementById('tradeRiskReward').value.trim();
+    const pnl = parseFloat(document.getElementById('tradePnL').value);
+    const entry = parseFloat(document.getElementById('tradeEntry').value);
 
-    if (!symbol || !date || isNaN(entry) || isNaN(sl) || isNaN(tp) || isNaN(lotSize)) {
-      alert('Please fill all fields correctly.');
+    if (!date || !pair || !entry || isNaN(pnl)) {
+      alert('Please fill Date, Symbol, Entry Level, and P&L.');
       return;
-    }
-    if (lotSize <= 0) {
-      alert('Lot size must be greater than 0.');
-      return;
-    }
-
-    const slAmount = Math.abs(entry - sl) * lotSize;
-    const profit = (tp - entry) * lotSize;
-    let rr = '0.00';
-    if (slAmount > 0) {
-      rr = (profit / slAmount).toFixed(2);
-    } else if (profit > 0) {
-      rr = '∞';
-    } else if (profit < 0) {
-      rr = '-∞';
     }
 
     const { error } = await supabase
       .from('trades')
       .insert({
         user_id: currentUserId,
-        symbol,
-        date,
-        entry,
-        sl,
-        exit: tp,
-        size: lotSize,
-        pnl: parseFloat(profit.toFixed(2)),
-        risk: parseFloat(slAmount.toFixed(2)),
-        rr: rr.toString()
+        symbol: pair,
+        date: date,
+        day: day,
+        time: time,
+        position: position,
+        entry_model: entryModel,
+        htf_key_level: htfKeyLevel,
+        confluence: confluence,
+        timeframe: timeframe,
+        win_lose: winLose,
+        risk_reward: riskReward,
+        pnl: pnl,
+        entry: entry,
+        // Optional: you can add sl/tp later if needed
+        sl: null,
+        exit: null,
+        size: null,
+        risk: null,
+        rr: null
       });
 
     if (error) {
@@ -1076,12 +1188,19 @@
     loadClientTrades(currentUserId);
 
     // Reset form
-    ['symbol','entry','sl','tp','lotSize'].forEach(id => {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('profitDisplay').textContent = '—';
-    document.getElementById('slAmountDisplay').textContent = '—';
-    document.getElementById('rrDisplay').textContent = '—';
+    document.getElementById('tradeDate').value = '';
+    document.getElementById('tradeDay').value = '';
+    document.getElementById('tradePair').value = '';
+    document.getElementById('tradeTime').value = '';
+    document.getElementById('tradePosition').value = '';
+    document.getElementById('tradeEntryModel').value = '';
+    document.getElementById('tradeHTFKeyLevel').value = '';
+    document.getElementById('tradeConfluence').value = '';
+    document.getElementById('tradeTimeframe').value = '';
+    document.getElementById('tradeWinLose').value = '';
+    document.getElementById('tradeRiskReward').value = '';
+    document.getElementById('tradePnL').value = '';
+    document.getElementById('tradeEntry').value = '';
   }
 
   function applyFilters() {
@@ -1124,8 +1243,7 @@
         <td>${t.date}</td>
         <td>${t.symbol}</td>
         <td>${t.entry?.toFixed(2)}</td>
-        <td>${t.sl?.toFixed(2)}</td>
-        <td>${t.exit?.toFixed(2)}</td>
+        <td>${t.win_lose || '-'}</td>
         <td>$${t.pnl?.toFixed(2)}</td>
       `;
       setTimeout(() => row.classList.add('appear'), i * 50);
@@ -1167,11 +1285,11 @@
     });
     equityChart = new Chart(ctx, {
       type: 'line',
-      data: {
+       {
         labels: labels,
         datasets: [{
           label: 'Equity Curve',
-          data: data,
+           data,
           borderColor: '#D4B08C',
           backgroundColor: 'rgba(212, 176, 140, 0.1)',
           borderWidth: 3,
@@ -1238,7 +1356,7 @@
     table.innerHTML = '';
     for (let i = 0; i < allUsers.length; i++) {
       const user = allUsers[i];
-      const { data: trades, error } = await supabase
+      const {  trades, error } = await supabase
         .from('trades')
         .select('pnl')
         .eq('user_id', user.id);
