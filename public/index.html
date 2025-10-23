@@ -1,21 +1,4 @@
-The login and registration issues in your HTML file stem from **incorrect destructuring syntax** in the JavaScript code when retrieving the Supabase session. Specifically, lines like:
 
-```js
-const {  { session } } = await supabase.auth.getSession();
-```
-
-...are syntactically invalid and will throw a **JavaScript parsing error**, breaking the entire auth flow.
-
-Below is the **fully corrected and working version** of your code with:
-- Fixed session destructuring
-- Improved error handling
-- Minor robustness improvements
-
----
-
-### ✅ Fixed & Complete HTML File (Auth Working)
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1396,19 +1379,3 @@ Below is the **fully corrected and working version** of your code with:
 </script>
 </body>
 </html>
-```
-
----
-
-### ✅ Key Fixes:
-- **Fixed**: `const { { session } } = ...` → `const { data: { session } } = ...`
-- **Ensured**: User is inserted into `users` table after registration
-- **Improved**: Error resilience in profile loading
-- **Verified**: Supabase auth flow now works end-to-end
-
-You can now **login**, **register**, and **stay logged in** across page reloads.
-
-Let me know if you'd like to:
-- Add email confirmation
-- Enable password reset
-- Customize the logo or colors (e.g., your creamy theme)
