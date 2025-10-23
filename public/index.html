@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -415,38 +414,33 @@
       align-items: center;
       gap: 12px;
     }
-    .trade-form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
+    .trade-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
       margin-bottom: 20px;
     }
-    .trade-input {
+    .trade-field {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .trade-input label {
-      font-size: 14px;
-      color: var(--text-secondary);
-      font-weight: 600;
-    }
-    .trade-input input,
-    .trade-input select {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--input-border);
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 8px;
       background: var(--input-bg);
-      color: var(--text);
-      font-size: 15px;
-      transition: var(--transition);
+      border: 1px solid var(--input-border);
     }
-    .trade-input input:focus,
-    .trade-input select:focus {
-      outline: none;
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 0 3px rgba(212, 176, 140, 0.2);
+    .trade-field i {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .trade-value {
+      flex: 1;
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 500;
     }
     .add-trade-btn {
       width: 100%;
@@ -470,7 +464,21 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 25px rgba(212, 176, 140, 0.5);
     }
-    /* ===== TABLE STYLING ===== */
+    .add-property {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      color: var(--accent-gold);
+      font-size: 14px;
+      cursor: pointer;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .add-property:hover {
+      text-decoration: underline;
+    }
+    /* ===== TABLE & OTHER STYLES (unchanged) ===== */
     table {
       width: 100%;
       border-collapse: separate;
@@ -520,7 +528,6 @@
       overflow: hidden;
       box-shadow: var(--card-shadow);
     }
-    /* ===== CHART & FOOTER ===== */
     .chart-container canvas {
       border-radius: 16px;
     }
@@ -556,101 +563,6 @@
     }
     footer a:hover {
       text-decoration: underline;
-    }
-    /* ===== NEW TRADE CARD LAYOUT ===== */
-    .trade-card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px;
-      border: 1px solid var(--border);
-      box-shadow: var(--card-shadow);
-      margin-bottom: 20px;
-    }
-    .trade-card h3 {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      color: var(--text);
-      font-family: 'Sora', sans-serif;
-    }
-    .trade-field {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-    }
-    .trade-field i {
-      font-size: 16px;
-      color: var(--text-secondary);
-    }
-    .trade-value {
-      flex: 1;
-      font-size: 15px;
-      color: var(--text);
-      font-weight: 500;
-    }
-    .tag {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-block;
-    }
-    .tag-green {
-      background: var(--win-bg);
-      color: #2e7d32;
-    }
-    .tag-red {
-      background: var(--loss-bg);
-      color: #c62828;
-    }
-    .tag-purple {
-      background: #f3e5f5;
-      color: #6a1b9a;
-    }
-    .tag-yellow {
-      background: #fff8e1;
-      color: #ff8f00;
-    }
-    .tag-blue {
-      background: #e3f2fd;
-      color: #1565c0;
-    }
-    .tag-gray {
-      background: #eeeeee;
-      color: #616161;
-    }
-    .media-icons {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .media-icon {
-      width: 24px;
-      height: 24px;
-      background: var(--border);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: var(--text);
-    }
-    .add-property {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 16px;
-      color: var(--text-secondary);
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .add-property:hover {
-      color: var(--accent-gold);
     }
   </style>
 </head>
@@ -699,6 +611,7 @@
     </div>
   </div>
 </div>
+
 <!-- MAIN APP -->
 <div id="mainApp" class="container">
   <header>
@@ -712,6 +625,7 @@
       <button class="btn btn-outline" onclick="logout()" style="padding:10px 20px; font-size:15px;">Logout</button>
     </div>
   </header>
+
   <div class="dashboard-header">
     <h2 class="section-title">📊 Performance Dashboard</h2>
     <div class="view-toggle" id="viewToggle" style="display:none;">
@@ -719,6 +633,7 @@
       <button class="view-btn" data-view="all">All Clients</button>
     </div>
   </div>
+
   <div class="client-controls" id="clientControls" style="display:none;">
     <label>👤 Client:
       <select id="clientSelect" onchange="switchClient(this.value)"></select>
@@ -728,109 +643,123 @@
              onchange="updateStartingBalance(this.value)" placeholder="10000">
     </label>
   </div>
-  <!-- ✅ NEW TRADE FORM - MANUAL INPUT ONLY -->
+
+  <!-- ✅ SIMPLIFIED TRADE ENTRY -->
   <div id="tradeForm" class="section">
-    <h3 class="section-title">➕ Add New Trade (Manual Entry)</h3>
+    <h3 class="section-title">➕ Quick Trade Entry</h3>
     <div class="trade-card">
-      <h3>TRADE</h3>
       <div class="trade-field">
         <i>📅</i>
         <span class="trade-value">
           <input type="date" id="tradeDate" style="width:100%; border:none; background:transparent;" required/>
         </span>
       </div>
-      <div class="trade-field">
-        <i>📆</i>
-        <span class="trade-value">
-          <input type="text" id="tradeDay" placeholder="Wednesday" style="width:100%; border:none; background:transparent;"/>
-        </span>
-      </div>
+
       <div class="trade-field">
         <i>💸</i>
         <span class="trade-value">
-          <input type="text" id="tradePair" placeholder="XAUUSD" style="width:100%; border:none; background:transparent;"/>
+          <select id="tradePair" style="width:100%; border:none; background:transparent; font-size:15px; color:var(--text);">
+            <option value="">— Select Symbol —</option>
+            <option value="XAUUSD">XAUUSD (Gold)</option>
+            <option value="EURUSD">EUR/USD</option>
+            <option value="GBPUSD">GBP/USD</option>
+            <option value="USDJPY">USD/JPY</option>
+            <option value="BTCUSD">BTC/USD</option>
+            <option value="NAS100">NAS100</option>
+            <option value="SPX500">SPX500</option>
+            <option value="Other">Other (type below)</option>
+          </select>
         </span>
       </div>
-      <div class="trade-field">
-        <i>⏰</i>
+
+      <div class="trade-field" id="customPairField" style="display:none;">
+        <i>✏️</i>
         <span class="trade-value">
-          <input type="text" id="tradeTime" placeholder="NewYork Session" style="width:100%; border:none; background:transparent;"/>
+          <input type="text" id="customPair" placeholder="e.g. ETHUSD" style="width:100%; border:none; background:transparent;"/>
         </span>
       </div>
-      <div class="trade-field">
-        <i>📈</i>
-        <span class="trade-value">
-          <input type="text" id="tradePosition" placeholder="Buy/Long" style="width:100%; border:none; background:transparent;"/>
-        </span>
-      </div>
+
       <div class="trade-field">
         <i>🎯</i>
         <span class="trade-value">
-          <input type="text" id="tradeEntryModel" placeholder="MsNr | Quarterly Theory | CRT" style="width:100%; border:none; background:transparent;"/>
+          <select id="tradeStrategy" style="width:100%; border:none; background:transparent; font-size:15px; color:var(--text);">
+            <option value="">— Select Strategy —</option>
+            <option value="Quarterly Theory">Quarterly Theory</option>
+            <option value="MsNr">MsNr</option>
+            <option value="CRT Model">CRT Model</option>
+            <option value="FVG Breakout">FVG Breakout</option>
+            <option value="Liquidity Grab">Liquidity Grab</option>
+            <option value="Other">Other (describe below)</option>
+          </select>
         </span>
       </div>
-      <div class="trade-field">
-        <i>🔑</i>
+
+      <div class="trade-field" id="customStrategyField" style="display:none;">
+        <i>✏️</i>
         <span class="trade-value">
-          <input type="text" id="tradeHTFKeyLevel" placeholder="RBS [Resistance Become Support]" style="width:100%; border:none; background:transparent;"/>
+          <input type="text" id="customStrategy" placeholder="Your strategy name" style="width:100%; border:none; background:transparent;"/>
         </span>
       </div>
-      <div class="trade-field">
-        <i>🤝</i>
-        <span class="trade-value">
-          <input type="text" id="tradeConfluence" placeholder="QM • Ts • FVG • Breakout" style="width:100%; border:none; background:transparent;"/>
-        </span>
-      </div>
-      <div class="trade-field">
-        <i>⏱️</i>
-        <span class="trade-value">
-          <input type="text" id="tradeTimeframe" placeholder="H4 M15 M5" style="width:100%; border:none; background:transparent;"/>
-        </span>
-      </div>
+
       <div class="trade-field">
         <i>✅❌</i>
         <span class="trade-value">
           <select id="tradeWinLose" style="width:100%; border:none; background:transparent;">
-            <option value="">Select Win/Lose</option>
+            <option value="">Win or Lose?</option>
             <option value="Win">Win</option>
             <option value="Lose">Lose</option>
           </select>
         </span>
       </div>
-      <div class="trade-field">
-        <i>⚖️</i>
-        <span class="trade-value">
-          <input type="text" id="tradeRiskReward" placeholder="1:3.1" style="width:100%; border:none; background:transparent;"/>
-        </span>
-      </div>
+
       <div class="trade-field">
         <i>💰</i>
         <span class="trade-value">
-          <input type="number" id="tradePnL" placeholder="Profit/Loss ($)" step="0.01" style="width:100%; border:none; background:transparent;"/>
+          <input type="number" id="tradePnL" placeholder="P&L ($)" step="0.01" style="width:100%; border:none; background:transparent;"/>
         </span>
       </div>
-      <div class="trade-field">
-        <i>📌</i>
-        <span class="trade-value">
-          <input type="number" id="tradeEntry" placeholder="Entry Level" step="0.01" style="width:100%; border:none; background:transparent;"/>
-        </span>
+
+      <div class="add-property" onclick="toggleOptionalFields()">
+        <i>🔽</i> <span id="toggleText">Show More Details</span>
       </div>
-      <div class="trade-field">
-        <i>📎</i>
-        <span class="trade-value">
-          <div class="media-icons">
-            <div class="media-icon">📷</div>
-            <div class="media-icon">📊</div>
-            <div class="media-icon">📝</div>
-          </div>
-        </span>
-      </div>
-      <div class="add-property">
-        <i>➕</i> Tambahkan properti
+
+      <div id="optionalFields" style="display:none; margin-top:20px; padding-top:16px; border-top:1px solid var(--border);">
+        <div class="trade-field">
+          <i>📌</i>
+          <span class="trade-value">
+            <input type="number" id="tradeEntry" placeholder="Entry Level" step="0.01" style="width:100%; border:none; background:transparent;"/>
+          </span>
+        </div>
+        <div class="trade-field">
+          <i>⏱️</i>
+          <span class="trade-value">
+            <input type="text" id="tradeTimeframe" placeholder="e.g. H4, M15" style="width:100%; border:none; background:transparent;"/>
+          </span>
+        </div>
+        <div class="trade-field">
+          <i>⚖️</i>
+          <span class="trade-value">
+            <input type="text" id="tradeRiskReward" placeholder="e.g. 1:2" style="width:100%; border:none; background:transparent;"/>
+          </span>
+        </div>
+        <div class="trade-field">
+          <i>📆</i>
+          <span class="trade-value">
+            <input type="text" id="tradeDay" placeholder="e.g. Wednesday" style="width:100%; border:none; background:transparent;"/>
+          </span>
+        </div>
+        <div class="trade-field">
+          <i>⏰</i>
+          <span class="trade-value">
+            <input type="text" id="tradeTime" placeholder="e.g. London Session" style="width:100%; border:none; background:transparent;"/>
+          </span>
+        </div>
       </div>
     </div>
     <button class="add-trade-btn" onclick="addTradeManually()">➕ ADD TRADE</button>
   </div>
+
+  <!-- Rest of dashboard (metrics, table, chart) -->
   <div id="myPerformance">
     <h3 class="metrics-title">📈 My Trading Performance</h3>
     <div class="dashboard-grid">
@@ -851,12 +780,14 @@
         <div class="metric" id="totalPnL">$0.00</div>
       </div>
     </div>
+
     <div class="section">
       <h3 class="section-title">📉 Equity Curve</h3>
       <div class="chart-container">
         <canvas id="equityChart"></canvas>
       </div>
     </div>
+
     <div class="section">
       <h3 class="section-title">📋 Recent Trades</h3>
       <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
@@ -887,6 +818,7 @@
       </div>
     </div>
   </div>
+
   <div id="clientList" style="display:none;">
     <h3 class="metrics-title">👥 All Clients Performance</h3>
     <div class="section">
@@ -905,15 +837,18 @@
       </table>
     </div>
   </div>
+
   <footer>
     © 2025 CRT Trading Portal • Built with <span style="color: var(--accent-gold);">✨</span> for elite traders
   </footer>
 </div>
+
 <script>
   // === SUPABASE CONFIG ===
   const supabaseUrl = 'https://skejswjowceevzkloiog.supabase.co';
   const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWpzd2pvd2NlZXZ6a2xvaW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNDg0NDYsImV4cCI6MjA3NjYyNDQ0Nn0.Q9LSKeEkOO7FZv3SOKvJa8efksRfGFYrvZDKlQmKTqk';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
   let currentUser = null;
   let currentUserId = null;
   let trades = [];
@@ -921,27 +856,20 @@
   let equityChart = null;
   let allUsers = [];
 
-  // =============== AUTH UI ===============
+  // UI Helpers
   function showForm(formType) {
-    document.querySelectorAll('.form-container').forEach(form => {
-      form.classList.remove('active');
-    });
+    document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
     document.getElementById(formType + 'Form').classList.add('active');
   }
 
-  // =============== AUTH LOGIC ===============
+  // === AUTH ===
   async function handleLogin() {
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-    if (!email || !password) {
-      alert('Please enter email and password.');
-      return;
-    }
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      alert('❌ ' + (error.message || 'Invalid credentials.'));
-      return;
-    }
+    if (!email || !password) return alert('Please enter email and password.');
+    
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return alert('❌ ' + (error.message || 'Login failed.'));
     await initApp();
   }
 
@@ -950,28 +878,22 @@
     const email = document.getElementById('regEmail').value.trim();
     const password = document.getElementById('regPassword').value;
     const balance = parseFloat(document.getElementById('regBalance').value) || 10000;
-    if (!name || !email || !password) {
-      alert('Please fill all fields.');
-      return;
-    }
-    const { data, error } = await supabase.auth.signUp({
+    if (!name || !email || !password) return alert('Please fill all fields.');
+
+    const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: { name, balance }
-      }
+      options: { data: { name, balance } }
     });
-    if (error) {
-      alert('❌ ' + error.message);
-      return;
-    }
+    if (error) return alert('❌ ' + error.message);
+
     alert('✅ Account created! Please log in.');
     showForm('login');
   }
 
-  // =============== MAIN APP ===============
+  // === MAIN APP ===
   async function initApp() {
-    const { data: { session } } = await supabase.auth.getSession(); // ✅ FIXED: correct destructuring
+    const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       document.getElementById('authScreen').style.display = 'flex';
       document.getElementById('mainApp').style.display = 'none';
@@ -982,26 +904,17 @@
     currentUser = user;
     currentUserId = user.id;
 
-    // Fetch user profile from 'users' table
-    let profile = null;
-    let error = null;
-    try {
-      const { data, error: err } = await supabase
-        .from('users')
-        .select('name, balance, role')
-        .eq('id', user.id)
-        .single();
-      profile = data;
-      error = err;
-    } catch (e) {
-      error = e;
-    }
+    // Fetch or create user profile
+    let { data: profile, error } = await supabase
+      .from('users')
+      .select('name, balance, role')
+      .eq('id', user.id)
+      .single();
 
     let name, role;
     if (error || !profile) {
       name = user.user_metadata?.name || user.email.split('@')[0];
       role = 'Trader';
-      // Insert user if missing
       await supabase.from('users').insert({
         id: user.id,
         email: user.email,
@@ -1032,6 +945,7 @@
       document.getElementById('clientList').style.display = 'none';
       await loadClientTrades(currentUserId);
     }
+
     document.getElementById('tradeDate').valueAsDate = new Date();
   }
 
@@ -1040,15 +954,11 @@
       btn.addEventListener('click', () => {
         document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        if (btn.dataset.view === 'my') {
-          document.getElementById('myPerformance').style.display = 'block';
-          document.getElementById('clientList').style.display = 'none';
-          loadClientTrades(currentUserId);
-        } else {
-          document.getElementById('myPerformance').style.display = 'none';
-          document.getElementById('clientList').style.display = 'block';
-          renderAllClientsTable();
-        }
+        const isMyView = btn.dataset.view === 'my';
+        document.getElementById('myPerformance').style.display = isMyView ? 'block' : 'none';
+        document.getElementById('clientList').style.display = isMyView ? 'none' : 'block';
+        if (isMyView) loadClientTrades(currentUserId);
+        else renderAllClientsTable();
       });
     });
   }
@@ -1066,32 +976,26 @@
     showForm('login');
   }
 
-  // =============== TRADES & BALANCE ===============
+  // === TRADES ===
   async function loadClientTrades(userId) {
-    const { data: userData, error: userErr } = await supabase
+    const { data: user, error: userErr } = await supabase
       .from('users')
       .select('balance')
       .eq('id', userId)
       .single();
-    if (userErr) {
-      console.error('User fetch error:', userErr);
-      return;
-    }
+    if (userErr) return console.error('User fetch error:', userErr);
 
-    const { data: tradesData, error } = await supabase
+    const { data, error } = await supabase
       .from('trades')
       .select('*')
       .eq('user_id', userId)
       .order('date', { ascending: false });
 
-    if (error) {
-      console.error('Trades fetch error:', error);
-      return;
-    }
+    if (error) return console.error('Trades fetch error:', error);
 
-    trades = tradesData || [];
+    trades = data || [];
     filteredTrades = [...trades];
-    document.getElementById('startingBalance').value = userData?.balance || 10000;
+    document.getElementById('startingBalance').value = user?.balance || 10000;
     render();
   }
 
@@ -1101,32 +1005,49 @@
       .from('users')
       .update({ balance })
       .eq('id', currentUserId);
-    if (error) {
-      alert('Failed to update balance');
-      return;
-    }
-    render();
+    if (error) alert('Failed to update balance');
+    else render();
   }
+
+  // === NEW TRADE ENTRY ===
+  function toggleOptionalFields() {
+    const opt = document.getElementById('optionalFields');
+    const text = document.getElementById('toggleText');
+    if (opt.style.display === 'none') {
+      opt.style.display = 'block';
+      text.textContent = 'Hide Details';
+    } else {
+      opt.style.display = 'none';
+      text.textContent = 'Show More Details';
+    }
+  }
+
+  document.getElementById('tradePair').addEventListener('change', function() {
+    document.getElementById('customPairField').style.display = this.value === 'Other' ? 'flex' : 'none';
+  });
+
+  document.getElementById('tradeStrategy').addEventListener('change', function() {
+    document.getElementById('customStrategyField').style.display = this.value === 'Other' ? 'flex' : 'none';
+  });
 
   async function addTradeManually() {
     const date = document.getElementById('tradeDate').value;
-    const day = document.getElementById('tradeDay').value.trim();
-    const pair = document.getElementById('tradePair').value.trim().toUpperCase();
-    const time = document.getElementById('tradeTime').value.trim();
-    const position = document.getElementById('tradePosition').value.trim();
-    const entryModel = document.getElementById('tradeEntryModel').value.trim();
-    const htfKeyLevel = document.getElementById('tradeHTFKeyLevel').value.trim();
-    const confluence = document.getElementById('tradeConfluence').value.trim();
-    const timeframe = document.getElementById('tradeTimeframe').value.trim();
+    let pair = document.getElementById('tradePair').value;
+    if (pair === 'Other') pair = document.getElementById('customPair').value.trim().toUpperCase();
+    let strategy = document.getElementById('tradeStrategy').value;
+    if (strategy === 'Other') strategy = document.getElementById('customStrategy').value.trim();
     const winLose = document.getElementById('tradeWinLose').value;
-    const riskReward = document.getElementById('tradeRiskReward').value.trim();
     const pnl = parseFloat(document.getElementById('tradePnL').value);
-    const entry = parseFloat(document.getElementById('tradeEntry').value);
 
-    if (!date || !pair || isNaN(entry) || isNaN(pnl)) {
-      alert('Please fill Date, Symbol, Entry Level, and P&L.');
-      return;
+    if (!date || !pair || !winLose || isNaN(pnl)) {
+      return alert('Please fill: Date, Symbol, Win/Lose, and P&L.');
     }
+
+    const entry = parseFloat(document.getElementById('tradeEntry')?.value) || null;
+    const timeframe = document.getElementById('tradeTimeframe')?.value.trim() || null;
+    const riskReward = document.getElementById('tradeRiskReward')?.value.trim() || null;
+    const day = document.getElementById('tradeDay')?.value.trim() || null;
+    const time = document.getElementById('tradeTime')?.value.trim() || null;
 
     const { error } = await supabase
       .from('trades')
@@ -1134,42 +1055,40 @@
         user_id: currentUserId,
         symbol: pair,
         date: date,
-        day: day,
-        time: time,
-        position: position,
-        entry_model: entryModel,
-        htf_key_level: htfKeyLevel,
-        confluence: confluence,
-        timeframe: timeframe,
         win_lose: winLose,
-        risk_reward: riskReward,
         pnl: pnl,
-        entry: entry
+        entry_model: strategy,
+        entry: entry,
+        timeframe: timeframe,
+        risk_reward: riskReward,
+        day: day,
+        time: time
       });
 
-    if (error) {
-      alert('Failed to add trade: ' + error.message);
-      return;
-    }
+    if (error) return alert('❌ Failed to add trade: ' + error.message);
 
-    await loadClientTrades(currentUserId); // Refresh
+    await loadClientTrades(currentUserId);
 
     // Reset form
-    document.getElementById('tradeDate').value = '';
-    document.getElementById('tradeDay').value = '';
+    document.getElementById('tradeDate').valueAsDate = new Date();
     document.getElementById('tradePair').value = '';
-    document.getElementById('tradeTime').value = '';
-    document.getElementById('tradePosition').value = '';
-    document.getElementById('tradeEntryModel').value = '';
-    document.getElementById('tradeHTFKeyLevel').value = '';
-    document.getElementById('tradeConfluence').value = '';
-    document.getElementById('tradeTimeframe').value = '';
+    document.getElementById('customPair').value = '';
+    document.getElementById('tradeStrategy').value = '';
+    document.getElementById('customStrategy').value = '';
     document.getElementById('tradeWinLose').value = '';
-    document.getElementById('tradeRiskReward').value = '';
     document.getElementById('tradePnL').value = '';
     document.getElementById('tradeEntry').value = '';
+    document.getElementById('tradeTimeframe').value = '';
+    document.getElementById('tradeRiskReward').value = '';
+    document.getElementById('tradeDay').value = '';
+    document.getElementById('tradeTime').value = '';
+    document.getElementById('customPairField').style.display = 'none';
+    document.getElementById('customStrategyField').style.display = 'none';
+    document.getElementById('optionalFields').style.display = 'none';
+    document.getElementById('toggleText').textContent = 'Show More Details';
   }
 
+  // === RENDERING ===
   function applyFilters() {
     const symbol = document.getElementById('filterSymbol').value.trim().toUpperCase();
     const start = document.getElementById('filterStart').value;
@@ -1208,7 +1127,7 @@
       row.innerHTML = `
         <td>${t.date}</td>
         <td>${t.symbol}</td>
-        <td>${t.entry?.toFixed(2)}</td>
+        <td>${t.entry?.toFixed(2) || '—'}</td>
         <td>${t.win_lose || '-'}</td>
         <td>$${t.pnl?.toFixed(2)}</td>
       `;
@@ -1287,16 +1206,13 @@
     });
   }
 
-  // =============== ADMIN VIEW ===============
+  // === ADMIN ===
   async function loadAllClientsView() {
     const { data, error } = await supabase
       .from('users')
       .select('id, email, name, balance, role')
       .neq('role', 'admin');
-    if (error) {
-      console.error('Load clients error:', error);
-      return;
-    }
+    if (error) return console.error('Load clients error:', error);
     allUsers = data;
     const select = document.getElementById('clientSelect');
     select.innerHTML = '';
@@ -1322,11 +1238,11 @@
     table.innerHTML = '';
     for (let i = 0; i < allUsers.length; i++) {
       const user = allUsers[i];
-      const { data: tradesData, error } = await supabase
+      const { data: trades, error } = await supabase
         .from('trades')
         .select('pnl')
         .eq('user_id', user.id);
-      if (error || !tradesData) {
+      if (error || !trades) {
         const row = table.insertRow();
         row.innerHTML = `
           <td>${user.name || user.email}</td>
@@ -1339,9 +1255,9 @@
         setTimeout(() => row.classList.add('appear'), i * 60);
         continue;
       }
-      const wins = tradesData.filter(t => t.pnl > 0);
-      const losses = tradesData.filter(t => t.pnl < 0);
-      const winRate = tradesData.length ? ((wins.length / tradesData.length) * 100).toFixed(1) + '%' : '0%';
+      const wins = trades.filter(t => t.pnl > 0);
+      const losses = trades.filter(t => t.pnl < 0);
+      const winRate = trades.length ? ((wins.length / trades.length) * 100).toFixed(1) + '%' : '0%';
       const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
       const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
       const netPnL = grossProfit - grossLoss;
@@ -1350,7 +1266,7 @@
       row.innerHTML = `
         <td>${user.name || user.email}</td>
         <td>$${(user.balance || 10000).toFixed(0)}</td>
-        <td>${tradesData.length}</td>
+        <td>${trades.length}</td>
         <td>${winRate}</td>
         <td>$${netPnL.toFixed(2)}</td>
         <td>${profitFactor}</td>
@@ -1359,16 +1275,11 @@
     }
   }
 
-  // Initialize on load
-  window.addEventListener('DOMContentLoaded', () => {
-    initApp();
-  });
-
-  // Listen for auth changes
+  // INIT
+  window.addEventListener('DOMContentLoaded', initApp);
   supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-      initApp();
-    } else if (event === 'SIGNED_OUT') {
+    if (event === 'SIGNED_IN') initApp();
+    else if (event === 'SIGNED_OUT') {
       currentUser = null;
       currentUserId = null;
       document.getElementById('mainApp').style.display = 'none';
