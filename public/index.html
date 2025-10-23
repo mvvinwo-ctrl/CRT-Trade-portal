@@ -684,7 +684,7 @@
     </label>
   </div>
 
-  <!-- ✅ MANUAL TRADE FORM -->
+  <!-- ✅ TRADE FORM WITH AUTO CALC -->
   <div id="tradeForm" class="section">
     <h3 class="section-title">➕ Add New Trade</h3>
     <div class="trade-form-grid">
@@ -714,7 +714,6 @@
       </div>
     </div>
 
-    <!-- Manual display fields - NO AUTO CALCULATION -->
     <div class="trade-summary">
       <div class="summary-item">
         <span class="summary-label">Profit ($)</span>
@@ -865,7 +864,7 @@
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {  { name, balance } }
+      options: { data: { name, balance } }
     });
     if (error) {
       alert('❌ ' + error.message);
@@ -883,7 +882,7 @@
 
   // =============== MAIN APP ===============
   async function initApp() {
-    const {  { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
     if (!session) return alert('Not authenticated');
     const user = session.user;
     currentUser = user;
@@ -980,7 +979,39 @@
     render();
   }
 
-  // 🔥 MANUAL MODE: No auto-calculation
+  // 🔥 REAL-TIME CALCULATIONS
+  function updateTradePreview() {
+    const entry = parseFloat(document.getElementById('entry').value);
+    const sl = parseFloat(document.getElementById('sl').value);
+    const tp = parseFloat(document.getElementById('tp').value);
+    const lotSize = parseFloat(document.getElementById('lotSize').value);
+
+    let slAmount = 0;
+    let profit = 0;
+    let rr = '—';
+
+    if (!isNaN(entry) && !isNaN(sl) && !isNaN(lotSize) && lotSize > 0) {
+      slAmount = Math.abs(entry - sl) * lotSize;
+      document.getElementById('slAmountDisplay').textContent = `$${slAmount.toFixed(2)}`;
+    }
+
+    if (!isNaN(entry) && !isNaN(tp) && !isNaN(lotSize) && lotSize > 0) {
+      profit = (tp - entry) * lotSize;
+      document.getElementById('profitDisplay').textContent = `$${profit.toFixed(2)}`;
+      if (slAmount > 0) {
+        rr = (profit / slAmount).toFixed(2);
+      } else if (profit !== 0) {
+        rr = profit > 0 ? '∞' : '-∞';
+      }
+      document.getElementById('rrDisplay').textContent = rr;
+    }
+  }
+
+  ['entry', 'sl', 'tp', 'lotSize'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateTradePreview);
+  });
+
+  // ✅ ADD TRADE WITH VALID VALUES
   async function addTradeFromForm() {
     const symbol = document.getElementById('symbol').value.trim().toUpperCase();
     const date = document.getElementById('tradeDate').value;
@@ -998,7 +1029,17 @@
       return;
     }
 
-    // Send NULL for pnl, risk, rr — let user fill them manually later
+    const slAmount = Math.abs(entry - sl) * lotSize;
+    const profit = (tp - entry) * lotSize;
+    let rr = '0.00';
+    if (slAmount > 0) {
+      rr = (profit / slAmount).toFixed(2);
+    } else if (profit > 0) {
+      rr = '∞';
+    } else if (profit < 0) {
+      rr = '-∞';
+    }
+
     const { error } = await supabase
       .from('trades')
       .insert({
@@ -1009,9 +1050,9 @@
         sl,
         exit: tp,
         size: lotSize,
-        pnl: null,
-        risk: null,
-        rr: null
+        pnl: parseFloat(profit.toFixed(2)),
+        risk: parseFloat(slAmount.toFixed(2)),
+        rr: rr.toString()
       });
 
     if (error) {
@@ -1067,10 +1108,10 @@
       row.innerHTML = `
         <td>${t.date}</td>
         <td>${t.symbol}</td>
-        <td>${t.entry?.toFixed(2) || '—'}</td>
-        <td>${t.sl?.toFixed(2) || '—'}</td>
-        <td>${t.exit?.toFixed(2) || '—'}</td>
-        <td>$${t.pnl?.toFixed(2) || '—'}</td>
+        <td>${t.entry?.toFixed(2)}</td>
+        <td>${t.sl?.toFixed(2)}</td>
+        <td>${t.exit?.toFixed(2)}</td>
+        <td>$${t.pnl?.toFixed(2)}</td>
       `;
       setTimeout(() => row.classList.add('appear'), i * 50);
     });
@@ -1088,8 +1129,8 @@
     const wins = filteredTrades.filter(t => t.pnl > 0);
     const losses = filteredTrades.filter(t => t.pnl < 0);
     const winCount = wins.length;
-    const grossProfit = wins.reduce((sum, t) => sum + (t.pnl || 0), 0);
-    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + (t.pnl || 0), 0));
+    const grossProfit = wins.reduce((sum, t) => sum + t.pnl, 0);
+    const grossLoss = Math.abs(losses.reduce((sum, t) => sum + t.pnl, 0));
     const totalPnL = grossProfit - grossLoss;
     const profitFactor = grossLoss > 0 ? (grossProfit / grossLoss).toFixed(2) : (grossProfit > 0 ? '∞' : '0.00');
     document.getElementById('totalTrades').textContent = n;
@@ -1106,7 +1147,7 @@
     const labels = sorted.map(t => t.date);
     let equity = startingBalance;
     const data = sorted.map(t => {
-      equity += t.pnl || 0;
+      equity += t.pnl;
       return equity;
     });
     equityChart = new Chart(ctx, {
