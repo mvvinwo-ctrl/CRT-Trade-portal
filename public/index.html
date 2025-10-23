@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -783,7 +782,7 @@
       <div class="trade-field">
         <i>🎯</i>
         <span class="trade-value">
-          <input type="text" id="tradeEntryModel" placeholder="MsNr | Quarterly Theory | CRT [Candle Range Theory]" style="width:100%; border:none; background:transparent;"/>
+          <input type="text" id="tradeEntryModel" placeholder="MsNr | Quarterly Theory | CRT" style="width:100%; border:none; background:transparent;"/>
         </span>
       </div>
 
@@ -998,12 +997,20 @@
       alert('❌ ' + error.message);
       return;
     }
-    const { error: dbError } = await supabase
-      .from('users')
-      .insert({ id: data.user.id, email, name, balance, role: 'Trader' });
-    if (dbError && !dbError.message.includes('duplicate')) {
-      console.warn('User insert warning:', dbError);
-    }
+    // Wait a moment for user to be created
+    setTimeout(async () => {
+      const {  { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Insert into users table
+        const { error: dbError } = await supabase
+          .from('users')
+          .insert({ id: session.user.id, email, name, balance, role: 'Trader' })
+          .select();
+        if (dbError && !dbError.message.includes('duplicate')) {
+          console.warn('User insert warning:', dbError);
+        }
+      }
+    }, 1000);
     alert('✅ Account created! Please log in.');
     showForm('login');
   }
@@ -1020,16 +1027,27 @@
     currentUser = user;
     currentUserId = user.id;
     
-    const {  profile, error } = await supabase
-      .from('users')
-      .select('name, balance, role')
-      .eq('id', user.id)
-      .single();
+    // Fetch user profile
+    let profile = null;
+    let error = null;
+    try {
+      const {  result, error: err } = await supabase
+        .from('users')
+        .select('name, balance, role')
+        .eq('id', user.id)
+        .single();
+      profile = result;
+      error = err;
+    } catch (e) {
+      error = e;
+    }
 
     let name, role;
     if (error || !profile) {
+      // Try to get name from metadata
       name = user.user_metadata?.name || user.email.split('@')[0];
       role = 'Trader';
+      // Insert missing user
       await supabase.from('users').insert({
         id: user.id,
         email: user.email,
@@ -1149,7 +1167,7 @@
     const pnl = parseFloat(document.getElementById('tradePnL').value);
     const entry = parseFloat(document.getElementById('tradeEntry').value);
 
-    if (!date || !pair || !entry || isNaN(pnl)) {
+    if (!date || !pair || isNaN(entry) || isNaN(pnl)) {
       alert('Please fill Date, Symbol, Entry Level, and P&L.');
       return;
     }
@@ -1170,13 +1188,7 @@
         win_lose: winLose,
         risk_reward: riskReward,
         pnl: pnl,
-        entry: entry,
-        // Optional: you can add sl/tp later if needed
-        sl: null,
-        exit: null,
-        size: null,
-        risk: null,
-        rr: null
+        entry: entry
       });
 
     if (error) {
