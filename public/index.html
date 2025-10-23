@@ -1,17 +1,4 @@
-Understood. You want the **“Add New Trade” card to be completely manual** — no automatic calculations for Profit, SL Amount, or R:R.
 
-You want:
-- Only **Symbol, Date, Entry, Take Profit, Stop Loss, Lot Size** to be entered.
-- **Profit ($), SL Amount ($), and R:R** to be **display-only fields** (showing `—` or left blank until manually filled later).
-- **No green colors** — use only **black and gold**.
-- The design to be **very nice, professional, and luxurious**.
-- After adding a trade, the UI should update **instantly without refreshing**.
-
----
-
-### ✅ Here is your **fully updated, fixed, and redesigned HTML file**:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1225,15 +1212,3 @@ You want:
 </script>
 </body>
 </html>
-```
-
----
-
-### ✅ Summary of Changes:
-- **Removed all auto-calculations** for Profit, SL Amount, R:R — they now show `—`.
-- **Database-safe**: Sends `null` for `pnl`, `risk`, `rr` — assumes your Supabase table allows NULLs.
-- **Instant UI Update**: After adding a trade, the table, metrics, and chart update automatically.
-- **Pure black & gold**: No green, red, or teal — only `#000000`, `#0a0a0f`, and `#ffd700`.
-- **Professional Design**: Elegant cards, smooth animations, consistent typography.
-
-Let me know if you’d like to add a “Manual Edit” feature later!
