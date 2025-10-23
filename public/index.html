@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -799,7 +798,6 @@
 </div>
 
 <script>
-  <script>
   // === SUPABASE CONFIG ===
   const supabaseUrl = 'https://skejswjowceevzkloiog.supabase.co';
   const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWpzd2pvd2NlZXZ6a2xvaW9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNDg0NDYsImV4cCI6MjA3NjYyNDQ0Nn0.Q9LSKeEkOO7FZv3SOKvJa8efksRfGFYrvZDKlQmKTqk';
@@ -847,17 +845,18 @@
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, balance } } // ✅ Fixed: proper metadata
+      options: {
+        data: { name, balance }
+      }
     });
     if (error) {
       alert('❌ ' + error.message);
       return;
     }
-    // Optional: insert into users table if not auto-created
+    // Insert into users table
     const { error: dbError } = await supabase
       .from('users')
-      .insert({ id: data.user.id, email, name, balance })
-      .select();
+      .insert({ id: data.user.id, email, name, balance, role: 'Trader' });
     if (dbError && !dbError.message.includes('duplicate')) {
       console.warn('User insert warning:', dbError);
     }
@@ -867,40 +866,47 @@
 
   // =============== MAIN APP ===============
   async function initApp() {
-    const { data: { session } } = await supabase.auth.getSession(); // ✅ Fixed destructuring
-    if (!session) return alert('Not authenticated');
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      document.getElementById('authScreen').style.display = 'flex';
+      document.getElementById('mainApp').style.display = 'none';
+      return;
+    }
     const user = session.user;
     currentUser = user;
     currentUserId = user.id;
+    
+    // Fetch user profile
     const { data: profile, error } = await supabase
       .from('users')
       .select('name, balance, role')
       .eq('id', user.id)
       .single();
-    if (error) {
-      console.error('Profile fetch error:', error);
-      // Fallback if profile not found
-      const name = user.user_metadata?.name || user.email.split('@')[0];
-      const role = 'Trader';
-      await supabase.from('users').insert({ id: user.id, email: user.email, name, balance: 10000, role });
-      document.getElementById('authScreen').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      document.getElementById('userName').textContent = name;
-      document.getElementById('userRole').textContent = role;
-      document.getElementById('userInitial').textContent = name[0].toUpperCase();
-      document.getElementById('startingBalance').value = 10000;
-      await loadClientTrades(currentUserId);
-      document.getElementById('tradeDate').valueAsDate = new Date();
-      return;
+
+    let name, role;
+    if (error || !profile) {
+      // Fallback: create profile if missing
+      name = user.user_metadata?.name || user.email.split('@')[0];
+      role = 'Trader';
+      await supabase.from('users').insert({
+        id: user.id,
+        email: user.email,
+        name: name,
+        balance: 10000,
+        role: role
+      });
+    } else {
+      name = profile.name;
+      role = profile.role;
     }
-    const name = profile.name || user.email.split('@')[0];
-    const role = profile.role === 'admin' ? 'Administrator' : 'Trader';
-    const isAdmin = profile.role === 'admin';
+
+    const isAdmin = role === 'admin';
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     document.getElementById('userName').textContent = name;
-    document.getElementById('userRole').textContent = role;
-    document.getElementById('userInitial').textContent = name[0].toUpperCase();
+    document.getElementById('userRole').textContent = isAdmin ? 'Administrator' : 'Trader';
+    document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+    
     if (isAdmin) {
       document.getElementById('viewToggle').style.display = 'flex';
       document.getElementById('clientControls').style.display = 'flex';
@@ -953,13 +959,19 @@
       .select('balance')
       .eq('id', userId)
       .single();
-    if (userErr) return console.error(userErr);
+    if (userErr) {
+      console.error('User fetch error:', userErr);
+      return;
+    }
     const { data, error } = await supabase
       .from('trades')
       .select('*')
       .eq('user_id', userId)
       .order('date', { ascending: false });
-    if (error) return console.error(error);
+    if (error) {
+      console.error('Trades fetch error:', error);
+      return;
+    }
     trades = data || [];
     filteredTrades = [...trades];
     document.getElementById('startingBalance').value = user.balance || 10000;
@@ -1197,7 +1209,10 @@
       .from('users')
       .select('id, email, name, balance, role')
       .neq('role', 'admin');
-    if (error) return console.error(error);
+    if (error) {
+      console.error('Load clients error:', error);
+      return;
+    }
     allUsers = data;
     const select = document.getElementById('clientSelect');
     select.innerHTML = '';
@@ -1227,8 +1242,7 @@
         .from('trades')
         .select('pnl')
         .eq('user_id', user.id);
-      if (error || !trades || trades.length === 0) {
-        // Still show user with 0 trades
+      if (error || !trades) {
         const row = table.insertRow();
         row.innerHTML = `
           <td>${user.name || user.email}</td>
@@ -1261,16 +1275,14 @@
     }
   }
 
-  // Auto-init if already logged in
-  (async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      await initApp();
-    }
-  })();
+  // Initialize on load
+  window.addEventListener('DOMContentLoaded', () => {
+    initApp();
+  });
 
+  // Listen for auth changes
   supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && !currentUser) {
+    if (event === 'SIGNED_IN') {
       initApp();
     } else if (event === 'SIGNED_OUT') {
       currentUser = null;
@@ -1283,4 +1295,3 @@
 </script>
 </body>
 </html>
-
