@@ -349,8 +349,8 @@
 
   <script>
     // ✅ REPLACE THESE WITH YOUR SUPABASE CREDENTIALS
-    const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-    const SUPABASE_ANON_KEY = 'your-anon-public-key-here';
+    const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
 
     // Initialize Supabase client
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -439,3 +439,4 @@
               <div class="action-buttons">
                 <button class="edit-btn" onclick="editTransaction('${t.id}', this)">Edit</button>
                 <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete<
+
