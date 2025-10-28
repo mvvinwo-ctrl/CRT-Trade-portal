@@ -100,7 +100,7 @@
       width: 100%;
       padding: 0.8rem;
       background: var(--card-light);
-      border: 1px solid var(--divider);
+      border: 1px solid(var(--divider));
       border-radius: 10px;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
@@ -348,14 +348,12 @@
   </footer>
 
   <script>
-    // ✅ FIXED: NO EXTRA SPACES IN URL OR KEY
+    // ✅ CORRECT SUPABASE CREDENTIALS
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_secret_omHu1NilXXwjL-aR0R0wUw_dCy4ru1o';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
 
-    // Initialize Supabase client
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Format MVR
     function formatMVR(value) {
       return new Intl.NumberFormat('en-MV', {
         style: 'currency',
@@ -372,7 +370,6 @@
       });
     }
 
-    // Add new transaction
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
@@ -380,52 +377,43 @@
       const payment = document.getElementById('payment').value;
       let date = document.getElementById('date').value;
 
-      // Auto-fill date if empty
       if (!date) {
-        date = new Date().toISOString().split('T')[0];
+        date = new Date().toISOString().substring(0, 10);
         document.getElementById('date').value = date;
       }
 
       const amount = parseFloat(amountInput);
-
       if (!description || isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid description and amount.');
+        alert('Please enter valid description and amount.');
         return;
       }
 
       try {
         const { error } = await supabase
           .from('transactions')
-          .insert([
-            {
-              type,
-              description,
-              amount,
-              payment_method: payment,
-              date
-            }
-          ]);
+          .insert([{ type, description, amount, payment_method: payment, date }]);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Insert error:', error);
+          alert('❌ Save failed: ' + (error.message || 'Unknown error'));
+          return;
+        }
 
         // Reset form
         document.getElementById('description').value = '';
         document.getElementById('amount').value = '';
         document.getElementById('date').value = '';
-
-        await fetchAndRender();
+        fetchAndRender();
       } catch (err) {
-        console.error('Save error:', err);
-        alert('Failed to save transaction. Please check your internet or Supabase setup.');
+        console.error('Unexpected error:', err);
+        alert('Unexpected error: ' + err.message);
       }
     }
 
-    // Edit transaction (inline update)
     async function editTransaction(id, button) {
       const card = button.closest('.transaction-card');
       const descElem = card.querySelector('.trans-desc');
       const amountElem = card.querySelector('.trans-amount');
-      const type = amountElem.classList.contains('amount-sale') ? 'sale' : 'expense';
       const currentDesc = descElem.textContent;
       const currentAmount = parseFloat(amountElem.textContent.replace(/[^\d.-]/g, ''));
 
@@ -433,48 +421,34 @@
       const newAmountStr = prompt('Edit amount (MVR):', currentAmount);
       const newAmount = parseFloat(newAmountStr);
 
-      if (newDesc === null || newAmountStr === null || isNaN(newAmount) || newAmount <= 0) {
-        return; // Cancelled or invalid
-      }
+      if (newDesc === null || newAmountStr === null || isNaN(newAmount) || newAmount <= 0) return;
 
       try {
         const { error } = await supabase
           .from('transactions')
-          .update({
-            description: newDesc,
-            amount: newAmount
-          })
+          .update({ description: newDesc, amount: newAmount })
           .eq('id', id);
 
         if (error) throw error;
-
-        await fetchAndRender();
+        fetchAndRender();
       } catch (err) {
         console.error('Edit error:', err);
-        alert('Failed to update transaction.');
+        alert('Failed to update.');
       }
     }
 
-    // Delete transaction
     async function deleteTransaction(id) {
-      if (!confirm('Are you sure you want to delete this record?')) return;
-
+      if (!confirm('Delete this record?')) return;
       try {
-        const { error } = await supabase
-          .from('transactions')
-          .delete()
-          .eq('id', id);
-
+        const { error } = await supabase.from('transactions').delete().eq('id', id);
         if (error) throw error;
-
-        await fetchAndRender();
+        fetchAndRender();
       } catch (err) {
         console.error('Delete error:', err);
-        alert('Failed to delete transaction.');
+        alert('Failed to delete.');
       }
     }
 
-    // Fetch & render all data
     async function fetchAndRender() {
       document.getElementById('loadingStatus').textContent = 'Loading...';
       document.getElementById('loadingStatus').style.display = 'block';
@@ -493,17 +467,13 @@
         document.getElementById('loadingStatus').style.display = 'none';
       } catch (err) {
         console.error('Fetch error:', err);
-        document.getElementById('loadingStatus').textContent = 'Failed to load records. Check console.';
+        document.getElementById('loadingStatus').textContent = 'Failed to load. Check console.';
       }
     }
 
     function renderSummary(transactions) {
-      const sales = transactions
-        .filter(t => t.type === 'sale')
-        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const expenses = transactions
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
       const profit = sales - expenses;
 
       document.getElementById('totalSales').textContent = formatMVR(sales);
@@ -514,11 +484,7 @@
     function renderTransactions(transactions) {
       const list = document.getElementById('transactionList');
       if (transactions.length === 0) {
-        list.innerHTML = `
-          <div class="transaction-card">
-            <div>No transactions recorded yet.</div>
-          </div>
-        `;
+        list.innerHTML = `<div class="transaction-card"><div>No transactions recorded yet.</div></div>`;
         return;
       }
 
@@ -549,9 +515,7 @@
       }).join('');
     }
 
-    // Initialize on load
     document.addEventListener('DOMContentLoaded', fetchAndRender);
   </script>
 </body>
 </html>
-
