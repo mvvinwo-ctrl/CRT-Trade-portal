@@ -33,6 +33,59 @@
       padding-bottom: 2rem;
     }
 
+    /* PIN LOCK SCREEN */
+    #pinLock {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1.5rem;
+    }
+
+    .pin-box {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .pin-box h2 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1.2rem;
+      text-align: center;
+      border: 1px solid var(--divider);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .pin-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -125,6 +178,77 @@
 
     .btn:hover {
       opacity: 0.94;
+    }
+
+    /* FILTER BUTTONS */
+    .filter-bar {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .filter-btn {
+      flex: 1;
+      padding: 0.6rem;
+      border: 1px solid var(--divider);
+      background: var(--card-light);
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* CALENDAR */
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .cal-header {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--subtle);
+      padding: 0.4rem 0;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-light);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    .cal-day.empty {
+      background: transparent;
+      border: none;
+    }
+
+    .cal-day.has-transaction::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .cal-day.today {
+      background: #f0e8e0;
+      font-weight: bold;
     }
 
     .summary-row {
@@ -271,91 +395,154 @@
 </head>
 <body>
 
-  <header>
-    <div class="logo-text">Bloomkraft</div>
-    <div class="user-info">
-      <div>Abdulla Jailam</div>
-      <div>#777488484848848</div>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="panel">
-      <h2 class="panel-title">Add Transaction</h2>
-      <div class="form-row">
-        <div>
-          <div class="form-group">
-            <label for="type">Type</label>
-            <select id="type">
-              <option value="sale">Sale</option>
-              <option value="expense">Expense</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="description">Description</label>
-            <input type="text" id="description" placeholder="e.g., Wedding Bouquet">
-          </div>
-        </div>
-        <div>
-          <div class="form-group">
-            <label for="amount">Amount (MVR)</label>
-            <input type="number" id="amount" min="0" step="0.01" placeholder="0.00">
-          </div>
-          <div class="form-group">
-            <label for="payment">Payment Method</label>
-            <select id="payment">
-              <option value="cash">Cash</option>
-              <option value="transfer">Bank Transfer</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" id="date">
-          </div>
-        </div>
-      </div>
-      <button class="btn" onclick="addTransaction()">Save Record</button>
-    </div>
-
-    <div class="panel">
-      <h2 class="panel-title">Financial Summary</h2>
-      <div class="summary-row">
-        <div class="summary-item">
-          <div class="summary-label">Total Sales</div>
-          <div class="summary-value value-sales" id="totalSales">MVR 0.00</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Total Expenses</div>
-          <div class="summary-value value-expense" id="totalExpenses">MVR 0.00</div>
-        </div>
-        <div class="summary-item">
-          <div class="summary-label">Net Profit</div>
-          <div class="summary-value value-profit" id="netProfit">MVR 0.00</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h2 class="panel-title">Your Records</h2>
-      <div class="status" id="loadingStatus">Loading your records...</div>
-      <div class="transaction-list" id="transactionList"></div>
+  <!-- PIN LOCK SCREEN -->
+  <div id="pinLock">
+    <div class="pin-box">
+      <h2>🔒 Bloomkraft Access</h2>
+      <p>Enter your PIN to continue</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" />
+      <button class="pin-btn" onclick="checkPin()">Unlock</button>
     </div>
   </div>
 
-  <footer>
-    <p>“Bloomkraft – Cultivating Clarity in Every Petal of Your Business.”</p>
-    <p>© 2025 Bloomkraft | Account: Abdulla Jailam (#777488484848848)</p>
-  </footer>
+  <!-- MAIN APP (HIDDEN UNTIL PIN ENTERED) -->
+  <div id="app" style="display:none;">
+
+    <header>
+      <div class="logo-text">Bloomkraft</div>
+      <div class="user-info">
+        <div>Abdulla Jailam</div>
+        <div>#777488484848848</div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="panel">
+        <h2 class="panel-title">Add Transaction</h2>
+        <div class="form-row">
+          <div>
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select id="type">
+                <option value="sale">Sale</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" id="description" placeholder="e.g., Wedding Bouquet">
+            </div>
+          </div>
+          <div>
+            <div class="form-group">
+              <label for="amount">Amount (MVR)</label>
+              <input type="number" id="amount" min="0" step="0.01" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label for="payment">Payment Method</label>
+              <select id="payment">
+                <option value="cash">Cash</option>
+                <option value="transfer">Bank Transfer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" id="date">
+            </div>
+          </div>
+        </div>
+        <button class="btn" onclick="addTransaction()">Save Record</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Financial Summary</h2>
+        <div class="summary-row">
+          <div class="summary-item">
+            <div class="summary-label">Total Sales</div>
+            <div class="summary-value value-sales" id="totalSales">MVR 0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Total Expenses</div>
+            <div class="summary-value value-expense" id="totalExpenses">MVR 0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Net Profit</div>
+            <div class="summary-value value-profit" id="netProfit">MVR 0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Your Records</h2>
+
+        <!-- FILTER BUTTONS -->
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="sale">Sales</button>
+          <button class="filter-btn" data-filter="expense">Expenses</button>
+        </div>
+
+        <!-- CALENDAR -->
+        <div class="calendar" id="calendar"></div>
+
+        <!-- TRANSACTION LIST -->
+        <div class="status" id="loadingStatus">Loading your records...</div>
+        <div class="transaction-list" id="transactionList"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>“Bloomkraft – Cultivating Clarity in Every Petal of Your Business.”</p>
+      <p>© 2025 Bloomkraft | Account: Abdulla Jailam (#777488484848848)</p>
+    </footer>
+  </div>
 
   <script>
-    // ✅ CORRECT Supabase credentials
+    // ✅ PIN PROTECTION
+    const CORRECT_PIN = '5252';
+    
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value;
+      if (pin === CORRECT_PIN) {
+        document.getElementById('pinLock').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        localStorage.setItem('bloomkraft_unlocked', 'true');
+        fetchAndRender();
+      } else {
+        alert('❌ Incorrect PIN. Please try again.');
+        document.getElementById('pinInput').value = '';
+      }
+    }
+
+    // Auto-unlock if previously authenticated
+    if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
+      document.getElementById('pinLock').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    }
+
+    // ✅ SUPABASE SETUP
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
 
-    // ✅ CORRECT INITIALIZATION — NO CONFLICT
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Global state
+    let allTransactions = [];
+    let currentFilter = 'all';
+
+    // ✅ FILTER HANDLING
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderTransactions(allTransactions);
+        renderCalendar(allTransactions);
+      });
+    });
+
+    // ✅ FORMATTING
     function formatMVR(value) {
       return new Intl.NumberFormat('en-MV', {
         style: 'currency',
@@ -372,6 +559,100 @@
       });
     }
 
+    // ✅ CALENDAR RENDERING
+    function renderCalendar(transactions) {
+      const calendarEl = document.getElementById('calendar');
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth(); // 0-indexed
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
+
+      // Get transactions for this month only
+      const monthTransactions = transactions.filter(t => {
+        const tDate = new Date(t.date);
+        return tDate.getFullYear() === year && tDate.getMonth() === month;
+      });
+
+      // Map day => transactions
+      const dayMap = {};
+      monthTransactions.forEach(t => {
+        const day = new Date(t.date).getDate();
+        if (!dayMap[day]) dayMap[day] = [];
+        dayMap[day].push(t);
+      });
+
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      let html = daysOfWeek.map(day => `<div class="cal-header">${day}</div>`).join('');
+
+      // Empty cells before 1st
+      for (let i = 0; i < startDayOfWeek; i++) {
+        html += `<div class="cal-day empty"></div>`;
+      }
+
+      // Days of month
+      const today = new Date().getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        const hasTrans = dayMap[day] && dayMap[day].length > 0;
+        const isToday = day === today && month === new Date().getMonth();
+        const classes = ['cal-day'];
+        if (hasTrans) classes.push('has-transaction');
+        if (isToday) classes.push('today');
+        html += `<div class="${classes.join(' ')}">${day}</div>`;
+      }
+
+      calendarEl.innerHTML = html;
+    }
+
+    // ✅ TRANSACTION RENDERING (WITH FILTER)
+    function renderTransactions(transactions) {
+      allTransactions = transactions;
+      const list = document.getElementById('transactionList');
+      
+      // Apply filter
+      let filtered = transactions;
+      if (currentFilter === 'sale') {
+        filtered = transactions.filter(t => t.type === 'sale');
+      } else if (currentFilter === 'expense') {
+        filtered = transactions.filter(t => t.type === 'expense');
+      }
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="transaction-card"><div>No records found.</div></div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(t => {
+        const isSale = t.type === 'sale';
+        const amountClass = isSale ? 'amount-sale' : 'amount-expense';
+        const sign = isSale ? '+' : '–';
+        const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
+
+        return `
+          <div class="transaction-card">
+            <div class="trans-main">
+              <div class="trans-header">
+                <span class="trans-desc">${t.description}</span>
+                <span class="trans-amount ${amountClass}">${sign}${formatMVR(t.amount)}</span>
+              </div>
+              <div class="trans-meta">
+                <span>${formatDate(t.date)}</span>
+                <span class="payment-tag">${paymentText}</span>
+              </div>
+              <div class="action-buttons">
+                <button class="edit-btn" onclick="editTransaction('${t.id}', this)">Edit</button>
+                <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ✅ SUPABASE FUNCTIONS (same as before, using supabaseClient)
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
@@ -468,6 +749,7 @@
 
         renderSummary(data);
         renderTransactions(data);
+        renderCalendar(data);
         document.getElementById('loadingStatus').style.display = 'none';
       } catch (err) {
         console.error('Fetch error:', err);
@@ -485,41 +767,10 @@
       document.getElementById('netProfit').textContent = formatMVR(profit);
     }
 
-    function renderTransactions(transactions) {
-      const list = document.getElementById('transactionList');
-      if (transactions.length === 0) {
-        list.innerHTML = `<div class="transaction-card"><div>No transactions recorded yet.</div></div>`;
-        return;
-      }
-
-      list.innerHTML = transactions.map(t => {
-        const isSale = t.type === 'sale';
-        const amountClass = isSale ? 'amount-sale' : 'amount-expense';
-        const sign = isSale ? '+' : '–';
-        const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
-
-        return `
-          <div class="transaction-card">
-            <div class="trans-main">
-              <div class="trans-header">
-                <span class="trans-desc">${t.description}</span>
-                <span class="trans-amount ${amountClass}">${sign}${formatMVR(t.amount)}</span>
-              </div>
-              <div class="trans-meta">
-                <span>${formatDate(t.date)}</span>
-                <span class="payment-tag">${paymentText}</span>
-              </div>
-              <div class="action-buttons">
-                <button class="edit-btn" onclick="editTransaction('${t.id}', this)">Edit</button>
-                <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+    // Initialize
+    if (document.getElementById('app').style.display === 'block') {
+      fetchAndRender();
     }
-
-    document.addEventListener('DOMContentLoaded', fetchAndRender);
   </script>
 </body>
 </html>
