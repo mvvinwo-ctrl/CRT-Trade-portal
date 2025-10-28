@@ -70,7 +70,7 @@
       padding: 0.9rem;
       font-size: 1.2rem;
       text-align: center;
-      border: 1px solid var(--divider);
+      border: 1px solid(var(--divider));
       border-radius: 10px;
       margin-bottom: 1rem;
     }
@@ -190,7 +190,7 @@
     .filter-btn {
       flex: 1;
       padding: 0.6rem;
-      border: 1px solid var(--divider);
+      border: 1px solid(var(--divider));
       background: var(--card-light);
       border-radius: 8px;
       font-weight: 500;
@@ -202,53 +202,6 @@
       background: var(--accent);
       color: white;
       border-color: var(--accent);
-    }
-
-    /* CALENDAR */
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      margin-bottom: 1.5rem;
-    }
-
-    .cal-header {
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--subtle);
-      padding: 0.4rem 0;
-    }
-
-    .cal-day {
-      aspect-ratio: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--card-light);
-      border-radius: 8px;
-      font-size: 0.9rem;
-      position: relative;
-    }
-
-    .cal-day.empty {
-      background: transparent;
-      border: none;
-    }
-
-    .cal-day.has-transaction::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      width: 6px;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    .cal-day.today {
-      background: #f0e8e0;
-      font-weight: bold;
     }
 
     .summary-row {
@@ -482,9 +435,6 @@
           <button class="filter-btn" data-filter="expense">Expenses</button>
         </div>
 
-        <!-- CALENDAR -->
-        <div class="calendar" id="calendar"></div>
-
         <!-- TRANSACTION LIST -->
         <div class="status" id="loadingStatus">Loading your records...</div>
         <div class="transaction-list" id="transactionList"></div>
@@ -538,7 +488,6 @@
         btn.classList.add('active');
         currentFilter = btn.dataset.filter;
         renderTransactions(allTransactions);
-        renderCalendar(allTransactions);
       });
     });
 
@@ -557,54 +506,6 @@
         day: '2-digit',
         month: 'short'
       });
-    }
-
-    // ✅ CALENDAR RENDERING
-    function renderCalendar(transactions) {
-      const calendarEl = document.getElementById('calendar');
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth(); // 0-indexed
-
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-      const daysInMonth = lastDay.getDate();
-      const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
-
-      // Get transactions for this month only
-      const monthTransactions = transactions.filter(t => {
-        const tDate = new Date(t.date);
-        return tDate.getFullYear() === year && tDate.getMonth() === month;
-      });
-
-      // Map day => transactions
-      const dayMap = {};
-      monthTransactions.forEach(t => {
-        const day = new Date(t.date).getDate();
-        if (!dayMap[day]) dayMap[day] = [];
-        dayMap[day].push(t);
-      });
-
-      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      let html = daysOfWeek.map(day => `<div class="cal-header">${day}</div>`).join('');
-
-      // Empty cells before 1st
-      for (let i = 0; i < startDayOfWeek; i++) {
-        html += `<div class="cal-day empty"></div>`;
-      }
-
-      // Days of month
-      const today = new Date().getDate();
-      for (let day = 1; day <= daysInMonth; day++) {
-        const hasTrans = dayMap[day] && dayMap[day].length > 0;
-        const isToday = day === today && month === new Date().getMonth();
-        const classes = ['cal-day'];
-        if (hasTrans) classes.push('has-transaction');
-        if (isToday) classes.push('today');
-        html += `<div class="${classes.join(' ')}">${day}</div>`;
-      }
-
-      calendarEl.innerHTML = html;
     }
 
     // ✅ TRANSACTION RENDERING (WITH FILTER)
@@ -652,7 +553,7 @@
       }).join('');
     }
 
-    // ✅ SUPABASE FUNCTIONS (same as before, using supabaseClient)
+    // ✅ SUPABASE FUNCTIONS
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
@@ -749,7 +650,6 @@
 
         renderSummary(data);
         renderTransactions(data);
-        renderCalendar(data);
         document.getElementById('loadingStatus').style.display = 'none';
       } catch (err) {
         console.error('Fetch error:', err);
