@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bloomkraft – Business Management</title>
   <!-- External Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2  "></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js  "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js  "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js  "></script>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -548,13 +548,28 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
+            <button class="btn" id="monthlyBtn" onclick="setView('monthly')" style="background:#D4B8A0; color:white;">Monthly</button>
+            <button class="btn" id="yearlyBtn" onclick="setView('yearly')" style="background:#D4B8A0; color:white;">Yearly</button>
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
             <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
         </div>
-        <!-- Monthly Panels will be dynamically generated here -->
-        <div id="monthlyPanelsContainer">
-          <!-- Placeholder for monthly panels -->
+        <div class="summary-row">
+          <div class="summary-item">
+            <div class="summary-label">Total Sales</div>
+            <div class="summary-value value-sales" id="totalSales">MVR 0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Total Expenses</div>
+            <div class="summary-value value-expense" id="totalExpenses">MVR 0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Net Profit</div>
+            <div class="summary-value value-profit" id="netProfit">MVR 0.00</div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="profitChart"></canvas>
         </div>
       </div>
 
@@ -613,13 +628,15 @@
     }
 
     // ✅ SUPABASE
-    const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
+    const SUPABASE_URL = '  https://bchygqpxmrovtetxwmrp.supabase.co  ';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
     let allTransactions = [];
     let currentFilter = { search: '', startDate: '', endDate: '' };
+    let chartInstance = null;
+    let currentView = 'monthly'; // 'monthly' or 'yearly'
 
     // ✅ FORMATTING
     function formatMVR(value) {
@@ -639,10 +656,10 @@
     }
 
     function formatMonthYear(dateStr) {
-      return new Date(dateStr).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      return new Date(dateStr).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
     }
 
-    // ✅ FILTERS FOR GLOBAL LIST
+    // ✅ FILTERS
     function applyFilters() {
       currentFilter.search = document.getElementById('searchInput').value.toLowerCase();
       currentFilter.startDate = document.getElementById('startDate').value;
@@ -658,7 +675,7 @@
       renderTransactions(allTransactions);
     }
 
-    // ✅ TRANSACTION RENDERING FOR GLOBAL LIST
+    // ✅ TRANSACTION RENDERING
     function showSkeletons() {
       const list = document.getElementById('transactionList');
       list.innerHTML = `
@@ -719,38 +736,40 @@
       }).join('');
     }
 
-    // ✅ CHART RENDERING FUNCTION (FOR MONTHLY PANELS)
-    function renderChartForMonth(ctx, transactions, monthKey) {
-      // Filter transactions for this specific month
-      const monthTransactions = transactions.filter(t => t.date.startsWith(monthKey));
+    // ✅ CHART (LINE CHART - FIXED)
+    function renderChart(transactions) {
+      const ctx = document.getElementById('profitChart').getContext('2d');
 
-      // Group by day within the month
-      const groupedByDay = {};
-      monthTransactions.forEach(t => {
-        const dayKey = t.date.slice(0, 10); // YYYY-MM-DD
-        if (!groupedByDay[dayKey]) groupedByDay[dayKey] = { sales: 0, expenses: 0 };
-        if (t.type === 'sale') groupedByDay[dayKey].sales += parseFloat(t.amount || 0);
-        else groupedByDay[dayKey].expenses += parseFloat(t.amount || 0);
+      // Group by month or year
+      const groupBy = currentView === 'monthly' ? (t) => t.date.slice(0, 7) : (t) => t.date.slice(0, 4);
+      const formatLabel = currentView === 'monthly' ? (key) => {
+        const d = new Date(key + '-01');
+        return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+      } : (key) => key;
+
+      const grouped = {};
+      transactions.forEach(t => {
+        const key = groupBy(t);
+        if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
+        if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
+        else grouped[key].expenses += parseFloat(t.amount || 0);
       });
 
-      // Sort days chronologically
-      const labels = Object.keys(groupedByDay).sort();
+      // Sort keys chronologically
+      const labels = Object.keys(grouped).sort();
 
-      // Calculate net profit per day
-      const profitData = labels.map(k => groupedByDay[k].sales - groupedByDay[k].expenses);
+      // Calculate net profit per period
+      const profitData = labels.map(k => grouped[k].sales - grouped[k].expenses);
 
-      // Destroy existing chart if any
-      if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
-      }
+      if (chartInstance) chartInstance.destroy();
 
-      ctx.chartInstance = new Chart(ctx, {
+      chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: labels.map(d => d.split('-')[2]), // Show only day number
+          labels: labels.map(formatLabel),
           datasets: [{
             label: 'Net Profit (MVR)',
-            data: profitData,
+             profitData,
             borderColor: '#A8C3B1',
             backgroundColor: 'rgba(168, 195, 177, 0.1)',
             tension: 0.3,
@@ -779,8 +798,7 @@
               ticks: { callback: v => `MVR ${v}` }
             },
             x: {
-              grid: { display: false },
-              title: { display: true, text: 'Day of Month' }
+              grid: { display: false }
             }
           }
         }
@@ -901,6 +919,23 @@
       }
     }
 
+    // ✅ VIEW TOGGLE (Monthly / Yearly)
+    function setView(view) {
+      currentView = view;
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.style.background = '#D4B8A0';
+        btn.style.color = 'white';
+      });
+      if (view === 'monthly') {
+        document.getElementById('monthlyBtn').style.background = '#C3A692';
+      } else {
+        document.getElementById('yearlyBtn').style.background = '#C3A692';
+      }
+
+      renderSummary(allTransactions);
+      renderChart(allTransactions);
+    }
+
     // ✅ SUPABASE FUNCTIONS
     async function addTransaction() {
       const type = document.getElementById('type').value;
@@ -1003,187 +1038,36 @@
       showToast('CSV exported successfully!');
     }
 
-    // ✅ RENDER MONTHLY PANELS
-    function renderMonthlyPanels(transactions) {
-      const container = document.getElementById('monthlyPanelsContainer');
-      container.innerHTML = ''; // Clear previous panels
+    function renderSummary(transactions) {
+      const now = new Date();
+      const currentKey = currentView === 'monthly'
+        ? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+        : `${now.getFullYear()}`;
 
-      if (transactions.length === 0) {
-        container.innerHTML = `<div class="status">No transactions recorded yet.</div>`;
-        return;
-      }
-
-      // Group transactions by month (YYYY-MM)
-      const groupedByMonth = {};
-      transactions.forEach(t => {
-        const monthKey = t.date.slice(0, 7); // YYYY-MM
-        if (!groupedByMonth[monthKey]) groupedByMonth[monthKey] = [];
-        groupedByMonth[monthKey].push(t);
+      const relevant = transactions.filter(t => {
+        const key = currentView === 'monthly'
+          ? t.date.slice(0, 7)
+          : t.date.slice(0, 4);
+        return key === currentKey;
       });
 
-      // Sort months chronologically (most recent first)
-      const sortedMonths = Object.keys(groupedByMonth).sort().reverse();
+      const sales = relevant.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const expenses = relevant.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const profit = sales - expenses;
 
-      // Create a panel for each month
-      sortedMonths.forEach(monthKey => {
-        const monthName = formatMonthYear(monthKey + '-01'); // Get full month name
-        const monthTransactions = groupedByMonth[monthKey];
+      // Update DOM with colors
+      const salesEl = document.getElementById('totalSales');
+      const expensesEl = document.getElementById('totalExpenses');
+      const profitEl = document.getElementById('netProfit');
 
-        // Calculate summary for this month
-        const sales = monthTransactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-        const expenses = monthTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-        const profit = sales - expenses;
+      salesEl.textContent = formatMVR(sales);
+      salesEl.style.color = sales > 0 ? 'var(--profit)' : 'var(--text)';
 
-        // Create the panel HTML
-        const panelHTML = `
-          <div class="panel" id="monthPanel-${monthKey}">
-            <div class="panel-header">
-              <h2 class="panel-title">${monthName}</h2>
-              <div class="btn-group">
-                <button class="btn export-btn" onclick="exportMonthCSV('${monthKey}')">Export Month CSV</button>
-              </div>
-            </div>
-            <div class="summary-row">
-              <div class="summary-item">
-                <div class="summary-label">Sales</div>
-                <div class="summary-value value-sales" style="color: ${sales > 0 ? 'var(--profit)' : 'var(--text)'}">${formatMVR(sales)}</div>
-              </div>
-              <div class="summary-item">
-                <div class="summary-label">Expenses</div>
-                <div class="summary-value value-expense" style="color: var(--expense)">${formatMVR(expenses)}</div>
-              </div>
-              <div class="summary-item">
-                <div class="summary-label">Net Profit</div>
-                <div class="summary-value value-profit" style="color: ${profit >= 0 ? 'var(--profit)' : 'var(--expense)'}">${formatMVR(profit)}</div>
-              </div>
-            </div>
-            <div class="chart-container">
-              <canvas id="chart-${monthKey}"></canvas>
-            </div>
-            <div class="filter-section">
-              <input type="text" id="search-${monthKey}" class="filter-input" placeholder="Search description...">
-              <input type="date" id="start-${monthKey}" class="filter-input" value="${monthKey}-01">
-              <input type="date" id="end-${monthKey}" class="filter-input" value="${monthKey}-31">
-              <button class="btn btn-outline" onclick="applyMonthFilter('${monthKey}')">Apply</button>
-              <button class="btn btn-outline" onclick="resetMonthFilter('${monthKey}')">Reset</button>
-            </div>
-            <div class="transaction-list" id="list-${monthKey}">
-              <!-- Transactions for this month will be rendered here -->
-            </div>
-          </div>
-        `;
+      expensesEl.textContent = formatMVR(expenses);
+      expensesEl.style.color = 'var(--expense)';
 
-        container.insertAdjacentHTML('beforeend', panelHTML);
-
-        // Render the chart for this month
-        const chartCanvas = document.getElementById(`chart-${monthKey}`);
-        renderChartForMonth(chartCanvas, transactions, monthKey);
-
-        // Render the transaction list for this month (initially unfiltered)
-        renderMonthTransactions(monthKey, monthTransactions);
-      });
-    }
-
-    // ✅ RENDER TRANSACTIONS FOR A SPECIFIC MONTH
-    function renderMonthTransactions(monthKey, transactions) {
-      const listElement = document.getElementById(`list-${monthKey}`);
-      const searchInput = document.getElementById(`search-${monthKey}`);
-      const startInput = document.getElementById(`start-${monthKey}`);
-      const endInput = document.getElementById(`end-${monthKey}`);
-
-      // Apply filters for this specific month
-      let filtered = [...transactions];
-
-      if (searchInput && searchInput.value) {
-        filtered = filtered.filter(t => 
-          t.description.toLowerCase().includes(searchInput.value.toLowerCase())
-        );
-      }
-      if (startInput && startInput.value) {
-        filtered = filtered.filter(t => t.date >= startInput.value);
-      }
-      if (endInput && endInput.value) {
-        filtered = filtered.filter(t => t.date <= endInput.value);
-      }
-
-      if (filtered.length === 0) {
-        listElement.innerHTML = `<div class="status">No transactions found for this period.</div>`;
-        return;
-      }
-
-      listElement.innerHTML = filtered.map(t => {
-        const isSale = t.type === 'sale';
-        const amountClass = isSale ? 'amount-sale' : 'amount-expense';
-        const sign = isSale ? '+' : '–';
-        const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
-
-        const invoiceBtn = isSale ? `<button class="pdf-btn" onclick="generateInvoice('${t.id}', '${t.description}', '${t.amount}', '${t.date}', '${t.payment_method}')">📄 Invoice</button>` : '';
-
-        return `
-          <div class="transaction-card">
-            <div class="trans-main">
-              <div class="trans-header">
-                <span class="trans-desc">${t.description}</span>
-                <span class="trans-amount ${amountClass}">${sign}${formatMVR(t.amount)}</span>
-              </div>
-              <div class="trans-meta">
-                <span>${formatDate(t.date)}</span>
-                <span class="payment-tag">${paymentText}</span>
-              </div>
-              <div class="action-buttons">
-                ${invoiceBtn}
-                <button class="edit-btn" onclick="editTransaction('${t.id}')">Edit</button>
-                <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // ✅ APPLY FILTER FOR A SPECIFIC MONTH
-    function applyMonthFilter(monthKey) {
-      const monthTransactions = allTransactions.filter(t => t.date.startsWith(monthKey));
-      renderMonthTransactions(monthKey, monthTransactions);
-    }
-
-    // ✅ RESET FILTER FOR A SPECIFIC MONTH
-    function resetMonthFilter(monthKey) {
-      const searchInput = document.getElementById(`search-${monthKey}`);
-      const startInput = document.getElementById(`start-${monthKey}`);
-      const endInput = document.getElementById(`end-${monthKey}`);
-
-      searchInput.value = '';
-      startInput.value = `${monthKey}-01`;
-      endInput.value = `${monthKey}-31`;
-
-      const monthTransactions = allTransactions.filter(t => t.date.startsWith(monthKey));
-      renderMonthTransactions(monthKey, monthTransactions);
-    }
-
-    // ✅ EXPORT CSV FOR A SPECIFIC MONTH
-    function exportMonthCSV(monthKey) {
-      const monthTransactions = allTransactions.filter(t => t.date.startsWith(monthKey));
-      if (monthTransactions.length === 0) {
-        showToast('No data to export for this month.', 'error');
-        return;
-      }
-
-      let csv = 'Date,Type,Description,Amount (MVR),Payment Method\n';
-      monthTransactions.forEach(t => {
-        csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.amount}","${t.payment_method}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Bloomkraft_${monthKey}_Transactions.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast(`CSV for ${monthKey} exported successfully!`);
+      profitEl.textContent = formatMVR(profit);
+      profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
     }
 
     async function fetchAndRender() {
@@ -1199,7 +1083,7 @@
 
         allTransactions = data;
         renderSummary(data);
-        renderMonthlyPanels(data); // This replaces the old chart rendering
+        renderChart(data);
         renderTransactions(data);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -1207,27 +1091,6 @@
           `<div class="status">Failed to load. Please check your connection.</div>`;
         showToast('Failed to load data.', 'error');
       }
-    }
-
-    // ✅ RENDER SUMMARY (TOTALS ACROSS ALL TIME)
-    function renderSummary(transactions) {
-      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-      const profit = sales - expenses;
-
-      // Update DOM with colors
-      const salesEl = document.getElementById('totalSales');
-      const expensesEl = document.getElementById('totalExpenses');
-      const profitEl = document.getElementById('netProfit');
-
-      if (salesEl) salesEl.textContent = formatMVR(sales);
-      if (salesEl) salesEl.style.color = sales > 0 ? 'var(--profit)' : 'var(--text)';
-
-      if (expensesEl) expensesEl.textContent = formatMVR(expenses);
-      if (expensesEl) expensesEl.style.color = 'var(--expense)';
-
-      if (profitEl) profitEl.textContent = formatMVR(profit);
-      if (profitEl) profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
     }
 
     // Initialize
