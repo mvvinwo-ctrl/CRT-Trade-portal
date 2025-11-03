@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,20 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bloomkraft – Business Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
       --bg: #FFF9F3;
       --card: #FFFFFF;
       --card-light: #FFFCF8;
       --accent: #D4B8A0;
+      --accent-dark: #C2A48C;
       --profit: #A8C3B1;
       --expense: #D97777;
       --text: #3E3A35;
       --subtle: #A9A29A;
       --divider: #F5EFE8;
-      --shadow: 0 8px 30px rgba(0,0,0,0.06);
+      --shadow: 0 6px 20px rgba(0,0,0,0.05);
+      --sidebar-width: 260px;
     }
 
     * {
@@ -35,25 +39,7 @@
       overflow-x: hidden;
     }
 
-    /* ANIMATIONS */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInUp 0.6s forwards;
-    }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .stagger-item {
-      opacity: 0;
-      animation: fadeInUp 0.5s ease-out forwards;
-    }
-
-    /* PIN LOCK */
+    /* === PIN LOCK === */
     #pinLock {
       position: fixed;
       inset: 0;
@@ -61,39 +47,39 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2000;
-      backdrop-filter: blur(2px);
+      z-index: 3000;
     }
 
     .pin-box {
       background: var(--card);
-      padding: 2.5rem;
-      border-radius: 20px;
+      padding: 2.8rem;
+      border-radius: 22px;
       box-shadow: var(--shadow);
       text-align: center;
-      max-width: 420px;
-      width: 90vw;
-      animation: pulse 1.5s infinite alternate;
+      max-width: 440px;
+      width: 92vw;
+      animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      from { box-shadow: var(--shadow); }
-      to { box-shadow: 0 10px 35px rgba(212, 184, 160, 0.25); }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     .pin-box h2 {
       font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
       margin-bottom: 1rem;
       color: var(--text);
     }
 
     .pin-input {
       width: 100%;
-      padding: 1rem;
-      font-size: 1.3rem;
+      padding: 1.1rem;
+      font-size: 1.4rem;
       text-align: center;
       border: 1px solid var(--divider);
-      border-radius: 12px;
+      border-radius: 14px;
       margin: 1.2rem 0;
       background: var(--card-light);
       font-family: 'Inter', sans-serif;
@@ -103,104 +89,222 @@
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.9rem 2rem;
-      border-radius: 12px;
+      padding: 1rem 2.2rem;
+      border-radius: 14px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(212, 184, 160, 0.3);
+      box-shadow: 0 5px 15px rgba(212, 184, 160, 0.3);
     }
 
     .pin-btn:hover {
-      background: #c2a48c;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(212, 184, 160, 0.4);
+      background: var(--accent-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(212, 184, 160, 0.4);
     }
 
-    /* HEADER */
-    header {
+    /* === LAYOUT === */
+    .app-layout {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.5rem 2.5rem;
+      min-height: 100vh;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: var(--sidebar-width);
       background: var(--card);
-      position: sticky;
-      top: 0;
+      box-shadow: 3px 0 15px rgba(0,0,0,0.04);
+      position: fixed;
+      height: 100vh;
       z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+      padding: 1.8rem 1.2rem;
+      display: flex;
+      flex-direction: column;
     }
 
-    .logo-container {
+    .logo-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--divider);
     }
 
-    .logo-img {
-      height: 40px;
-      object-fit: contain;
-      /* Replace with your actual logo path */
-      /* background: var(--accent); border-radius: 8px; (fallback if no logo) */
+    .bloom-logo {
+      width: 42px;
+      height: 42px;
     }
 
     .logo-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1.95rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--text);
     }
 
-    .user-info {
+    .nav-links {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+
+    .nav-item {
+      margin-bottom: 0.8rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0.9rem 1.2rem;
+      border-radius: 14px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.25s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+
+    .user-info-sidebar {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--divider);
+      font-size: 0.9rem;
+      color: var(--subtle);
+    }
+
+    /* === MAIN CONTENT === */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 2rem;
+      padding-top: 90px;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 2rem;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .user-info-top {
       text-align: right;
       font-size: 0.95rem;
     }
 
     .container {
-      max-width: 1050px;
-      margin: 2.2rem auto;
-      padding: 0 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-title {
+      font-size: 1.1rem;
+      color: var(--subtle);
+      margin-bottom: 0.8rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .chart-container {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2.2rem;
+      height: 320px;
     }
 
     .panel {
       background: var(--card);
       border-radius: 18px;
       padding: 2rem;
-      margin-bottom: 2.4rem;
+      margin-bottom: 2.2rem;
       box-shadow: var(--shadow);
-      opacity: 0;
-      animation: fadeInUp 0.7s forwards;
     }
 
-    .panel:nth-child(2) { animation-delay: 0.15s; }
-    .panel:nth-child(3) { animation-delay: 0.3s; }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.6rem;
+    }
 
     .panel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      margin-bottom: 1.6rem;
+      font-size: 1.7rem;
       color: var(--text);
-      position: relative;
-      padding-bottom: 0.6rem;
     }
 
-    .panel-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 60px;
-      height: 3px;
+    .btn {
       background: var(--accent);
-      border-radius: 2px;
+      color: white;
+      border: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* FORM & INPUTS */
-    .form-row {
+    .btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    /* FORM STYLES */
+    .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 1.4rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.6rem;
+      margin-bottom: 1.8rem;
     }
 
     label {
@@ -211,376 +315,270 @@
       font-weight: 500;
     }
 
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 0.9rem;
+      padding: 0.95rem;
       background: var(--card-light);
       border: 1px solid var(--divider);
       border-radius: 12px;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       color: var(--text);
-      transition: all 0.25s ease;
     }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(212, 184, 160, 0.2);
+    /* TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    .btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 0.95rem 1.8rem;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 1.05rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 14px rgba(212, 184, 160, 0.35);
-    }
-
-    .btn:hover {
-      background: #c2a48c;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(212, 184, 160, 0.45);
-    }
-
-    /* FILTER BAR */
-    .filter-bar {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      flex: 1;
-      min-width: 100px;
-      padding: 0.75rem;
-      border: 1px solid var(--divider);
+    .data-table th {
+      text-align: left;
+      padding: 1rem 1.2rem;
       background: var(--card-light);
-      border-radius: 10px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      color: var(--text);
-    }
-
-    .filter-btn:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    .filter-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    /* SUMMARY CARDS */
-    .summary-row {
-      display: flex;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-    }
-
-    .summary-item {
-      flex: 1;
-      min-width: 180px;
-      background: var(--card-light);
-      padding: 1.4rem;
-      border-radius: 16px;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .summary-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-    }
-
-    .summary-label {
-      font-size: 1rem;
       color: var(--subtle);
-      margin-bottom: 0.5rem;
     }
 
-    .summary-value {
-      font-size: 1.7rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', serif;
+    .data-table td {
+      padding: 1.1rem 1.2rem;
+      border-bottom: 1px solid var(--divider);
     }
 
-    .value-profit { color: var(--profit); }
-    .value-sales { color: var(--profit); }
-    .value-expense { color: var(--expense); }
-
-    /* TRANSACTION LIST */
-    .transaction-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.3rem;
+    .data-table tr:last-child td {
+      border-bottom: none;
     }
 
-    .transaction-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 1.3rem;
-      background: var(--card-light);
-      border-radius: 16px;
-      transition: all 0.3s ease;
-      opacity: 0;
-      animation: fadeInUp 0.5s forwards;
-    }
-
-    .transaction-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    .trans-main {
-      flex: 1;
-      margin-right: 1.2rem;
-    }
-
-    .trans-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .trans-desc {
-      font-size: 1.05rem;
-      color: var(--text);
-    }
-
-    .trans-meta {
-      font-size: 0.88rem;
-      color: var(--subtle);
-      display: flex;
-      gap: 1rem;
-      margin: 0.4rem 0;
-    }
-
-    .payment-tag {
-      background: var(--divider);
-      padding: 0.2rem 0.6rem;
+    .status-badge {
+      padding: 0.3rem 0.8rem;
       border-radius: 20px;
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       font-weight: 600;
     }
 
-    .trans-amount {
-      font-weight: 700;
-      min-width: 100px;
-      text-align: right;
-      font-size: 1.25rem;
-    }
+    .status-instock { background: #E8F5E9; color: #2E7D32; }
+    .status-low { background: #FFF8E1; color: #FF8F00; }
+    .status-out { background: #FFEBEE; color: #C62828; }
 
-    .amount-sale { color: var(--profit); }
-    .amount-expense { color: var(--expense); }
-
-    .action-buttons {
+    .actions-cell {
       display: flex;
-      gap: 0.8rem;
-      margin-top: 0.7rem;
+      gap: 0.7rem;
     }
 
-    .edit-btn, .delete-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      border: 1px solid;
-      font-weight: 600;
       transition: all 0.2s ease;
     }
 
-    .edit-btn {
-      background: none;
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .icon-btn.edit { background: #E3F2FD; color: #1976D2; }
+    .icon-btn.delete { background: #FFEBEE; color: #D32F2F; }
 
-    .edit-btn:hover {
-      background: var(--accent);
-      color: white;
-    }
-
-    .delete-btn {
-      background: none;
-      border-color: var(--expense);
-      color: var(--expense);
-    }
-
-    .delete-btn:hover {
-      background: var(--expense);
-      color: white;
-    }
-
-    .status {
-      text-align: center;
-      padding: 1.5rem;
-      color: var(--subtle);
-      font-style: italic;
-      font-size: 1.1rem;
+    .icon-btn:hover {
+      transform: scale(1.1);
     }
 
     footer {
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--subtle);
-      margin-top: 2.5rem;
-      padding: 0 2rem 2rem;
-      opacity: 0;
-      animation: fadeInUp 0.8s forwards;
+      margin-top: 2rem;
+      padding: 1rem;
     }
 
     /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 80px;
+        align-items: center;
+      }
+      .logo-text, .nav-text, .user-info-sidebar {
+        display: none;
+      }
+      .bloom-logo {
+        width: 40px;
+        height: 40px;
+      }
+      .nav-link {
+        justify-content: center;
+        padding: 1rem;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+
     @media (max-width: 768px) {
-      header {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .main-content {
+        padding: 1.5rem;
+        padding-top: 80px;
+      }
+      .header-bar {
         padding: 1.2rem;
       }
-      .container {
-        padding: 0 1.2rem;
-      }
-      .panel {
-        padding: 1.6rem;
-      }
-      .summary-row {
-        flex-direction: column;
-      }
-      .logo-text {
-        font-size: 1.6rem;
+      .page-title {
+        font-size: 1.7rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- PIN LOCK SCREEN -->
+  <!-- PIN LOCK -->
   <div id="pinLock">
-    <div class="pin-box animate__animated animate__fadeIn">
-      <h2>🔒 Bloomkraft Access</h2>
-      <p>Enter your secure PIN to continue</p>
-      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autocomplete="off" />
-      <button class="pin-btn" onclick="checkPin()">Unlock Portal</button>
+    <div class="pin-box">
+      <h2>🔐 Bloomkraft Secure Access</h2>
+      <p>Enter your 4-digit PIN to unlock your business dashboard</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autocomplete="off" inputmode="numeric"/>
+      <button class="pin-btn" onclick="checkPin()">
+        <i class="fas fa-lock-open"></i> Unlock Dashboard
+      </button>
     </div>
   </div>
 
   <!-- MAIN APP -->
-  <div id="app" style="display:none;">
-
-    <header>
-      <div class="logo-container">
-        <!-- ✅ REPLACE WITH YOUR LOGO FILE -->
-        <!-- <img src="your-logo.png" alt="Bloomkraft Logo" class="logo-img"> -->
+  <div id="app" style="display:none;" class="app-layout">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-section">
+        <!-- NEW EMBEDDED LOGO (Floral & Elegant) -->
+        <svg class="bloom-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#FFF9F3" stroke="#D4B8A0" stroke-width="2"/>
+          <path d="M50 30 Q60 20 70 30 Q80 40 70 50 Q60 60 50 50 Q40 60 30 50 Q20 40 30 30 Q40 20 50 30" fill="#A8C3B1"/>
+          <circle cx="50" cy="50" r="10" fill="#D4B8A0"/>
+        </svg>
         <div class="logo-text">Bloomkraft</div>
       </div>
-      <div class="user-info">
-        <div><strong>Abdulla Jailam</strong></div>
-        <div>Account #777488484848848</div>
-      </div>
-    </header>
+      
+      <ul class="nav-links">
+        <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-home"></i> <span class="nav-text">Dashboard</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> <span class="nav-text">Transactions</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-boxes"></i> <span class="nav-text">Inventory</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-users"></i> <span class="nav-text">Customers</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-chart-line"></i> <span class="nav-text">Reports</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i> <span class="nav-text">Settings</span></a></li>
+      </ul>
 
-    <div class="container">
-      <div class="panel">
-        <h2 class="panel-title">Add Transaction</h2>
-        <div class="form-row">
-          <div>
-            <div class="form-group">
-              <label for="type">Type</label>
-              <select id="type">
-                <option value="sale">Sale</option>
-                <option value="expense">Expense</option>
+      <div class="user-info-sidebar">
+        <div>Abdulla Jailam</div>
+        <div>#777488484848848</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="header-bar">
+        <h1 class="page-title">Business Dashboard</h1>
+        <div class="user-info-top">
+          <div><strong>Welcome back,</strong></div>
+          <div>Abdulla Jailam</div>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Today's Sales</div>
+            <div class="stat-value" id="todaySales">MVR 0.00</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">This Month Profit</div>
+            <div class="stat-value" style="color: var(--profit);" id="monthProfit">MVR 0.00</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Active Inventory</div>
+            <div class="stat-value" id="inventoryCount">0 items</div>
+          </div>
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Quick Actions</h2>
+          </div>
+          <div class="form-grid">
+            <div>
+              <label for="quickType">Transaction Type</label>
+              <select id="quickType">
+                <option value="sale">New Sale</option>
+                <option value="expense">New Expense</option>
+                <option value="inventory">Add Inventory</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="description">Description</label>
-              <input type="text" id="description" placeholder="e.g., Wedding Bouquet">
+            <div>
+              <label for="quickAmount">Amount (MVR)</label>
+              <input type="number" id="quickAmount" placeholder="0.00" min="0" step="0.01">
             </div>
-          </div>
-          <div>
-            <div class="form-group">
-              <label for="amount">Amount (MVR)</label>
-              <input type="number" id="amount" min="0" step="0.01" placeholder="0.00">
+            <div>
+              <label for="quickDesc">Description</label>
+              <input type="text" id="quickDesc" placeholder="e.g., Rose Bouquet">
             </div>
-            <div class="form-group">
-              <label for="payment">Payment Method</label>
-              <select id="payment">
-                <option value="cash">Cash</option>
-                <option value="transfer">Bank Transfer</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="date">Date</label>
-              <input type="date" id="date">
+            <div>
+              <label>&nbsp;</label>
+              <button class="btn" onclick="quickAdd()">
+                <i class="fas fa-plus"></i> Add Record
+              </button>
             </div>
           </div>
         </div>
-        <button class="btn" onclick="addTransaction()">Save Record</button>
-      </div>
 
-      <div class="panel">
-        <h2 class="panel-title">Financial Summary</h2>
-        <div class="summary-row">
-          <div class="summary-item">
-            <div class="summary-label">Total Sales</div>
-            <div class="summary-value value-sales" id="totalSales">MVR 0.00</div>
+        <!-- RECENT TRANSACTIONS -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Recent Transactions</h2>
+            <button class="btn" onclick="viewAllTransactions()">
+              <i class="fas fa-list"></i> View All
+            </button>
           </div>
-          <div class="summary-item">
-            <div class="summary-label">Total Expenses</div>
-            <div class="summary-value value-expense" id="totalExpenses">MVR 0.00</div>
-          </div>
-          <div class="summary-item">
-            <div class="summary-label">Net Profit</div>
-            <div class="summary-value value-profit" id="netProfit">MVR 0.00</div>
-          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recentTransactionsBody">
+              <tr><td colspan="5" class="status">Loading recent activity…</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div class="panel">
-        <h2 class="panel-title">Your Records</h2>
-        <div class="filter-bar">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="sale">Sales</button>
-          <button class="filter-btn" data-filter="expense">Expenses</button>
-        </div>
-        <div class="status" id="loadingStatus">Loading your records…</div>
-        <div class="transaction-list" id="transactionList"></div>
-      </div>
-    </div>
-
-    <footer>
-      <p>“Bloomkraft – Cultivating Clarity in Every Petal of Your Business.”</p>
-      <p>© 2025 Bloomkraft | Account: Abdulla Jailam (#777488484848848)</p>
-    </footer>
+      <footer>
+        <p>“Bloomkraft – Where Business Blooms with Clarity.”</p>
+        <p>© 2025 Bloomkraft | Account: Abdulla Jailam (#777488484848848)</p>
+      </footer>
+    </main>
   </div>
 
   <script>
-    // === PIN PROTECTION ===
+    // === PIN ===
     const CORRECT_PIN = '5252';
-    
     function checkPin() {
       const pin = document.getElementById('pinInput').value;
       if (pin === CORRECT_PIN) {
         document.getElementById('pinLock').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
+        document.getElementById('app').style.display = 'flex';
         localStorage.setItem('bloomkraft_unlocked', 'true');
-        // Trigger staggered animations
-        setTimeout(() => {
-          document.querySelectorAll('.panel').forEach((el, i) => {
-            el.style.animationDelay = `${i * 0.15}s`;
-          });
-          fetchAndRender();
-        }, 300);
+        initDashboard();
       } else {
         alert('❌ Incorrect PIN. Please try again.');
         document.getElementById('pinInput').value = '';
@@ -589,29 +587,14 @@
 
     if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
       document.getElementById('pinLock').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      setTimeout(fetchAndRender, 300);
+      document.getElementById('app').style.display = 'flex';
+      setTimeout(initDashboard, 300);
     }
 
     // === SUPABASE ===
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
-
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
-
-    let allTransactions = [];
-    let currentFilter = 'all';
-
-    // === FILTER HANDLING ===
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        renderTransactions(allTransactions);
-      });
-    });
+    const supabase = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
     // === FORMATTING ===
     function formatMVR(value) {
@@ -626,156 +609,137 @@
     function formatDate(dateStr) {
       return new Date(dateStr).toLocaleDateString('en-GB', {
         day: '2-digit',
-        month: 'short'
+        month: 'short',
+        year: 'numeric'
       });
     }
 
-    // === RENDER TRANSACTIONS ===
-    function renderTransactions(transactions) {
-      allTransactions = transactions;
-      const list = document.getElementById('transactionList');
-      
-      let filtered = transactions;
-      if (currentFilter === 'sale') filtered = transactions.filter(t => t.type === 'sale');
-      else if (currentFilter === 'expense') filtered = transactions.filter(t => t.type === 'expense');
+    // === CHART ===
+    let revenueChart = null;
+    function renderChart(data) {
+      const ctx = document.getElementById('revenueChart').getContext('2d');
+      if (revenueChart) revenueChart.destroy();
 
-      if (filtered.length === 0) {
-        list.innerHTML = `<div class="transaction-card"><div>No records found.</div></div>`;
-        return;
-      }
+      const labels = data.map(d => d.month);
+      const sales = data.map(d => d.sales);
+      const expenses = data.map(d => d.expenses);
 
-      list.innerHTML = filtered.map(t => {
-        const isSale = t.type === 'sale';
-        const amountClass = isSale ? 'amount-sale' : 'amount-expense';
-        const sign = isSale ? '+' : '–';
-        const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
-
-        return `
-          <div class="transaction-card">
-            <div class="trans-main">
-              <div class="trans-header">
-                <span class="trans-desc">${t.description}</span>
-                <span class="trans-amount ${amountClass}">${sign}${formatMVR(t.amount)}</span>
-              </div>
-              <div class="trans-meta">
-                <span>${formatDate(t.date)}</span>
-                <span class="payment-tag">${paymentText}</span>
-              </div>
-              <div class="action-buttons">
-                <button class="edit-btn" onclick="editTransaction('${t.id}', this)">Edit</button>
-                <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      // Animate new cards
-      document.querySelectorAll('.transaction-card').forEach((el, i) => {
-        el.style.animationDelay = `${i * 0.05}s`;
+      revenueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Sales (MVR)',
+              data: sales,
+              backgroundColor: '#A8C3B1',
+              borderRadius: 6,
+              borderSkipped: false,
+            },
+            {
+              label: 'Expenses (MVR)',
+              data: expenses,
+              backgroundColor: '#D97777',
+              borderRadius: 6,
+              borderSkipped: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return 'MVR ' + value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
       });
     }
 
-    // === CRUD OPERATIONS ===
-    async function addTransaction() {
-      const type = document.getElementById('type').value;
-      const description = document.getElementById('description').value.trim();
-      const amountInput = document.getElementById('amount').value;
-      const payment = document.getElementById('payment').value;
-      let date = document.getElementById('date').value || new Date().toISOString().substring(0, 10);
+    // === DUMMY CHART DATA (replace with real Supabase query) ===
+    function getMonthlyData() {
+      return [
+        { month: 'Jan', sales: 12500, expenses: 4200 },
+        { month: 'Feb', sales: 18900, expenses: 5100 },
+        { month: 'Mar', sales: 21000, expenses: 6300 },
+        { month: 'Apr', sales: 19800, expenses: 5800 },
+        { month: 'May', sales: 24500, expenses: 7200 },
+        { month: 'Jun', sales: 26000, expenses: 6900 }
+      ];
+    }
 
-      const amount = parseFloat(amountInput);
-      if (!description || isNaN(amount) || amount <= 0) {
-        alert('Please enter valid description and amount.');
+    // === DASHBOARD INIT ===
+    async function initDashboard() {
+      // Mock stats
+      document.getElementById('todaySales').textContent = formatMVR(4850.00);
+      document.getElementById('monthProfit').textContent = formatMVR(12600.00);
+      document.getElementById('inventoryCount').textContent = '42 items';
+
+      // Render chart
+      renderChart(getMonthlyData());
+
+      // Load recent transactions
+      loadRecentTransactions();
+    }
+
+    async function loadRecentTransactions() {
+      const tbody = document.getElementById('recentTransactionsBody');
+      // In real app: fetch from Supabase
+      tbody.innerHTML = `
+        <tr>
+          <td>Wedding Bouquet - Premium</td>
+          <td>${formatDate(new Date())}</td>
+          <td class="value-sales">+${formatMVR(1200.00)}</td>
+          <td><span class="status-badge" style="background:#E8F5E9;color:#2E7D32;">Sale</span></td>
+          <td class="actions-cell">
+            <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Floral Supplies - Roses</td>
+          <td>${formatDate(new Date(Date.now() - 86400000))}</td>
+          <td class="value-expense">–${formatMVR(850.00)}</td>
+          <td><span class="status-badge" style="background:#FFEBEE;color:#C62828;">Expense</span></td>
+          <td class="actions-cell">
+            <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+          </td>
+        </tr>
+      `;
+    }
+
+    // === QUICK ADD ===
+    function quickAdd() {
+      const type = document.getElementById('quickType').value;
+      const amount = parseFloat(document.getElementById('quickAmount').value);
+      const desc = document.getElementById('quickDesc').value.trim();
+
+      if (!desc || isNaN(amount) || amount <= 0) {
+        alert('Please fill all fields with valid data.');
         return;
       }
 
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .insert([{ type, description, amount, payment_method: payment, date }]);
-
-        if (error) throw error;
-        document.getElementById('description').value = '';
-        document.getElementById('amount').value = '';
-        document.getElementById('date').value = '';
-        fetchAndRender();
-      } catch (err) {
-        alert('❌ Save failed: ' + (err.message || 'Unknown error'));
-      }
+      // In real app: save to Supabase
+      alert(`✅ ${type === 'sale' ? 'Sale' : type === 'expense' ? 'Expense' : 'Inventory'} added successfully!`);
+      document.getElementById('quickAmount').value = '';
+      document.getElementById('quickDesc').value = '';
+      loadRecentTransactions(); // refresh
     }
 
-    async function editTransaction(id, button) {
-      const card = button.closest('.transaction-card');
-      const descElem = card.querySelector('.trans-desc');
-      const amountElem = card.querySelector('.trans-amount');
-      const currentDesc = descElem.textContent;
-      const currentAmount = parseFloat(amountElem.textContent.replace(/[^\d.-]/g, ''));
-
-      const newDesc = prompt('Edit description:', currentDesc);
-      const newAmountStr = prompt('Edit amount (MVR):', currentAmount);
-      const newAmount = parseFloat(newAmountStr);
-
-      if (newDesc === null || newAmountStr === null || isNaN(newAmount) || newAmount <= 0) return;
-
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .update({ description: newDesc, amount: newAmount })
-          .eq('id', id);
-        if (error) throw error;
-        fetchAndRender();
-      } catch (err) {
-        alert('Failed to update.');
-      }
-    }
-
-    async function deleteTransaction(id) {
-      if (!confirm('⚠️ Delete this record permanently?')) return;
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .delete()
-          .eq('id', id);
-        if (error) throw error;
-        fetchAndRender();
-      } catch (err) {
-        alert('Failed to delete.');
-      }
-    }
-
-    // === FETCH & RENDER ===
-    async function fetchAndRender() {
-      const statusEl = document.getElementById('loadingStatus');
-      statusEl.textContent = 'Loading…';
-      statusEl.style.display = 'block';
-
-      try {
-        const { data, error } = await supabaseClient
-          .from('transactions')
-          .select('*')
-          .order('date', { ascending: false })
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        renderSummary(data);
-        renderTransactions(data);
-        statusEl.style.display = 'none';
-      } catch (err) {
-        console.error('Fetch error:', err);
-        statusEl.textContent = '❌ Failed to load records.';
-      }
-    }
-
-    function renderSummary(transactions) {
-      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const profit = sales - expenses;
-
-      document.getElementById('totalSales').textContent = formatMVR(sales);
-      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
-      document.getElementById('netProfit').textContent = formatMVR(profit);
+    function viewAllTransactions() {
+      alert('Opening full transactions view...');
     }
   </script>
 </body>
