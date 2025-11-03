@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bloomkraft – Business Management</title>
   <!-- External Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2  "></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js  "></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js  "></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js  "></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -137,12 +138,15 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.95rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.5px;
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
     }
 
     .user-info {
@@ -497,7 +501,10 @@
   <div id="app" style="display:none;">
 
     <header>
-      <div class="logo-text">Bloomkraft</div>
+      <!-- Replaced text with logo image -->
+      <div class="logo-container">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICAgIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8cGF0aCBkPSJNMTEwIDEwMEwxMDAgMTUwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTYwIDEwMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDExNSAxMTUiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMTAgOTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgOTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgODAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxNjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTcwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDE4MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxOTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMjAwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDIxMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAyMjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMjMwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDI0MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAyNTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMjYwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDI3MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAyODAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMjkwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDMwMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAzMTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMzIwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDMzMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAzNDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMzUwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDM2MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAzNzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMzgwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDM5MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA0MDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNDEwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDQyMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA0MzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNDQwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDQ1MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA0NjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNDcwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDQ4MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA0OTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNTAwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDUxMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA1MjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNTMwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDU0MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA1NTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNTYwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDU3MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA1ODAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNTkwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDYwMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA2MTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNjIwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDYzMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA2NDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNjUwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDY2MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA2NzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNjgwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDY5MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA3MDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNzEwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDcyMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA3MzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNzQwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDc1MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA3NjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgNzcwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDc4MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA3OTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgODAwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDgxMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA4MjAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgODMwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDg0MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA4NTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgODYwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDg3MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA4ODAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgODkwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDkwMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA5MTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgOTIwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDkzMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA5NDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgOTUwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDk2MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCA5NzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgOTgwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDk5MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxMDAwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDEwMTAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTAyMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxMDMwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDEwNDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTA1MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxMDYwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDEwNzAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTA4MCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xMDAgMTAwTDEwMCAxMDkwIiBzdHJva2U9IiMyNTM0NDIiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTEwMCAxMDBMMTAwIDExMDAiIHN0cm9rZT0iIzI1MzQ0MiIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNMTAwIDEwMEwxMDAgMTEwMCIgc3Ryb2tlPSIjMjUzNDQyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+" alt="Bloomkraft Logo" class="logo-img">
+      </div>
       <div class="user-info">
         <div>Abdulla Jailam</div>
         <div>#777488484848848</div>
@@ -548,8 +555,11 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
-            <button class="btn" id="monthlyBtn" onclick="setView('monthly')" style="background:#D4B8A0; color:white;">Monthly</button>
-            <button class="btn" id="yearlyBtn" onclick="setView('yearly')" style="background:#D4B8A0; color:white;">Yearly</button>
+            <!-- Replaced Monthly/Yearly buttons with a Month Dropdown -->
+            <select id="monthSelector" onchange="updateForSelectedMonth()">
+              <option value="">Select Month...</option>
+              <!-- Options will be populated dynamically by JS -->
+            </select>
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
             <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
@@ -628,15 +638,15 @@
     }
 
     // ✅ SUPABASE
-    const SUPABASE_URL = '  https://bchygqpxmrovtetxwmrp.supabase.co  ';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
+    const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncQB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
     let allTransactions = [];
     let currentFilter = { search: '', startDate: '', endDate: '' };
     let chartInstance = null;
-    let currentView = 'monthly'; // 'monthly' or 'yearly'
+    // Removed currentView variable since we're using manual month selection
 
     // ✅ FORMATTING
     function formatMVR(value) {
@@ -741,11 +751,11 @@
       const ctx = document.getElementById('profitChart').getContext('2d');
 
       // Group by month or year
-      const groupBy = currentView === 'monthly' ? (t) => t.date.slice(0, 7) : (t) => t.date.slice(0, 4);
-      const formatLabel = currentView === 'monthly' ? (key) => {
+      const groupBy = (t) => t.date.slice(0, 7); // Always group by month for this view
+      const formatLabel = (key) => {
         const d = new Date(key + '-01');
         return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-      } : (key) => key;
+      };
 
       const grouped = {};
       transactions.forEach(t => {
@@ -769,7 +779,7 @@
           labels: labels.map(formatLabel),
           datasets: [{
             label: 'Net Profit (MVR)',
-             profitData,
+            data: profitData,
             borderColor: '#A8C3B1',
             backgroundColor: 'rgba(168, 195, 177, 0.1)',
             tension: 0.3,
@@ -919,22 +929,8 @@
       }
     }
 
-    // ✅ VIEW TOGGLE (Monthly / Yearly)
-    function setView(view) {
-      currentView = view;
-      document.querySelectorAll('.btn').forEach(btn => {
-        btn.style.background = '#D4B8A0';
-        btn.style.color = 'white';
-      });
-      if (view === 'monthly') {
-        document.getElementById('monthlyBtn').style.background = '#C3A692';
-      } else {
-        document.getElementById('yearlyBtn').style.background = '#C3A692';
-      }
-
-      renderSummary(allTransactions);
-      renderChart(allTransactions);
-    }
+    // ✅ VIEW TOGGLE (Monthly / Yearly) - REMOVED
+    // Function setView(view) is no longer needed.
 
     // ✅ SUPABASE FUNCTIONS
     async function addTransaction() {
@@ -1038,18 +1034,12 @@
       showToast('CSV exported successfully!');
     }
 
-    function renderSummary(transactions) {
-      const now = new Date();
-      const currentKey = currentView === 'monthly'
-        ? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-        : `${now.getFullYear()}`;
-
-      const relevant = transactions.filter(t => {
-        const key = currentView === 'monthly'
-          ? t.date.slice(0, 7)
-          : t.date.slice(0, 4);
-        return key === currentKey;
-      });
+    function renderSummary(transactions, selectedMonthKey = null) {
+      // If no specific month is selected, default to showing overall totals
+      let relevant = transactions;
+      if (selectedMonthKey) {
+        relevant = transactions.filter(t => t.date.slice(0, 7) === selectedMonthKey);
+      }
 
       const sales = relevant.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
       const expenses = relevant.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
@@ -1082,15 +1072,61 @@
         if (error) throw error;
 
         allTransactions = data;
+        // Render the summary and chart for the overall data initially
         renderSummary(data);
         renderChart(data);
         renderTransactions(data);
+
+        // Populate the month selector dropdown
+        populateMonthSelector(data);
       } catch (err) {
         console.error('Fetch error:', err);
         document.getElementById('transactionList').innerHTML = 
           `<div class="status">Failed to load. Please check your connection.</div>`;
         showToast('Failed to load data.', 'error');
       }
+    }
+
+    // New function to populate the month selector dropdown
+    function populateMonthSelector(transactions) {
+      const monthSelector = document.getElementById('monthSelector');
+      // Clear existing options except the first one
+      while (monthSelector.options.length > 1) {
+        monthSelector.remove(1);
+      }
+
+      if (transactions.length === 0) {
+        return;
+      }
+
+      // Get unique months from transactions
+      const monthsSet = new Set();
+      transactions.forEach(t => {
+        const monthKey = t.date.slice(0, 7); // YYYY-MM
+        monthsSet.add(monthKey);
+      });
+
+      // Convert to array and sort chronologically
+      const sortedMonths = Array.from(monthsSet).sort();
+
+      // Add options to the dropdown
+      sortedMonths.forEach(monthKey => {
+        const option = document.createElement('option');
+        option.value = monthKey;
+        const dateObj = new Date(monthKey + '-01');
+        option.textContent = dateObj.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        monthSelector.appendChild(option);
+      });
+    }
+
+    // New function to handle updating the dashboard based on selected month
+    function updateForSelectedMonth() {
+      const selectedMonthKey = document.getElementById('monthSelector').value;
+      renderSummary(allTransactions, selectedMonthKey);
+      // The chart still shows all months, as it's designed to show trends.
+      // If you want the chart to only show the selected month, you'd need to modify renderChart to accept a filter.
+      // For now, keeping the chart as-is to show the full trend.
+      // renderChart(allTransactions); // This line is commented out because we don't want to re-render the chart for a single month.
     }
 
     // Initialize
@@ -1102,3 +1138,4 @@
   </script>
 </body>
 </html>
+```
