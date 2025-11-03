@@ -549,7 +549,8 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
-            <button class="btn" id="viewToggle" onclick="setView(currentView === 'monthly' ? 'yearly' : 'monthly')">Switch to Yearly</button>
+            <button class="btn" id="viewToggle" onclick="setView('monthly')" style="background:var(--accent); color:white;">Monthly</button>
+            <button class="btn" onclick="setView('yearly')" style="background:var(--accent); color:white;">Yearly</button>
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
             <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
@@ -736,7 +737,7 @@
       }).join('');
     }
 
-    // ✅ CHART (Beautiful Bar Chart)
+    // ✅ CHART (LINE CHART as requested)
     function renderChart(transactions) {
       const ctx = document.getElementById('profitChart').getContext('2d');
 
@@ -760,17 +761,18 @@
       if (chartInstance) chartInstance.destroy();
 
       chartInstance = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: labels.map(formatLabel),
           datasets: [{
             label: 'Net Profit (MVR)',
-            data: profitData,
-            backgroundColor: profitData.map(p => p >= 0 ? 'rgba(134, 178, 146, 0.7)' : 'rgba(217, 119, 119, 0.7)'),
-            borderColor: profitData.map(p => p >= 0 ? '#86B292' : '#D97777'),
-            borderWidth: 1,
-            borderRadius: 6,
-            borderSkipped: false
+             profitData,
+            borderColor: '#A8C3B1',
+            backgroundColor: 'rgba(168, 195, 177, 0.1)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4,
+            pointBackgroundColor: '#A8C3B1'
           }]
         },
         options: {
@@ -788,7 +790,7 @@
           },
           scales: {
             y: {
-              beginAtZero: true,
+              beginAtZero: false,
               grid: { color: 'rgba(0,0,0,0.03)' },
               ticks: { callback: v => `MVR ${v}` }
             },
@@ -914,11 +916,24 @@
       }
     }
 
-    // ✅ VIEW TOGGLE
+    // ✅ VIEW TOGGLE (Monthly / Yearly)
     function setView(view) {
       currentView = view;
-      document.getElementById('viewToggle').textContent = 
-        view === 'monthly' ? 'Switch to Yearly' : 'Switch to Monthly';
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.style.background = 'var(--accent)';
+        btn.style.color = 'white';
+      });
+      document.querySelector(`#viewToggle`).style.background = 'var(--accent-hover)';
+      document.querySelector(`#viewToggle`).style.color = 'white';
+
+      if (view === 'monthly') {
+        document.querySelector('#viewToggle').textContent = 'Monthly';
+        document.querySelectorAll('.btn')[1].textContent = 'Yearly';
+      } else {
+        document.querySelector('#viewToggle').textContent = 'Yearly';
+        document.querySelectorAll('.btn')[1].textContent = 'Monthly';
+      }
+
       renderSummary(allTransactions);
       renderChart(allTransactions);
     }
