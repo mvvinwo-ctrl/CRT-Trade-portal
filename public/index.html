@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -495,7 +496,7 @@
 </head>
 <body>
 
-  <!-- PIN LOCK -->
+  <!-- PIN LOCK (PIN = 5252) -->
   <div id="pinLock">
     <div class="pin-box">
       <h2>🔐 Bloomkraft Secure Access</h2>
@@ -664,7 +665,7 @@
           </div>
         </div>
 
-        <!-- INVENTORY -->
+        <!-- OTHER SECTIONS (PLACEHOLDERS) -->
         <div id="inventorySection" style="display:none;">
           <div class="panel">
             <div class="panel-header">
@@ -677,7 +678,6 @@
           </div>
         </div>
 
-        <!-- CUSTOMERS -->
         <div id="customersSection" style="display:none;">
           <div class="panel">
             <div class="panel-header">
@@ -690,7 +690,6 @@
           </div>
         </div>
 
-        <!-- REPORTS -->
         <div id="reportsSection" style="display:none;">
           <div class="panel">
             <div class="panel-header">
@@ -714,8 +713,9 @@
   </div>
 
   <script>
-    // === PIN ===
+    // === PIN LOCKED TO 5252 (UNCHANGED) ===
     const CORRECT_PIN = '5252';
+    
     function checkPin() {
       const pin = document.getElementById('pinInput').value;
       if (pin === CORRECT_PIN) {
@@ -735,7 +735,7 @@
       setTimeout(initApp, 300);
     }
 
-    // === SUPABASE ===
+    // === SUPABASE CONFIG (UNCHANGED) ===
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const supabase = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
@@ -784,7 +784,6 @@
       const title = document.getElementById('modalTitle');
       
       if (id) {
-        // Edit mode: populate fields
         const transaction = allTransactions.find(t => t.id == id);
         if (transaction) {
           document.getElementById('modalDesc').value = transaction.description;
@@ -795,7 +794,6 @@
           title.textContent = 'Edit Transaction';
         }
       } else {
-        // Add mode
         title.textContent = 'Add New Transaction';
         document.getElementById('modalDesc').value = '';
         document.getElementById('modalAmount').value = '';
@@ -810,13 +808,12 @@
       document.getElementById('transactionModal').style.display = 'none';
     }
 
-    // === SUPABASE CRUD ===
+    // === SUPABASE CRUD FUNCTIONS (FULLY RESTORED) ===
     async function addTransaction(type, description, amount, payment_method, date) {
       const { data, error } = await supabase
         .from('transactions')
         .insert([{ type, description, amount: parseFloat(amount), payment_method, date }])
         .select();
-      
       if (error) throw error;
       return data[0];
     }
@@ -843,12 +840,11 @@
         .select('*')
         .order('date', { ascending: false })
         .order('created_at', { ascending: false });
-      
       if (error) throw error;
       return data;
     }
 
-    // === SAVE TRANSACTION (ADD/EDIT) ===
+    // === SAVE & DELETE ===
     async function saveTransaction() {
       const desc = document.getElementById('modalDesc').value.trim();
       const amount = document.getElementById('modalAmount').value;
@@ -879,28 +875,25 @@
         await refreshData();
       } catch (err) {
         console.error(err);
-        alert('❌ Error saving transaction: ' + (err.message || 'Unknown error'));
+        alert('❌ Error: ' + (err.message || 'Failed to save.'));
       }
     }
 
-    // === DELETE ===
     async function deleteTransaction(id) {
-      if (!confirm('⚠️ Are you sure you want to delete this transaction? This cannot be undone.')) return;
-      
+      if (!confirm('⚠️ Delete this transaction permanently?')) return;
       try {
         await deleteTransactionFromDB(id);
-        alert('✅ Transaction deleted.');
+        alert('✅ Deleted.');
         await refreshData();
       } catch (err) {
-        console.error(err);
-        alert('❌ Error deleting transaction: ' + (err.message || 'Unknown error'));
+        alert('❌ Delete failed: ' + (err.message || 'Unknown error'));
       }
     }
 
-    // === RENDER DATA ===
+    // === RENDERING ===
     function renderSummary(transactions) {
       const today = new Date().toISOString().split('T')[0];
-      const thisMonth = new Date().toISOString().substring(0, 7); // "2025-11"
+      const thisMonth = new Date().toISOString().substring(0, 7);
 
       const todaySales = transactions
         .filter(t => t.type === 'sale' && t.date === today)
@@ -916,7 +909,7 @@
 
       document.getElementById('todaySales').textContent = formatMVR(todaySales);
       document.getElementById('monthProfit').textContent = formatMVR(monthSales - monthExpenses);
-      document.getElementById('inventoryCount').textContent = '42 items'; // mock
+      document.getElementById('inventoryCount').textContent = '42 items';
     }
 
     function renderRecentActivity(transactions) {
@@ -930,17 +923,18 @@
 
       tbody.innerHTML = recent.map(t => {
         const isSale = t.type === 'sale';
-        const amountClass = isSale ? 'value-sales' : 'value-expense';
         const sign = isSale ? '+' : '–';
-        const badgeColor = isSale ? 'style="background:#E8F5E9;color:#2E7D32;"' : 'style="background:#FFEBEE;color:#C62828;"';
+        const badgeStyle = isSale 
+          ? 'background:#E8F5E9;color:#2E7D32;' 
+          : 'background:#FFEBEE;color:#C62828;';
         const badgeText = isSale ? 'Sale' : 'Expense';
 
         return `
           <tr>
             <td>${t.description}</td>
             <td>${formatDate(t.date)}</td>
-            <td class="${amountClass}" style="color:${isSale ? '#A8C3B1' : '#D97777'};">${sign}${formatMVR(t.amount)}</td>
-            <td><span class="status-badge" ${badgeColor}>${badgeText}</span></td>
+            <td style="color:${isSale ? '#A8C3B1' : '#D97777'};">${sign}${formatMVR(t.amount)}</td>
+            <td><span class="status-badge" style="${badgeStyle}">${badgeText}</span></td>
             <td class="actions-cell">
               <span class="icon-btn edit" onclick="openTransactionModal('${t.id}')"><i class="fas fa-edit"></i></span>
               <span class="icon-btn delete" onclick="deleteTransaction('${t.id}')"><i class="fas fa-trash"></i></span>
@@ -981,10 +975,9 @@
       const ctx = document.getElementById('revenueChart').getContext('2d');
       if (revenueChart) revenueChart.destroy();
 
-      // Group by month
       const monthly = {};
       transactions.forEach(t => {
-        const month = t.date.substring(0, 7); // "2025-11"
+        const month = t.date.substring(0, 7);
         if (!monthly[month]) monthly[month] = { sales: 0, expenses: 0 };
         if (t.type === 'sale') monthly[month].sales += parseFloat(t.amount);
         else monthly[month].expenses += parseFloat(t.amount);
@@ -999,20 +992,8 @@
          {
           labels: labels,
           datasets: [
-            {
-              label: 'Sales (MVR)',
-               salesData,
-              backgroundColor: '#A8C3B1',
-              borderRadius: 6,
-              borderSkipped: false,
-            },
-            {
-              label: 'Expenses (MVR)',
-               expenseData,
-              backgroundColor: '#D97777',
-              borderRadius: 6,
-              borderSkipped: false,
-            }
+            { label: 'Sales (MVR)', data: salesData, backgroundColor: '#A8C3B1', borderRadius: 6, borderSkipped: false },
+            { label: 'Expenses (MVR)', data: expenseData, backgroundColor: '#D97777', borderRadius: 6, borderSkipped: false }
           ]
         },
         options: {
@@ -1022,52 +1003,31 @@
           scales: {
             y: {
               beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return 'MVR ' + value.toLocaleString();
-                }
-              }
+              ticks: { callback: v => 'MVR ' + v.toLocaleString() }
             }
           }
         }
       });
     }
 
-    function renderReportChart(transactions) {
+    function renderReportChart() {
       const ctx = document.getElementById('reportChart').getContext('2d');
       if (reportChart) reportChart.destroy();
-
-      // Mock quarterly for now — can be enhanced
-      const labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-      const data = [42500, 48900, 51200, 47800];
-
       reportChart = new Chart(ctx, {
         type: 'line',
-         {
-          labels: labels,
-          datasets: [{
-            label: 'Quarterly Revenue (MVR)',
-             data,
-            borderColor: '#D4B8A0',
-            backgroundColor: 'rgba(212, 184, 160, 0.1)',
-            tension: 0.3,
-            fill: true
-          }]
-        },
+         { labels: ['Q1','Q2','Q3','Q4'], datasets: [{ 
+          label: 'Quarterly Revenue', 
+           [42500, 48900, 51200, 47800], 
+          borderColor: '#D4B8A0', 
+          backgroundColor: 'rgba(212,184,160,0.1)', 
+          tension: 0.3, 
+          fill: true 
+        }] },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return 'MVR ' + value.toLocaleString();
-                }
-              }
-            }
-          }
+          scales: { y: { beginAtZero: true, ticks: { callback: v => 'MVR ' + v.toLocaleString() } } }
         }
       });
     }
@@ -1075,55 +1035,41 @@
     // === EXPORT ===
     function exportTransactionsToCSV() {
       if (allTransactions.length === 0) {
-        alert('No transactions to export.');
+        alert('No data to export.');
         return;
       }
-
       let csv = 'ID,Description,Date,Amount (MVR),Type,Payment Method\n';
       allTransactions.forEach(t => {
         csv += `"#TR-${String(t.id).padStart(4, '0')}","${t.description}","${t.date}",${t.amount},${t.type},${t.payment_method}\n`;
       });
-
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', `bloomkraft_transactions_${new Date().toISOString().slice(0,10)}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bloomkraft_transactions_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     }
 
-    // === REFRESH ALL DATA ===
-    async function refreshData() {
+    // === INIT ===
+    async function initApp() {
       try {
         allTransactions = await fetchAllTransactions();
         renderSummary(allTransactions);
         renderRecentActivity(allTransactions);
         renderTransactionsTable(allTransactions);
         renderRevenueChart(allTransactions);
+        renderReportChart();
+        document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
       } catch (err) {
-        console.error('Failed to refresh data:', err);
-        alert('❌ Failed to load data. Please check your connection.');
+        console.error('Init error:', err);
+        alert('Failed to load data. Check console for details.');
       }
     }
 
-    // === INIT APP ===
-    async function initApp() {
-      await refreshData();
-      renderReportChart(); // uses mock data for now
-
-      // Set today in modal
-      document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
-    }
-
-    // Close modal on outside click
-    window.onclick = function(event) {
-      const modal = document.getElementById('transactionModal');
-      if (event.target === modal) {
-        closeModal();
-      }
+    window.onclick = function(e) {
+      if (e.target === document.getElementById('transactionModal')) closeModal();
     }
   </script>
 </body>
