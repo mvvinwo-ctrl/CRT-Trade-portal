@@ -12,11 +12,14 @@
       --card: #FFFFFF;
       --card-light: #FFFCF8;
       --accent: #D4B8A0;
+      --accent-hover: #C3A692;
       --profit: #A8C3B1;
       --expense: #D97777;
       --text: #3E3A35;
       --subtle: #A9A29A;
       --divider: #F5EFE8;
+      --shadow-sm: 0 2px 6px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
     }
 
     * {
@@ -30,7 +33,7 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 2rem;
+      padding-bottom: 2.5rem;
     }
 
     /* PIN LOCK SCREEN */
@@ -51,151 +54,170 @@
 
     .pin-box {
       background: var(--card);
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      padding: 2.2rem;
+      border-radius: 18px;
+      box-shadow: var(--shadow-md);
       text-align: center;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
     }
 
     .pin-box h2 {
       font-family: 'Playfair Display', serif;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       color: var(--text);
+      font-size: 1.9rem;
     }
 
     .pin-input {
       width: 100%;
-      padding: 0.9rem;
-      font-size: 1.2rem;
+      padding: 0.95rem;
+      font-size: 1.25rem;
       text-align: center;
-      border: 1px solid(var(--divider));
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      border: 1px solid var(--divider);
+      border-radius: 12px;
+      margin-bottom: 1.2rem;
+      font-family: 'Inter', sans-serif;
     }
 
     .pin-btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.8rem 1.6rem;
-      border-radius: 10px;
+      padding: 0.9rem 1.8rem;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      transition: background 0.2s ease;
+    }
+
+    .pin-btn:hover {
+      background: var(--accent-hover);
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.3rem 2rem;
+      padding: 1.4rem 2.2rem;
       background: var(--card);
       position: sticky;
       top: 0;
       z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      box-shadow: var(--shadow-sm);
     }
 
     .logo-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1.85rem;
+      font-size: 1.95rem;
       font-weight: 700;
       color: var(--text);
+      letter-spacing: -0.5px;
     }
 
     .user-info {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       text-align: right;
+      line-height: 1.4;
     }
 
     .container {
-      max-width: 1000px;
-      margin: 1.8rem auto;
-      padding: 0 1.8rem;
+      max-width: 1040px;
+      margin: 2rem auto;
+      padding: 0 2rem;
     }
 
     .panel {
       background: var(--card);
-      border-radius: 14px;
-      padding: 1.8rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2.2rem;
+      box-shadow: var(--shadow-md);
     }
 
     .panel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.45rem;
-      margin-bottom: 1.4rem;
+      font-size: 1.55rem;
+      margin-bottom: 1.5rem;
       color: var(--text);
+      font-weight: 600;
     }
 
     .form-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.3rem;
-      margin-bottom: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.4rem;
+      margin-bottom: 1.4rem;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.1rem;
     }
 
     label {
       display: block;
-      font-size: 0.92rem;
+      font-size: 0.93rem;
       color: var(--subtle);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
     }
 
     input, select {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.85rem;
       background: var(--card-light);
-      border: 1px solid(var(--divider));
+      border: 1px solid var(--divider);
       border-radius: 10px;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       color: var(--text);
+      transition: border-color 0.2s;
     }
 
     input:focus, select:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(212, 184, 160, 0.2);
     }
 
     .btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.8rem 1.4rem;
-      border-radius: 10px;
+      padding: 0.9rem 1.6rem;
+      border-radius: 11px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: background 0.2s ease;
+      font-size: 1.02rem;
     }
 
     .btn:hover {
-      opacity: 0.94;
+      background: var(--accent-hover);
     }
 
     /* FILTER BUTTONS */
     .filter-bar {
       display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.2rem;
+      gap: 0.9rem;
+      margin-bottom: 1.4rem;
     }
 
     .filter-btn {
       flex: 1;
-      padding: 0.6rem;
-      border: 1px solid(var(--divider));
+      padding: 0.7rem;
+      border: 1px solid var(--divider);
       background: var(--card-light);
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: #fefafa;
     }
 
     .filter-btn.active {
@@ -206,28 +228,31 @@
 
     .summary-row {
       display: flex;
-      gap: 1rem;
+      gap: 1.3rem;
       flex-wrap: wrap;
     }
 
     .summary-item {
       flex: 1;
-      min-width: 180px;
+      min-width: 190px;
       background: var(--card-light);
-      padding: 1.2rem;
-      border-radius: 12px;
+      padding: 1.4rem;
+      border-radius: 14px;
       text-align: center;
+      box-shadow: var(--shadow-sm);
     }
 
     .summary-label {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       color: var(--subtle);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
     }
 
     .summary-value {
-      font-size: 1.55rem;
+      font-size: 1.65rem;
       font-weight: 700;
+      font-family: 'Playfair Display', serif;
     }
 
     .value-profit { color: var(--profit); }
@@ -237,57 +262,64 @@
     .transaction-list {
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
+      gap: 1.3rem;
     }
 
     .transaction-card {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 1.1rem 1.2rem;
+      padding: 1.3rem 1.4rem;
       background: var(--card-light);
-      border-radius: 12px;
-      transition: transform 0.2s;
+      border-radius: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow-sm);
     }
 
     .transaction-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
 
     .trans-main {
       flex: 1;
-      margin-right: 1rem;
+      margin-right: 1.2rem;
     }
 
     .trans-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
       font-weight: 600;
+      font-size: 1.1rem;
     }
 
     .trans-desc {
-      font-size: 1.05rem;
+      word-break: break-word;
     }
 
     .trans-meta {
-      font-size: 0.85rem;
+      font-size: 0.87rem;
       color: var(--subtle);
       display: flex;
-      gap: 0.8rem;
+      gap: 1rem;
+      margin-top: 0.4rem;
     }
 
     .payment-tag {
       background: var(--divider);
-      padding: 0.15rem 0.5rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
     }
 
     .trans-amount {
       font-weight: 700;
-      min-width: 90px;
+      min-width: 95px;
       text-align: right;
+      font-size: 1.15rem;
     }
 
     .amount-sale { color: var(--profit); }
@@ -295,17 +327,18 @@
 
     .action-buttons {
       display: flex;
-      gap: 0.6rem;
-      margin-top: 0.6rem;
+      gap: 0.75rem;
+      margin-top: 0.8rem;
     }
 
     .edit-btn, .delete-btn {
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9px;
+      font-size: 0.85rem;
       cursor: pointer;
       border: 1px solid;
       font-weight: 600;
+      transition: all 0.2s;
     }
 
     .edit-btn {
@@ -332,17 +365,24 @@
 
     .status {
       text-align: center;
-      padding: 1rem;
+      padding: 1.2rem;
       color: var(--subtle);
       font-style: italic;
     }
 
     footer {
       text-align: center;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--subtle);
-      margin-top: 2rem;
-      padding: 0 1.8rem;
+      margin-top: 2.2rem;
+      padding: 0 2rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -674,4 +714,3 @@
   </script>
 </body>
 </html>
-
