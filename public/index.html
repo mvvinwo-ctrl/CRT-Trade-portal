@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -549,8 +548,8 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
-            <button class="btn" id="viewToggle" onclick="setView('monthly')" style="background:var(--accent); color:white;">Monthly</button>
-            <button class="btn" onclick="setView('yearly')" style="background:var(--accent); color:white;">Yearly</button>
+            <button class="btn" id="monthlyBtn" onclick="setView('monthly')" style="background:#D4B8A0; color:white;">Monthly</button>
+            <button class="btn" id="yearlyBtn" onclick="setView('yearly')" style="background:#D4B8A0; color:white;">Yearly</button>
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
             <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
@@ -737,10 +736,11 @@
       }).join('');
     }
 
-    // ✅ CHART (LINE CHART as requested)
+    // ✅ CHART (LINE CHART - FIXED)
     function renderChart(transactions) {
       const ctx = document.getElementById('profitChart').getContext('2d');
 
+      // Group by month or year
       const groupBy = currentView === 'monthly' ? (t) => t.date.slice(0, 7) : (t) => t.date.slice(0, 4);
       const formatLabel = currentView === 'monthly' ? (key) => {
         const d = new Date(key + '-01');
@@ -751,11 +751,14 @@
       transactions.forEach(t => {
         const key = groupBy(t);
         if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
-        if (t.type === 'sale') grouped[key].sales += t.amount;
-        else grouped[key].expenses += t.amount;
+        if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
+        else grouped[key].expenses += parseFloat(t.amount || 0);
       });
 
+      // Sort keys chronologically
       const labels = Object.keys(grouped).sort();
+
+      // Calculate net profit per period
       const profitData = labels.map(k => grouped[k].sales - grouped[k].expenses);
 
       if (chartInstance) chartInstance.destroy();
@@ -920,18 +923,13 @@
     function setView(view) {
       currentView = view;
       document.querySelectorAll('.btn').forEach(btn => {
-        btn.style.background = 'var(--accent)';
+        btn.style.background = '#D4B8A0';
         btn.style.color = 'white';
       });
-      document.querySelector(`#viewToggle`).style.background = 'var(--accent-hover)';
-      document.querySelector(`#viewToggle`).style.color = 'white';
-
       if (view === 'monthly') {
-        document.querySelector('#viewToggle').textContent = 'Monthly';
-        document.querySelectorAll('.btn')[1].textContent = 'Yearly';
+        document.getElementById('monthlyBtn').style.background = '#C3A692';
       } else {
-        document.querySelector('#viewToggle').textContent = 'Yearly';
-        document.querySelectorAll('.btn')[1].textContent = 'Monthly';
+        document.getElementById('yearlyBtn').style.background = '#C3A692';
       }
 
       renderSummary(allTransactions);
