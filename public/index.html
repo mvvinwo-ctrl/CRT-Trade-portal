@@ -6,6 +6,7 @@
   <title>Bloomkraft – Business Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <style>
     :root {
       --bg: #FFF9F3;
@@ -17,6 +18,7 @@
       --text: #3E3A35;
       --subtle: #A9A29A;
       --divider: #F5EFE8;
+      --shadow: 0 8px 30px rgba(0,0,0,0.06);
     }
 
     * {
@@ -30,172 +32,247 @@
       background-color: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      padding-bottom: 2rem;
+      overflow-x: hidden;
     }
 
-    /* PIN LOCK SCREEN */
+    /* ANIMATIONS */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.6s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stagger-item {
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    /* PIN LOCK */
     #pinLock {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: var(--bg);
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
-      padding: 1.5rem;
+      z-index: 2000;
+      backdrop-filter: blur(2px);
     }
 
     .pin-box {
       background: var(--card);
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
       text-align: center;
-      max-width: 400px;
-      width: 100%;
+      max-width: 420px;
+      width: 90vw;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: var(--shadow); }
+      to { box-shadow: 0 10px 35px rgba(212, 184, 160, 0.25); }
     }
 
     .pin-box h2 {
       font-family: 'Playfair Display', serif;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       color: var(--text);
     }
 
     .pin-input {
       width: 100%;
-      padding: 0.9rem;
-      font-size: 1.2rem;
+      padding: 1rem;
+      font-size: 1.3rem;
       text-align: center;
-      border: 1px solid(var(--divider));
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      border: 1px solid var(--divider);
+      border-radius: 12px;
+      margin: 1.2rem 0;
+      background: var(--card-light);
+      font-family: 'Inter', sans-serif;
     }
 
     .pin-btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.8rem 1.6rem;
-      border-radius: 10px;
+      padding: 0.9rem 2rem;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(212, 184, 160, 0.3);
     }
 
+    .pin-btn:hover {
+      background: #c2a48c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(212, 184, 160, 0.4);
+    }
+
+    /* HEADER */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.3rem 2rem;
+      padding: 1.5rem 2.5rem;
       background: var(--card);
       position: sticky;
       top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      height: 40px;
+      object-fit: contain;
+      /* Replace with your actual logo path */
+      /* background: var(--accent); border-radius: 8px; (fallback if no logo) */
     }
 
     .logo-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1.85rem;
+      font-size: 1.95rem;
       font-weight: 700;
       color: var(--text);
     }
 
     .user-info {
-      font-size: 0.9rem;
       text-align: right;
+      font-size: 0.95rem;
     }
 
     .container {
-      max-width: 1000px;
-      margin: 1.8rem auto;
-      padding: 0 1.8rem;
+      max-width: 1050px;
+      margin: 2.2rem auto;
+      padding: 0 2rem;
     }
 
     .panel {
       background: var(--card);
-      border-radius: 14px;
-      padding: 1.8rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.015);
+      border-radius: 18px;
+      padding: 2rem;
+      margin-bottom: 2.4rem;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      animation: fadeInUp 0.7s forwards;
     }
+
+    .panel:nth-child(2) { animation-delay: 0.15s; }
+    .panel:nth-child(3) { animation-delay: 0.3s; }
 
     .panel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.45rem;
-      margin-bottom: 1.4rem;
+      font-size: 1.6rem;
+      margin-bottom: 1.6rem;
       color: var(--text);
+      position: relative;
+      padding-bottom: 0.6rem;
     }
 
+    .panel-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* FORM & INPUTS */
     .form-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.3rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.4rem;
     }
 
     label {
       display: block;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       color: var(--subtle);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
     }
 
     input, select {
       width: 100%;
-      padding: 0.8rem;
+      padding: 0.9rem;
       background: var(--card-light);
-      border: 1px solid(var(--divider));
-      border-radius: 10px;
+      border: 1px solid var(--divider);
+      border-radius: 12px;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       color: var(--text);
+      transition: all 0.25s ease;
     }
 
     input:focus, select:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(212, 184, 160, 0.2);
     }
 
     .btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.8rem 1.4rem;
-      border-radius: 10px;
+      padding: 0.95rem 1.8rem;
+      border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(212, 184, 160, 0.35);
     }
 
     .btn:hover {
-      opacity: 0.94;
+      background: #c2a48c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(212, 184, 160, 0.45);
     }
 
-    /* FILTER BUTTONS */
+    /* FILTER BAR */
     .filter-bar {
       display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.2rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
     .filter-btn {
       flex: 1;
-      padding: 0.6rem;
-      border: 1px solid(var(--divider));
+      min-width: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--divider);
       background: var(--card-light);
-      border-radius: 8px;
-      font-weight: 500;
+      border-radius: 10px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
+      color: var(--text);
+    }
+
+    .filter-btn:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
     }
 
     .filter-btn.active {
@@ -204,9 +281,10 @@
       border-color: var(--accent);
     }
 
+    /* SUMMARY CARDS */
     .summary-row {
       display: flex;
-      gap: 1rem;
+      gap: 1.2rem;
       flex-wrap: wrap;
     }
 
@@ -214,80 +292,96 @@
       flex: 1;
       min-width: 180px;
       background: var(--card-light);
-      padding: 1.2rem;
-      border-radius: 12px;
+      padding: 1.4rem;
+      border-radius: 16px;
       text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .summary-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
     }
 
     .summary-label {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--subtle);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
 
     .summary-value {
-      font-size: 1.55rem;
+      font-size: 1.7rem;
       font-weight: 700;
+      font-family: 'Playfair Display', serif;
     }
 
     .value-profit { color: var(--profit); }
     .value-sales { color: var(--profit); }
     .value-expense { color: var(--expense); }
 
+    /* TRANSACTION LIST */
     .transaction-list {
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
+      gap: 1.3rem;
     }
 
     .transaction-card {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 1.1rem 1.2rem;
+      padding: 1.3rem;
       background: var(--card-light);
-      border-radius: 12px;
-      transition: transform 0.2s;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
     }
 
     .transaction-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
     .trans-main {
       flex: 1;
-      margin-right: 1rem;
+      margin-right: 1.2rem;
     }
 
     .trans-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
       font-weight: 600;
+      font-size: 1.1rem;
     }
 
     .trans-desc {
       font-size: 1.05rem;
+      color: var(--text);
     }
 
     .trans-meta {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--subtle);
       display: flex;
-      gap: 0.8rem;
+      gap: 1rem;
+      margin: 0.4rem 0;
     }
 
     .payment-tag {
       background: var(--divider);
-      padding: 0.15rem 0.5rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
     }
 
     .trans-amount {
       font-weight: 700;
-      min-width: 90px;
+      min-width: 100px;
       text-align: right;
+      font-size: 1.25rem;
     }
 
     .amount-sale { color: var(--profit); }
@@ -295,17 +389,18 @@
 
     .action-buttons {
       display: flex;
-      gap: 0.6rem;
-      margin-top: 0.6rem;
+      gap: 0.8rem;
+      margin-top: 0.7rem;
     }
 
     .edit-btn, .delete-btn {
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
       cursor: pointer;
       border: 1px solid;
       font-weight: 600;
+      transition: all 0.2s ease;
     }
 
     .edit-btn {
@@ -332,17 +427,39 @@
 
     .status {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       color: var(--subtle);
       font-style: italic;
+      font-size: 1.1rem;
     }
 
     footer {
       text-align: center;
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       color: var(--subtle);
-      margin-top: 2rem;
-      padding: 0 1.8rem;
+      margin-top: 2.5rem;
+      padding: 0 2rem 2rem;
+      opacity: 0;
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 1.2rem;
+      }
+      .container {
+        padding: 0 1.2rem;
+      }
+      .panel {
+        padding: 1.6rem;
+      }
+      .summary-row {
+        flex-direction: column;
+      }
+      .logo-text {
+        font-size: 1.6rem;
+      }
     }
   </style>
 </head>
@@ -350,22 +467,26 @@
 
   <!-- PIN LOCK SCREEN -->
   <div id="pinLock">
-    <div class="pin-box">
+    <div class="pin-box animate__animated animate__fadeIn">
       <h2>🔒 Bloomkraft Access</h2>
-      <p>Enter your PIN to continue</p>
-      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" />
-      <button class="pin-btn" onclick="checkPin()">Unlock</button>
+      <p>Enter your secure PIN to continue</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="4" placeholder="••••" autocomplete="off" />
+      <button class="pin-btn" onclick="checkPin()">Unlock Portal</button>
     </div>
   </div>
 
-  <!-- MAIN APP (HIDDEN UNTIL PIN ENTERED) -->
+  <!-- MAIN APP -->
   <div id="app" style="display:none;">
 
     <header>
-      <div class="logo-text">Bloomkraft</div>
+      <div class="logo-container">
+        <!-- ✅ REPLACE WITH YOUR LOGO FILE -->
+        <!-- <img src="your-logo.png" alt="Bloomkraft Logo" class="logo-img"> -->
+        <div class="logo-text">Bloomkraft</div>
+      </div>
       <div class="user-info">
-        <div>Abdulla Jailam</div>
-        <div>#777488484848848</div>
+        <div><strong>Abdulla Jailam</strong></div>
+        <div>Account #777488484848848</div>
       </div>
     </header>
 
@@ -427,16 +548,12 @@
 
       <div class="panel">
         <h2 class="panel-title">Your Records</h2>
-
-        <!-- FILTER BUTTONS -->
         <div class="filter-bar">
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="sale">Sales</button>
           <button class="filter-btn" data-filter="expense">Expenses</button>
         </div>
-
-        <!-- TRANSACTION LIST -->
-        <div class="status" id="loadingStatus">Loading your records...</div>
+        <div class="status" id="loadingStatus">Loading your records…</div>
         <div class="transaction-list" id="transactionList"></div>
       </div>
     </div>
@@ -448,7 +565,7 @@
   </div>
 
   <script>
-    // ✅ PIN PROTECTION
+    // === PIN PROTECTION ===
     const CORRECT_PIN = '5252';
     
     function checkPin() {
@@ -457,31 +574,36 @@
         document.getElementById('pinLock').style.display = 'none';
         document.getElementById('app').style.display = 'block';
         localStorage.setItem('bloomkraft_unlocked', 'true');
-        fetchAndRender();
+        // Trigger staggered animations
+        setTimeout(() => {
+          document.querySelectorAll('.panel').forEach((el, i) => {
+            el.style.animationDelay = `${i * 0.15}s`;
+          });
+          fetchAndRender();
+        }, 300);
       } else {
         alert('❌ Incorrect PIN. Please try again.');
         document.getElementById('pinInput').value = '';
       }
     }
 
-    // Auto-unlock if previously authenticated
     if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
       document.getElementById('pinLock').style.display = 'none';
       document.getElementById('app').style.display = 'block';
+      setTimeout(fetchAndRender, 300);
     }
 
-    // ✅ SUPABASE SETUP
+    // === SUPABASE ===
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
 
     const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
-    // Global state
     let allTransactions = [];
     let currentFilter = 'all';
 
-    // ✅ FILTER HANDLING
+    // === FILTER HANDLING ===
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -491,7 +613,7 @@
       });
     });
 
-    // ✅ FORMATTING
+    // === FORMATTING ===
     function formatMVR(value) {
       return new Intl.NumberFormat('en-MV', {
         style: 'currency',
@@ -508,18 +630,14 @@
       });
     }
 
-    // ✅ TRANSACTION RENDERING (WITH FILTER)
+    // === RENDER TRANSACTIONS ===
     function renderTransactions(transactions) {
       allTransactions = transactions;
       const list = document.getElementById('transactionList');
       
-      // Apply filter
       let filtered = transactions;
-      if (currentFilter === 'sale') {
-        filtered = transactions.filter(t => t.type === 'sale');
-      } else if (currentFilter === 'expense') {
-        filtered = transactions.filter(t => t.type === 'expense');
-      }
+      if (currentFilter === 'sale') filtered = transactions.filter(t => t.type === 'sale');
+      else if (currentFilter === 'expense') filtered = transactions.filter(t => t.type === 'expense');
 
       if (filtered.length === 0) {
         list.innerHTML = `<div class="transaction-card"><div>No records found.</div></div>`;
@@ -551,20 +669,20 @@
           </div>
         `;
       }).join('');
+
+      // Animate new cards
+      document.querySelectorAll('.transaction-card').forEach((el, i) => {
+        el.style.animationDelay = `${i * 0.05}s`;
+      });
     }
 
-    // ✅ SUPABASE FUNCTIONS
+    // === CRUD OPERATIONS ===
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
       const amountInput = document.getElementById('amount').value;
       const payment = document.getElementById('payment').value;
-      let date = document.getElementById('date').value;
-
-      if (!date) {
-        date = new Date().toISOString().substring(0, 10);
-        document.getElementById('date').value = date;
-      }
+      let date = document.getElementById('date').value || new Date().toISOString().substring(0, 10);
 
       const amount = parseFloat(amountInput);
       if (!description || isNaN(amount) || amount <= 0) {
@@ -577,19 +695,13 @@
           .from('transactions')
           .insert([{ type, description, amount, payment_method: payment, date }]);
 
-        if (error) {
-          console.error('Insert error:', error);
-          alert('❌ Save failed: ' + (error.message || 'Unknown error'));
-          return;
-        }
-
+        if (error) throw error;
         document.getElementById('description').value = '';
         document.getElementById('amount').value = '';
         document.getElementById('date').value = '';
         fetchAndRender();
       } catch (err) {
-        console.error('Unexpected error:', err);
-        alert('Unexpected error: ' + err.message);
+        alert('❌ Save failed: ' + (err.message || 'Unknown error'));
       }
     }
 
@@ -611,17 +723,15 @@
           .from('transactions')
           .update({ description: newDesc, amount: newAmount })
           .eq('id', id);
-
         if (error) throw error;
         fetchAndRender();
       } catch (err) {
-        console.error('Edit error:', err);
         alert('Failed to update.');
       }
     }
 
     async function deleteTransaction(id) {
-      if (!confirm('Delete this record?')) return;
+      if (!confirm('⚠️ Delete this record permanently?')) return;
       try {
         const { error } = await supabaseClient
           .from('transactions')
@@ -630,14 +740,15 @@
         if (error) throw error;
         fetchAndRender();
       } catch (err) {
-        console.error('Delete error:', err);
         alert('Failed to delete.');
       }
     }
 
+    // === FETCH & RENDER ===
     async function fetchAndRender() {
-      document.getElementById('loadingStatus').textContent = 'Loading...';
-      document.getElementById('loadingStatus').style.display = 'block';
+      const statusEl = document.getElementById('loadingStatus');
+      statusEl.textContent = 'Loading…';
+      statusEl.style.display = 'block';
 
       try {
         const { data, error } = await supabaseClient
@@ -650,10 +761,10 @@
 
         renderSummary(data);
         renderTransactions(data);
-        document.getElementById('loadingStatus').style.display = 'none';
+        statusEl.style.display = 'none';
       } catch (err) {
         console.error('Fetch error:', err);
-        document.getElementById('loadingStatus').textContent = 'Failed to load. Check console.';
+        statusEl.textContent = '❌ Failed to load records.';
       }
     }
 
@@ -665,11 +776,6 @@
       document.getElementById('totalSales').textContent = formatMVR(sales);
       document.getElementById('totalExpenses').textContent = formatMVR(expenses);
       document.getElementById('netProfit').textContent = formatMVR(profit);
-    }
-
-    // Initialize
-    if (document.getElementById('app').style.display === 'block') {
-      fetchAndRender();
     }
   </script>
 </body>
