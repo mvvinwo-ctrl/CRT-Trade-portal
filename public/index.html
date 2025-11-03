@@ -15,15 +15,14 @@
       --card-light: #FFFCF8;
       --accent: #D4B8A0;
       --accent-hover: #C3A692;
-      --profit: #A8C3B1;
+      --profit: #86B292;
       --expense: #D97777;
       --text: #3E3A35;
       --subtle: #A9A29A;
       --divider: #F5EFE8;
       --shadow-sm: 0 2px 6px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-      --success: #86B292;
-      --warning: #F2C94C;
+      --loss: #E57373;
     }
 
     * {
@@ -40,7 +39,6 @@
       padding-bottom: 2.5rem;
     }
 
-    /* TOAST NOTIFICATIONS */
     #toast {
       position: fixed;
       top: 20px;
@@ -59,10 +57,9 @@
       opacity: 1;
       transform: translateX(0);
     }
-    #toast.success { background: var(--success); }
+    #toast.success { background: var(--profit); }
     #toast.error { background: var(--expense); }
 
-    /* PIN LOCK SCREEN */
     #pinLock {
       position: fixed;
       top: 0;
@@ -165,8 +162,10 @@
     .panel-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .panel-title {
@@ -180,6 +179,29 @@
     .btn-group {
       display: flex;
       gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .time-toggle {
+      display: flex;
+      background: var(--card-light);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-top: 0.5rem;
+    }
+    .time-btn {
+      padding: 0.6rem 1.2rem;
+      background: none;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--subtle);
+      transition: all 0.2s;
+    }
+    .time-btn.active {
+      background: var(--accent);
+      color: white;
     }
 
     .form-row {
@@ -199,22 +221,6 @@
       color: var(--subtle);
       margin-bottom: 0.6rem;
       font-weight: 500;
-    }
-
-    .filter-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
-    }
-
-    .filter-input {
-      flex: 1;
-      min-width: 180px;
-      padding: 0.75rem;
-      border: 1px solid var(--divider);
-      border-radius: 10px;
-      font-family: 'Inter', sans-serif;
     }
 
     input, select {
@@ -248,17 +254,6 @@
       white-space: nowrap;
     }
 
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-    }
-
-    .btn-outline:hover {
-      background: var(--accent);
-      color: white;
-    }
-
     .btn:hover {
       background: var(--accent-hover);
     }
@@ -267,18 +262,19 @@
       background: var(--profit);
     }
     .btn.export-btn:hover {
-      background: #95af9e;
+      background: #76a082;
     }
 
     .summary-row {
       display: flex;
       gap: 1.3rem;
       flex-wrap: wrap;
+      margin-bottom: 1.5rem;
     }
 
     .summary-item {
       flex: 1;
-      min-width: 190px;
+      min-width: 180px;
       background: var(--card-light);
       padding: 1.4rem;
       border-radius: 14px;
@@ -299,9 +295,14 @@
       font-family: 'Playfair Display', serif;
     }
 
+    .value-profit.positive { color: var(--profit); }
+    .value-profit.negative { color: var(--loss); }
+    .value-sales { color: var(--profit); }
+    .value-expense { color: var(--expense); }
+
     .chart-container {
-      height: 200px;
-      margin: 1.5rem 0;
+      height: 240px;
+      margin: 1rem 0;
     }
 
     .transaction-list {
@@ -389,7 +390,7 @@
       margin-top: 0.8rem;
     }
 
-    .edit-btn, .delete-btn {
+    .edit-btn, .delete-btn, .invoice-btn {
       padding: 0.45rem 0.9rem;
       border-radius: 9px;
       font-size: 0.85rem;
@@ -399,27 +400,14 @@
       transition: all 0.2s;
     }
 
-    .edit-btn {
-      background: none;
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .edit-btn { background: none; border-color: var(--accent); color: var(--accent); }
+    .edit-btn:hover { background: var(--accent); color: white; }
 
-    .edit-btn:hover {
-      background: var(--accent);
-      color: white;
-    }
+    .delete-btn { background: none; border-color: var(--expense); color: var(--expense); }
+    .delete-btn:hover { background: var(--expense); color: white; }
 
-    .delete-btn {
-      background: none;
-      border-color: var(--expense);
-      color: var(--expense);
-    }
-
-    .delete-btn:hover {
-      background: var(--expense);
-      color: white;
-    }
+    .invoice-btn { background: none; border-color: var(--profit); color: var(--profit); }
+    .invoice-btn:hover { background: var(--profit); color: white; }
 
     .status {
       text-align: center;
@@ -436,26 +424,12 @@
       padding: 0 2rem;
       line-height: 1.6;
     }
-
-    @media (max-width: 768px) {
-      .filter-section {
-        flex-direction: column;
-      }
-      .filter-input {
-        min-width: auto;
-      }
-      .btn-group {
-        flex-wrap: wrap;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <!-- TOAST -->
   <div id="toast"></div>
 
-  <!-- PIN LOCK SCREEN -->
   <div id="pinLock">
     <div class="pin-box">
       <h2>🔒 Bloomkraft Access</h2>
@@ -465,9 +439,7 @@
     </div>
   </div>
 
-  <!-- MAIN APP -->
   <div id="app" style="display:none;">
-
     <header>
       <div class="logo-text">Bloomkraft</div>
       <div class="user-info">
@@ -516,13 +488,20 @@
         <button class="btn" onclick="addTransaction()">Save Record</button>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="dashboardPanel">
         <div class="panel-header">
-          <h2 class="panel-title">Financial Dashboard</h2>
+          <div>
+            <h2 class="panel-title">Financial Dashboard</h2>
+            <div class="time-toggle">
+              <button class="time-btn active" data-period="monthly">Monthly</button>
+              <button class="time-btn" data-period="yearly">Yearly</button>
+            </div>
+          </div>
           <div class="btn-group">
-            <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
         </div>
+
         <div class="summary-row">
           <div class="summary-item">
             <div class="summary-label">Total Sales</div>
@@ -546,17 +525,9 @@
         <div class="panel-header">
           <h2 class="panel-title">Your Records</h2>
         </div>
-
-        <div class="filter-section">
-          <input type="text" id="searchInput" class="filter-input" placeholder="Search description...">
-          <input type="date" id="startDate" class="filter-input">
-          <input type="date" id="endDate" class="filter-input">
-          <button class="btn btn-outline" onclick="applyFilters()">Apply</button>
-          <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
-        </div>
-
         <div class="transaction-list" id="transactionList">
-          <!-- Skeletons will appear here during load -->
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
         </div>
       </div>
     </div>
@@ -568,7 +539,30 @@
   </div>
 
   <script>
-    // ✅ TOAST
+    // ✅ SAFE LOGIN — NO EXTERNAL DEPENDENCIES
+    const CORRECT_PIN = '5252';
+
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value;
+      if (pin === CORRECT_PIN) {
+        document.getElementById('pinLock').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        localStorage.setItem('bloomkraft_unlocked', 'true');
+        // Delay init to ensure DOM is ready
+        setTimeout(initApp, 100);
+      } else {
+        showToast('❌ Incorrect PIN. Please try again.', 'error');
+        document.getElementById('pinInput').value = '';
+      }
+    }
+
+    // Auto-login if previously unlocked
+    if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
+      document.getElementById('pinLock').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      setTimeout(initApp, 300);
+    }
+
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = message;
@@ -576,37 +570,30 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // ✅ PIN PROTECTION
-    const CORRECT_PIN = '5252';
-    function checkPin() {
-      const pin = document.getElementById('pinInput').value;
-      if (pin === CORRECT_PIN) {
-        document.getElementById('pinLock').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        localStorage.setItem('bloomkraft_unlocked', 'true');
-        fetchAndRender();
-      } else {
-        showToast('Incorrect PIN. Please try again.', 'error');
-        document.getElementById('pinInput').value = '';
-      }
+    // App logic loaded ONLY after login
+    let supabaseClient, allTransactions = [], currentPeriod = 'monthly', chartInstance = null;
+
+    function initApp() {
+      // Initialize Supabase
+      const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
+      const { createClient } = supabase;
+      supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // Time toggle
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentPeriod = btn.dataset.period;
+          renderDashboard(allTransactions);
+        });
+      });
+
+      // Load data
+      fetchAndRender();
     }
 
-    if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
-      document.getElementById('pinLock').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-    }
-
-    // ✅ SUPABASE
-    const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
-    const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let allTransactions = [];
-    let currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
-    let chartInstance = null;
-
-    // ✅ FORMATTING
     function formatMVR(value) {
       return new Intl.NumberFormat('en-MV', {
         style: 'currency',
@@ -617,68 +604,166 @@
     }
 
     function formatDate(dateStr) {
-      return new Date(dateStr).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short'
+      return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    }
+
+    // PDF EXPORT — load scripts only when needed
+    async function exportDashboardPDF() {
+      showToast('Preparing PDF...');
+
+      // Load jsPDF and html2canvas dynamically
+      try {
+        const [jsPDFScript, html2canvasScript] = await Promise.all([
+          import('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
+          import('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
+        ]);
+
+        const { jsPDF } = jsPDFScript;
+        const html2canvas = html2canvasScript.default;
+
+        const element = document.getElementById('dashboardPanel');
+        const canvas = await html2canvas(element, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`Bloomkraft_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+        showToast('PDF report downloaded!');
+      } catch (err) {
+        console.error('PDF error:', err);
+        showToast('PDF export failed. Try again.', 'error');
+      }
+    }
+
+    // INVOICE — simple browser print fallback
+    function downloadInvoice(t) {
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+        <head><title>Invoice - Bloomkraft</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .header { border-bottom: 2px solid #d4b8a0; padding-bottom: 10px; }
+          .total { font-weight: bold; margin-top: 20px; }
+        </style>
+        </head>
+        <body>
+          <div class="header">
+            <h2>BLOOMKRAFT</h2>
+            <p>Floral & Event Design Studio<br>Malé, Maldives</p>
+          </div>
+          <p><strong>Invoice #INV-${t.id}</strong><br>Date: ${new Date(t.date).toLocaleDateString('en-GB')}</p>
+          <p><strong>Bill To:</strong><br>Abdulla Jailam<br>#777488484848848</p>
+          <p><strong>Description:</strong> ${t.description}</p>
+          <p class="total">Total: ${formatMVR(t.amount)}</p>
+          <p>Thank you for your business!</p>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      showToast('Invoice ready to print or save as PDF.');
+    }
+
+    // Rest of your logic (renderDashboard, renderChart, CRUD, etc.)
+    function renderDashboard(transactions) {
+      const now = new Date();
+      let filtered = transactions;
+
+      if (currentPeriod === 'monthly') {
+        const start = new Date(now.getFullYear(), now.getMonth(), 1);
+        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        filtered = transactions.filter(t => {
+          const d = new Date(t.date);
+          return d >= start && d <= end;
+        });
+      } else {
+        filtered = transactions.filter(t => new Date(t.date).getFullYear() === now.getFullYear());
+      }
+
+      const sales = filtered.filter(t => t.type === 'sale').reduce((sum, t) => sum + t.amount, 0);
+      const expenses = filtered.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+      const profit = sales - expenses;
+
+      document.getElementById('totalSales').textContent = formatMVR(sales);
+      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
+      const profitEl = document.getElementById('netProfit');
+      profitEl.textContent = formatMVR(profit);
+      profitEl.className = 'summary-value value-profit ' + (profit >= 0 ? 'positive' : 'negative');
+
+      renderChart(filtered);
+    }
+
+    function renderChart(transactions) {
+      const ctx = document.getElementById('profitChart').getContext('2d');
+      let labels = [], salesData = [], expenseData = [];
+
+      if (currentPeriod === 'monthly') {
+        const days = Array.from({length: 30}, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (29 - i));
+          return d.toISOString().split('T')[0];
+        });
+        const map = {};
+        days.forEach(d => map[d] = { s: 0, e: 0 });
+        transactions.forEach(t => {
+          if (map[t.date]) {
+            if (t.type === 'sale') map[t.date].s += t.amount;
+            else map[t.date].e += t.amount;
+          }
+        });
+        labels = days.map(d => new Date(d).getDate());
+        salesData = days.map(d => map[d]?.s || 0);
+        expenseData = days.map(d => map[d]?.e || 0);
+      } else {
+        const months = Array.from({length: 12}, (_, i) => 
+          new Date(2025, i, 1).toLocaleString('default', { month: 'short' })
+        );
+        const map = {};
+        months.forEach(m => map[m] = { s: 0, e: 0 });
+        transactions.forEach(t => {
+          const m = new Date(t.date).toLocaleString('default', { month: 'short' });
+          if (map[m] !== undefined) {
+            if (t.type === 'sale') map[m].s += t.amount;
+            else map[m].e += t.amount;
+          }
+        });
+        labels = months;
+        salesData = months.map(m => map[m]?.s || 0);
+        expenseData = months.map(m => map[m]?.e || 0);
+      }
+
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+         { labels, datasets: [
+          { label: 'Sales',  salesData, backgroundColor: 'rgba(134,178,146,0.7)' },
+          { label: 'Expenses',  expenseData, backgroundColor: 'rgba(217,119,119,0.7)' }
+        ]},
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { beginAtZero: true, ticks: { callback: v => `MVR ${v}` } } }
+        }
       });
-    }
-
-    // ✅ FILTERS
-    function applyFilters() {
-      currentFilter.search = document.getElementById('searchInput').value.toLowerCase();
-      currentFilter.startDate = document.getElementById('startDate').value;
-      currentFilter.endDate = document.getElementById('endDate').value;
-      renderTransactions(allTransactions);
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('startDate').value = '';
-      document.getElementById('endDate').value = '';
-      currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
-      renderTransactions(allTransactions);
-    }
-
-    // ✅ TRANSACTION RENDERING
-    function showSkeletons() {
-      const list = document.getElementById('transactionList');
-      list.innerHTML = `
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-        <div class="skeleton"></div>
-      `;
     }
 
     function renderTransactions(transactions) {
       const list = document.getElementById('transactionList');
-      let filtered = [...transactions];
-
-      // Type filter (if you add type buttons later, hook here)
-      // Search filter
-      if (currentFilter.search) {
-        filtered = filtered.filter(t => 
-          t.description.toLowerCase().includes(currentFilter.search)
-        );
-      }
-      // Date range
-      if (currentFilter.startDate) {
-        filtered = filtered.filter(t => t.date >= currentFilter.startDate);
-      }
-      if (currentFilter.endDate) {
-        filtered = filtered.filter(t => t.date <= currentFilter.endDate);
-      }
-
-      if (filtered.length === 0) {
-        list.innerHTML = `<div class="status">No matching records found.</div>`;
+      if (transactions.length === 0) {
+        list.innerHTML = '<div class="status">No records found.</div>';
         return;
       }
-
-      list.innerHTML = filtered.map(t => {
+      list.innerHTML = transactions.map(t => {
         const isSale = t.type === 'sale';
         const amountClass = isSale ? 'amount-sale' : 'amount-expense';
         const sign = isSale ? '+' : '–';
         const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
-
+        const invoiceBtn = isSale ? 
+          `<button class="invoice-btn" onclick="downloadInvoice(${JSON.stringify(t)})">Invoice</button>` : '';
         return `
           <div class="transaction-card">
             <div class="trans-main">
@@ -693,6 +778,7 @@
               <div class="action-buttons">
                 <button class="edit-btn" onclick="editTransaction('${t.id}')">Edit</button>
                 <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
+                ${invoiceBtn}
               </div>
             </div>
           </div>
@@ -700,207 +786,51 @@
       }).join('');
     }
 
-    // ✅ CHART
-    function renderChart(transactions) {
-      const ctx = document.getElementById('profitChart').getContext('2d');
-
-      // Group by month
-      const monthlyData = {};
-      transactions.forEach(t => {
-        const month = new Date(t.date).toISOString().slice(0,7); // YYYY-MM
-        if (!monthlyData[month]) monthlyData[month] = { sales: 0, expenses: 0 };
-        if (t.type === 'sale') monthlyData[month].sales += t.amount;
-        else monthlyData[month].expenses += t.amount;
-      });
-
-      const labels = Object.keys(monthlyData).sort();
-      const profits = labels.map(m => monthlyData[m].sales - monthlyData[m].expenses);
-
-      if (chartInstance) chartInstance.destroy();
-
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels.map(m => {
-            const d = new Date(m + '-01');
-            return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-          }),
-          datasets: [{
-            label: 'Monthly Net Profit (MVR)',
-            data: profits,
-            borderColor: '#A8C3B1',
-            backgroundColor: 'rgba(168, 195, 177, 0.1)',
-            tension: 0.3,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#A8C3B1'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: false,
-              grid: { color: 'rgba(0,0,0,0.03)' },
-              ticks: { callback: v => `MVR ${v}` }
-            },
-            x: {
-              grid: { display: false }
-            }
-          }
-        }
-      });
-    }
-
-    // ✅ SUPABASE FUNCTIONS
     async function addTransaction() {
       const type = document.getElementById('type').value;
-      const description = document.getElementById('description').value.trim();
-      const amountInput = document.getElementById('amount').value;
-      const payment = document.getElementById('payment').value;
-      let date = document.getElementById('date').value;
+      const desc = document.getElementById('description').value.trim();
+      const amt = parseFloat(document.getElementById('amount').value);
+      const pay = document.getElementById('payment').value;
+      const date = document.getElementById('date').value || new Date().toISOString().split('T')[0];
 
-      if (!date) date = new Date().toISOString().substring(0, 10);
-
-      const amount = parseFloat(amountInput);
-      if (!description || isNaN(amount) || amount <= 0) {
-        showToast('Please enter valid description and amount.', 'error');
-        return;
-      }
-
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .insert([{ type, description, amount, payment_method: payment, date }]);
-
-        if (error) throw error;
-
-        document.getElementById('description').value = '';
-        document.getElementById('amount').value = '';
-        document.getElementById('date').value = '';
-        showToast('Transaction saved successfully!');
-        fetchAndRender();
-      } catch (err) {
-        console.error('Save error:', err);
-        showToast('Failed to save transaction.', 'error');
-      }
-    }
-
-    // ✅ MODAL-BASED EDIT (more professional)
-    async function editTransaction(id) {
-      const transaction = allTransactions.find(t => t.id === id);
-      if (!transaction) return;
-
-      const newDesc = prompt('Edit description:', transaction.description);
-      if (newDesc === null) return;
-
-      const newAmountStr = prompt('Edit amount (MVR):', transaction.amount);
-      const newAmount = parseFloat(newAmountStr);
-      if (newAmountStr === null || isNaN(newAmount) || newAmount <= 0) {
-        showToast('Invalid amount.', 'error');
-        return;
-      }
-
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .update({ description: newDesc, amount: newAmount })
-          .eq('id', id);
-
-        if (error) throw error;
-        showToast('Transaction updated.');
-        fetchAndRender();
-      } catch (err) {
-        console.error('Edit error:', err);
-        showToast('Failed to update transaction.', 'error');
-      }
-    }
-
-    async function deleteTransaction(id) {
-      if (!confirm('Are you sure you want to delete this record?')) return;
-      try {
-        const { error } = await supabaseClient
-          .from('transactions')
-          .delete()
-          .eq('id', id);
-        if (error) throw error;
-        showToast('Transaction deleted.');
-        fetchAndRender();
-      } catch (err) {
-        console.error('Delete error:', err);
-        showToast('Failed to delete transaction.', 'error');
-      }
-    }
-
-    // ✅ EXPORT
-    function exportToCSV() {
-      if (allTransactions.length === 0) {
-        showToast('No data to export.', 'error');
-        return;
-      }
-
-      let csv = 'Date,Type,Description,Amount (MVR),Payment Method\n';
-      allTransactions.forEach(t => {
-        csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.amount}","${t.payment_method}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Bloomkraft_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('Exported successfully!');
-    }
-
-    // ✅ FETCH & RENDER
-    async function fetchAndRender() {
-      showSkeletons();
-      try {
-        const { data, error } = await supabaseClient
-          .from('transactions')
-          .select('*')
-          .order('date', { ascending: false })
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        allTransactions = data;
-        renderSummary(data);
-        renderChart(data);
-        renderTransactions(data);
-      } catch (err) {
-        console.error('Fetch error:', err);
-        document.getElementById('transactionList').innerHTML = 
-          `<div class="status">Failed to load. Please check your connection.</div>`;
-        showToast('Failed to load data.', 'error');
-      }
-    }
-
-    function renderSummary(transactions) {
-      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const profit = sales - expenses;
-
-      document.getElementById('totalSales').textContent = formatMVR(sales);
-      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
-      document.getElementById('netProfit').textContent = formatMVR(profit);
-    }
-
-    // Initialize
-    if (document.getElementById('app').style.display === 'block') {
+      if (!desc || isNaN(amt) || amt <= 0) return showToast('Invalid input.', 'error');
+      
+      const { error } = await supabaseClient.from('transactions').insert([{ type, description: desc, amount: amt, payment_method: pay, date }]);
+      if (error) return showToast('Save failed.', 'error');
+      
+      document.getElementById('description').value = '';
+      document.getElementById('amount').value = '';
+      showToast('Saved!');
       fetchAndRender();
     }
 
-    // Auto-refresh filters on input
-    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    async function editTransaction(id) {
+      const t = allTransactions.find(x => x.id == id);
+      if (!t) return;
+      const newDesc = prompt('Description:', t.description);
+      const newAmt = parseFloat(prompt('Amount (MVR):', t.amount));
+      if (newDesc === null || newAmt === null || isNaN(newAmt) || newAmt <= 0) return;
+      const { error } = await supabaseClient.from('transactions').update({ description: newDesc, amount: newAmt }).eq('id', id);
+      if (error) return showToast('Update failed.', 'error');
+      showToast('Updated.');
+      fetchAndRender();
+    }
+
+    async function deleteTransaction(id) {
+      if (!confirm('Delete?')) return;
+      const { error } = await supabaseClient.from('transactions').delete().eq('id', id);
+      if (error) return showToast('Delete failed.', 'error');
+      showToast('Deleted.');
+      fetchAndRender();
+    }
+
+    async function fetchAndRender() {
+      const { data, error } = await supabaseClient.from('transactions').select('*').order('date', { ascending: false });
+      if (error) return showToast('Load failed.', 'error');
+      allTransactions = data;
+      renderDashboard(data);
+      renderTransactions(data);
+    }
   </script>
 </body>
 </html>
