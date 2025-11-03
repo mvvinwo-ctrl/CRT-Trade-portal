@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,6 @@
   <title>Bloomkraft – Business Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- jsPDF + html2canvas for PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -17,14 +15,15 @@
       --card-light: #FFFCF8;
       --accent: #D4B8A0;
       --accent-hover: #C3A692;
-      --profit: #86B292; /* richer green */
+      --profit: #A8C3B1;
       --expense: #D97777;
       --text: #3E3A35;
       --subtle: #A9A29A;
       --divider: #F5EFE8;
       --shadow-sm: 0 2px 6px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-      --loss: #E57373; /* red for negative profit */
+      --success: #86B292;
+      --warning: #F2C94C;
     }
 
     * {
@@ -41,7 +40,7 @@
       padding-bottom: 2.5rem;
     }
 
-    /* TOAST */
+    /* TOAST NOTIFICATIONS */
     #toast {
       position: fixed;
       top: 20px;
@@ -60,10 +59,10 @@
       opacity: 1;
       transform: translateX(0);
     }
-    #toast.success { background: var(--profit); }
+    #toast.success { background: var(--success); }
     #toast.error { background: var(--expense); }
 
-    /* PIN LOCK */
+    /* PIN LOCK SCREEN */
     #pinLock {
       position: fixed;
       top: 0;
@@ -166,10 +165,8 @@
     .panel-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-      gap: 1rem;
     }
 
     .panel-title {
@@ -183,28 +180,6 @@
     .btn-group {
       display: flex;
       gap: 0.8rem;
-      flex-wrap: wrap;
-    }
-
-    .time-toggle {
-      display: flex;
-      background: var(--card-light);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-    .time-btn {
-      padding: 0.6rem 1.2rem;
-      background: none;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--subtle);
-      transition: all 0.2s;
-    }
-    .time-btn.active {
-      background: var(--accent);
-      color: white;
     }
 
     .form-row {
@@ -224,6 +199,22 @@
       color: var(--subtle);
       margin-bottom: 0.6rem;
       font-weight: 500;
+    }
+
+    .filter-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .filter-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.75rem;
+      border: 1px solid var(--divider);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
     }
 
     input, select {
@@ -263,6 +254,11 @@
       color: var(--accent);
     }
 
+    .btn-outline:hover {
+      background: var(--accent);
+      color: white;
+    }
+
     .btn:hover {
       background: var(--accent-hover);
     }
@@ -271,19 +267,18 @@
       background: var(--profit);
     }
     .btn.export-btn:hover {
-      background: #76a082;
+      background: #95af9e;
     }
 
     .summary-row {
       display: flex;
       gap: 1.3rem;
       flex-wrap: wrap;
-      margin-bottom: 1.5rem;
     }
 
     .summary-item {
       flex: 1;
-      min-width: 180px;
+      min-width: 190px;
       background: var(--card-light);
       padding: 1.4rem;
       border-radius: 14px;
@@ -304,14 +299,9 @@
       font-family: 'Playfair Display', serif;
     }
 
-    .value-profit.positive { color: var(--profit); }
-    .value-profit.negative { color: var(--loss); }
-    .value-sales { color: var(--profit); }
-    .value-expense { color: var(--expense); }
-
     .chart-container {
-      height: 240px;
-      margin: 1rem 0;
+      height: 200px;
+      margin: 1.5rem 0;
     }
 
     .transaction-list {
@@ -399,7 +389,7 @@
       margin-top: 0.8rem;
     }
 
-    .edit-btn, .delete-btn, .invoice-btn {
+    .edit-btn, .delete-btn {
       padding: 0.45rem 0.9rem;
       border-radius: 9px;
       font-size: 0.85rem;
@@ -414,6 +404,7 @@
       border-color: var(--accent);
       color: var(--accent);
     }
+
     .edit-btn:hover {
       background: var(--accent);
       color: white;
@@ -424,18 +415,9 @@
       border-color: var(--expense);
       color: var(--expense);
     }
+
     .delete-btn:hover {
       background: var(--expense);
-      color: white;
-    }
-
-    .invoice-btn {
-      background: none;
-      border-color: var(--profit);
-      color: var(--profit);
-    }
-    .invoice-btn:hover {
-      background: var(--profit);
       color: white;
     }
 
@@ -456,17 +438,24 @@
     }
 
     @media (max-width: 768px) {
+      .filter-section {
+        flex-direction: column;
+      }
+      .filter-input {
+        min-width: auto;
+      }
       .btn-group {
-        width: 100%;
-        justify-content: flex-end;
+        flex-wrap: wrap;
       }
     }
   </style>
 </head>
 <body>
 
+  <!-- TOAST -->
   <div id="toast"></div>
 
+  <!-- PIN LOCK SCREEN -->
   <div id="pinLock">
     <div class="pin-box">
       <h2>🔒 Bloomkraft Access</h2>
@@ -476,6 +465,7 @@
     </div>
   </div>
 
+  <!-- MAIN APP -->
   <div id="app" style="display:none;">
 
     <header>
@@ -526,21 +516,13 @@
         <button class="btn" onclick="addTransaction()">Save Record</button>
       </div>
 
-      <!-- FINANCIAL DASHBOARD -->
-      <div class="panel" id="dashboardPanel">
+      <div class="panel">
         <div class="panel-header">
-          <div>
-            <h2 class="panel-title">Financial Dashboard</h2>
-            <div class="time-toggle" style="margin-top: 0.5rem;">
-              <button class="time-btn active" data-period="monthly">Monthly</button>
-              <button class="time-btn" data-period="yearly">Yearly</button>
-            </div>
-          </div>
+          <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
-            <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
+            <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
           </div>
         </div>
-
         <div class="summary-row">
           <div class="summary-item">
             <div class="summary-label">Total Sales</div>
@@ -565,7 +547,17 @@
           <h2 class="panel-title">Your Records</h2>
         </div>
 
-        <div class="transaction-list" id="transactionList"></div>
+        <div class="filter-section">
+          <input type="text" id="searchInput" class="filter-input" placeholder="Search description...">
+          <input type="date" id="startDate" class="filter-input">
+          <input type="date" id="endDate" class="filter-input">
+          <button class="btn btn-outline" onclick="applyFilters()">Apply</button>
+          <button class="btn btn-outline" onclick="resetFilters()">Reset</button>
+        </div>
+
+        <div class="transaction-list" id="transactionList">
+          <!-- Skeletons will appear here during load -->
+        </div>
       </div>
     </div>
 
@@ -576,7 +568,7 @@
   </div>
 
   <script>
-    // TOAST
+    // ✅ TOAST
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = message;
@@ -584,7 +576,7 @@
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // PIN
+    // ✅ PIN PROTECTION
     const CORRECT_PIN = '5252';
     function checkPin() {
       const pin = document.getElementById('pinInput').value;
@@ -604,27 +596,17 @@
       document.getElementById('app').style.display = 'block';
     }
 
-    // SUPABASE
+    // ✅ SUPABASE
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const { createClient } = supabase;
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let allTransactions = [];
-    let currentPeriod = 'monthly';
+    let currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
     let chartInstance = null;
 
-    // TIME TOGGLE
-    document.querySelectorAll('.time-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentPeriod = btn.dataset.period;
-        renderDashboard(allTransactions);
-      });
-    });
-
-    // FORMATTING
+    // ✅ FORMATTING
     function formatMVR(value) {
       return new Intl.NumberFormat('en-MV', {
         style: 'currency',
@@ -641,218 +623,61 @@
       });
     }
 
-    // PDF EXPORT - DASHBOARD
-    async function exportDashboardPDF() {
-      const { jsPDF } = window.jspdf;
-      const panel = document.getElementById('dashboardPanel');
-      const canvas = await html2canvas(panel, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save(`Bloomkraft_Financial_Report_${new Date().toISOString().slice(0,10)}.pdf`);
-      showToast('PDF Report downloaded!');
+    // ✅ FILTERS
+    function applyFilters() {
+      currentFilter.search = document.getElementById('searchInput').value.toLowerCase();
+      currentFilter.startDate = document.getElementById('startDate').value;
+      currentFilter.endDate = document.getElementById('endDate').value;
+      renderTransactions(allTransactions);
     }
 
-    // INVOICE PDF
-    function downloadInvoice(transaction) {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      // Header
-      doc.setFontSize(22);
-      doc.setFont('helvetica', 'bold');
-      doc.text('BLOOMKRAFT', 20, 20);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Floral & Event Design Studio', 20, 26);
-      doc.text('Malé, Maldives', 20, 30);
-
-      // Divider
-      doc.setDrawColor(212, 184, 160);
-      doc.setLineWidth(0.5);
-      doc.line(20, 35, 190, 35);
-
-      // Invoice Info
-      doc.setFontSize(12);
-      doc.text(`Invoice #INV-${transaction.id}`, 150, 20);
-      doc.text(`Date: ${new Date(transaction.date).toLocaleDateString('en-GB')}`, 150, 25);
-
-      // Client
-      doc.setFontSize(11);
-      doc.text('Bill To:', 20, 45);
-      doc.text('Abdulla Jailam', 20, 50);
-      doc.text('#777488484848848', 20, 55);
-
-      // Item
-      doc.setFillColor(245, 239, 232);
-      doc.rect(20, 65, 170, 10, 'F');
-      doc.setTextColor(62, 58, 53);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Description', 25, 72);
-      doc.text('Amount (MVR)', 160, 72);
-
-      doc.setFont('helvetica', 'normal');
-      doc.text(transaction.description, 25, 85);
-      doc.text(formatMVR(transaction.amount), 160, 85);
-
-      // Total
-      doc.setFont('helvetica', 'bold');
-      doc.text('TOTAL', 140, 100);
-      doc.text(formatMVR(transaction.amount), 160, 100);
-
-      // Footer
-      doc.setFontSize(9);
-      doc.setTextColor(169, 162, 154);
-      doc.text('Thank you for your business!', 20, 120);
-      doc.text('www.bloomkraft.mv', 160, 120);
-
-      doc.save(`Invoice_INV-${transaction.id}.pdf`);
-      showToast('Invoice downloaded!');
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
+      renderTransactions(allTransactions);
     }
 
-    // RENDER DASHBOARD (with period filter)
-    function renderDashboard(transactions) {
-      const now = new Date();
-      let filtered = transactions;
-
-      if (currentPeriod === 'monthly') {
-        const start = new Date(now.getFullYear(), now.getMonth(), 1);
-        const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-        filtered = transactions.filter(t => {
-          const d = new Date(t.date);
-          return d >= start && d <= end;
-        });
-      } else if (currentPeriod === 'yearly') {
-        const year = now.getFullYear();
-        filtered = transactions.filter(t => new Date(t.date).getFullYear() === year);
-      }
-
-      // Summary
-      const sales = filtered.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const expenses = filtered.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const profit = sales - expenses;
-
-      document.getElementById('totalSales').textContent = formatMVR(sales);
-      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
-      const profitElem = document.getElementById('netProfit');
-      profitElem.textContent = formatMVR(profit);
-      profitElem.className = 'summary-value value-profit ' + (profit >= 0 ? 'positive' : 'negative');
-
-      // Chart
-      renderChart(filtered);
+    // ✅ TRANSACTION RENDERING
+    function showSkeletons() {
+      const list = document.getElementById('transactionList');
+      list.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      `;
     }
 
-    // CHART (BAR)
-    function renderChart(transactions) {
-      const ctx = document.getElementById('profitChart').getContext('2d');
-
-      let grouped = {};
-      if (currentPeriod === 'monthly') {
-        // Group by day (last 30 days)
-        const today = new Date();
-        for (let i = 29; i >= 0; i--) {
-          const d = new Date(today);
-          d.setDate(d.getDate() - i);
-          const key = d.toISOString().split('T')[0];
-          grouped[key] = { sales: 0, expenses: 0 };
-        }
-        transactions.forEach(t => {
-          if (grouped[t.date]) {
-            if (t.type === 'sale') grouped[t.date].sales += t.amount;
-            else grouped[t.date].expenses += t.amount;
-          }
-        });
-      } else {
-        // Yearly → group by month
-        const months = Array.from({length: 12}, (_, i) => 
-          new Date(new Date().getFullYear(), i, 1).toLocaleString('default', { month: 'short' })
-        );
-        months.forEach(m => grouped[m] = { sales: 0, expenses: 0 });
-        transactions.forEach(t => {
-          const month = new Date(t.date).toLocaleString('default', { month: 'short' });
-          if (grouped[month] !== undefined) {
-            if (t.type === 'sale') grouped[month].sales += t.amount;
-            else grouped[month].expenses += t.amount;
-          }
-        });
-      }
-
-      const labels = Object.keys(grouped);
-      const salesData = labels.map(k => grouped[k].sales);
-      const expenseData = labels.map(k => grouped[k].expenses);
-
-      if (chartInstance) chartInstance.destroy();
-
-      chartInstance = new Chart(ctx, {
-        type: 'bar',
-         {
-          labels: currentPeriod === 'monthly' 
-            ? labels.map(d => new Date(d).getDate()) 
-            : labels,
-          datasets: [
-            {
-              label: 'Sales',
-              data: salesData,
-              backgroundColor: 'rgba(134, 178, 146, 0.7)',
-              borderColor: 'rgba(134, 178, 146, 1)',
-              borderWidth: 1
-            },
-            {
-              label: 'Expenses',
-              data: expenseData,
-              backgroundColor: 'rgba(217, 119, 119, 0.7)',
-              borderColor: 'rgba(217, 119, 119, 1)',
-              borderWidth: 1
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'top' }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: { callback: v => `MVR ${v}` }
-            }
-          }
-        }
-      });
-    }
-
-    // TRANSACTION RENDERING
     function renderTransactions(transactions) {
       const list = document.getElementById('transactionList');
-      if (transactions.length === 0) {
-        list.innerHTML = `<div class="status">No records found.</div>`;
+      let filtered = [...transactions];
+
+      // Type filter (if you add type buttons later, hook here)
+      // Search filter
+      if (currentFilter.search) {
+        filtered = filtered.filter(t => 
+          t.description.toLowerCase().includes(currentFilter.search)
+        );
+      }
+      // Date range
+      if (currentFilter.startDate) {
+        filtered = filtered.filter(t => t.date >= currentFilter.startDate);
+      }
+      if (currentFilter.endDate) {
+        filtered = filtered.filter(t => t.date <= currentFilter.endDate);
+      }
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="status">No matching records found.</div>`;
         return;
       }
 
-      list.innerHTML = transactions.map(t => {
+      list.innerHTML = filtered.map(t => {
         const isSale = t.type === 'sale';
         const amountClass = isSale ? 'amount-sale' : 'amount-expense';
         const sign = isSale ? '+' : '–';
         const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
-
-        const invoiceBtn = isSale ? 
-          `<button class="invoice-btn" onclick="downloadInvoice(${JSON.stringify(t).replace(/'/g, "\\'")})">Invoice</button>` : '';
 
         return `
           <div class="transaction-card">
@@ -868,7 +693,6 @@
               <div class="action-buttons">
                 <button class="edit-btn" onclick="editTransaction('${t.id}')">Edit</button>
                 <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
-                ${invoiceBtn}
               </div>
             </div>
           </div>
@@ -876,13 +700,71 @@
       }).join('');
     }
 
-    // SUPABASE FUNCTIONS
+    // ✅ CHART
+    function renderChart(transactions) {
+      const ctx = document.getElementById('profitChart').getContext('2d');
+
+      // Group by month
+      const monthlyData = {};
+      transactions.forEach(t => {
+        const month = new Date(t.date).toISOString().slice(0,7); // YYYY-MM
+        if (!monthlyData[month]) monthlyData[month] = { sales: 0, expenses: 0 };
+        if (t.type === 'sale') monthlyData[month].sales += t.amount;
+        else monthlyData[month].expenses += t.amount;
+      });
+
+      const labels = Object.keys(monthlyData).sort();
+      const profits = labels.map(m => monthlyData[m].sales - monthlyData[m].expenses);
+
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels.map(m => {
+            const d = new Date(m + '-01');
+            return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+          }),
+          datasets: [{
+            label: 'Monthly Net Profit (MVR)',
+            data: profits,
+            borderColor: '#A8C3B1',
+            backgroundColor: 'rgba(168, 195, 177, 0.1)',
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4,
+            pointBackgroundColor: '#A8C3B1'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              grid: { color: 'rgba(0,0,0,0.03)' },
+              ticks: { callback: v => `MVR ${v}` }
+            },
+            x: {
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ✅ SUPABASE FUNCTIONS
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
       const amountInput = document.getElementById('amount').value;
       const payment = document.getElementById('payment').value;
-      let date = document.getElementById('date').value || new Date().toISOString().substring(0, 10);
+      let date = document.getElementById('date').value;
+
+      if (!date) date = new Date().toISOString().substring(0, 10);
 
       const amount = parseFloat(amountInput);
       if (!description || isNaN(amount) || amount <= 0) {
@@ -900,14 +782,15 @@
         document.getElementById('description').value = '';
         document.getElementById('amount').value = '';
         document.getElementById('date').value = '';
-        showToast('Transaction saved!');
+        showToast('Transaction saved successfully!');
         fetchAndRender();
       } catch (err) {
         console.error('Save error:', err);
-        showToast('Failed to save.', 'error');
+        showToast('Failed to save transaction.', 'error');
       }
     }
 
+    // ✅ MODAL-BASED EDIT (more professional)
     async function editTransaction(id) {
       const transaction = allTransactions.find(t => t.id === id);
       if (!transaction) return;
@@ -929,34 +812,57 @@
           .eq('id', id);
 
         if (error) throw error;
-        showToast('Updated.');
+        showToast('Transaction updated.');
         fetchAndRender();
       } catch (err) {
         console.error('Edit error:', err);
-        showToast('Failed to update.', 'error');
+        showToast('Failed to update transaction.', 'error');
       }
     }
 
     async function deleteTransaction(id) {
-      if (!confirm('Delete this record?')) return;
+      if (!confirm('Are you sure you want to delete this record?')) return;
       try {
         const { error } = await supabaseClient
           .from('transactions')
           .delete()
           .eq('id', id);
         if (error) throw error;
-        showToast('Deleted.');
+        showToast('Transaction deleted.');
         fetchAndRender();
       } catch (err) {
         console.error('Delete error:', err);
-        showToast('Failed to delete.', 'error');
+        showToast('Failed to delete transaction.', 'error');
       }
     }
 
+    // ✅ EXPORT
+    function exportToCSV() {
+      if (allTransactions.length === 0) {
+        showToast('No data to export.', 'error');
+        return;
+      }
+
+      let csv = 'Date,Type,Description,Amount (MVR),Payment Method\n';
+      allTransactions.forEach(t => {
+        csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.amount}","${t.payment_method}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Bloomkraft_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Exported successfully!');
+    }
+
+    // ✅ FETCH & RENDER
     async function fetchAndRender() {
-      const list = document.getElementById('transactionList');
-      list.innerHTML = `<div class="skeleton"></div><div class="skeleton"></div>`;
-      
+      showSkeletons();
       try {
         const { data, error } = await supabaseClient
           .from('transactions')
@@ -967,19 +873,34 @@
         if (error) throw error;
 
         allTransactions = data;
-        renderDashboard(data);
+        renderSummary(data);
+        renderChart(data);
         renderTransactions(data);
       } catch (err) {
         console.error('Fetch error:', err);
-        list.innerHTML = `<div class="status">Failed to load data.</div>`;
-        showToast('Failed to load.', 'error');
+        document.getElementById('transactionList').innerHTML = 
+          `<div class="status">Failed to load. Please check your connection.</div>`;
+        showToast('Failed to load data.', 'error');
       }
     }
 
-    // Init
+    function renderSummary(transactions) {
+      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+      const profit = sales - expenses;
+
+      document.getElementById('totalSales').textContent = formatMVR(sales);
+      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
+      document.getElementById('netProfit').textContent = formatMVR(profit);
+    }
+
+    // Initialize
     if (document.getElementById('app').style.display === 'block') {
       fetchAndRender();
     }
+
+    // Auto-refresh filters on input
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
   </script>
 </body>
 </html>
