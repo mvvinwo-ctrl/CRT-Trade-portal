@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -553,7 +552,7 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="logo-section">
-        <!-- NEW EMBEDDED LOGO (Floral & Elegant) -->
+        <!-- EMBEDDED LOGO -->
         <svg class="bloom-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="45" fill="#FFF9F3" stroke="#D4B8A0" stroke-width="2"/>
           <path d="M50 30 Q60 20 70 30 Q80 40 70 50 Q60 60 50 50 Q40 60 30 50 Q20 40 30 30 Q40 20 50 30" fill="#A8C3B1"/>
@@ -638,7 +637,7 @@
             <div class="panel-header">
               <h2 class="panel-title">All Transactions</h2>
               <div style="display:flex;gap:0.8rem;">
-                <button class="btn btn-outline" onclick="exportToCSV('transactions')">
+                <button class="btn btn-outline" onclick="exportTransactionsToCSV()">
                   <i class="fas fa-file-csv"></i> Export CSV
                 </button>
                 <button class="btn" onclick="openTransactionModal()">
@@ -670,46 +669,11 @@
           <div class="panel">
             <div class="panel-header">
               <h2 class="panel-title">Inventory Management</h2>
-              <button class="btn" onclick="alert('Feature ready for extension!')">
+              <button class="btn" onclick="alert('Inventory module ready for extension!')">
                 <i class="fas fa-plus"></i> Add Item
               </button>
             </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Category</th>
-                  <th>Stock</th>
-                  <th>Unit Price (MVR)</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Rose Bouquet (Premium)</td>
-                  <td>Arrangements</td>
-                  <td>18</td>
-                  <td>1,200.00</td>
-                  <td><span class="status-badge status-instock">In Stock</span></td>
-                  <td class="actions-cell">
-                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
-                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>White Lilies</td>
-                  <td>Flowers</td>
-                  <td>5</td>
-                  <td>350.00</td>
-                  <td><span class="status-badge status-low">Low Stock</span></td>
-                  <td class="actions-cell">
-                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
-                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <p style="text-align:center;padding:2rem;color:var(--subtle);">Inventory tracking will sync with sales automatically.</p>
           </div>
         </div>
 
@@ -718,35 +682,11 @@
           <div class="panel">
             <div class="panel-header">
               <h2 class="panel-title">Customer Directory</h2>
-              <button class="btn" onclick="alert('Feature ready for extension!')">
+              <button class="btn" onclick="alert('Customer module ready for extension!')">
                 <i class="fas fa-user-plus"></i> Add Customer
               </button>
             </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Last Purchase</th>
-                  <th>Total Spent (MVR)</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Aisha Mohamed</td>
-                  <td>+960 7712345</td>
-                  <td>aisha@email.com</td>
-                  <td>12 Oct 2025</td>
-                  <td>4,850.00</td>
-                  <td class="actions-cell">
-                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
-                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <p style="text-align:center;padding:2rem;color:var(--subtle);">Customer data will be linked to transactions.</p>
           </div>
         </div>
 
@@ -755,26 +695,9 @@
           <div class="panel">
             <div class="panel-header">
               <h2 class="panel-title">Financial Reports</h2>
-              <button class="btn" onclick="exportToCSV('reports')">
+              <button class="btn" onclick="exportTransactionsToCSV()">
                 <i class="fas fa-file-export"></i> Export Report
               </button>
-            </div>
-            <div class="form-grid" style="margin-bottom:2rem;">
-              <div>
-                <label for="reportPeriod">Period</label>
-                <select id="reportPeriod">
-                  <option>Monthly</option>
-                  <option>Quarterly</option>
-                  <option>Yearly</option>
-                </select>
-              </div>
-              <div>
-                <label for="reportYear">Year</label>
-                <select id="reportYear">
-                  <option>2025</option>
-                  <option>2024</option>
-                </select>
-              </div>
             </div>
             <div class="chart-container">
               <canvas id="reportChart"></canvas>
@@ -820,6 +743,7 @@
     let currentTransactionId = null;
     let revenueChart = null;
     let reportChart = null;
+    let allTransactions = [];
 
     // === FORMATTING ===
     function formatMVR(value) {
@@ -849,7 +773,6 @@
         section === 'inventory' ? 'Inventory' :
         section === 'customers' ? 'Customers' : 'Reports';
       
-      // Update active nav
       document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
       event.target.closest('.nav-link').classList.add('active');
     }
@@ -861,14 +784,16 @@
       const title = document.getElementById('modalTitle');
       
       if (id) {
-        // Edit mode
-        title.textContent = 'Edit Transaction';
-        // In real app: fetch data by id and populate fields
-        document.getElementById('modalDesc').value = 'Wedding Bouquet - Premium';
-        document.getElementById('modalAmount').value = '1200.00';
-        document.getElementById('modalType').value = 'sale';
-        document.getElementById('modalPayment').value = 'cash';
-        document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
+        // Edit mode: populate fields
+        const transaction = allTransactions.find(t => t.id == id);
+        if (transaction) {
+          document.getElementById('modalDesc').value = transaction.description;
+          document.getElementById('modalAmount').value = transaction.amount;
+          document.getElementById('modalType').value = transaction.type;
+          document.getElementById('modalPayment').value = transaction.payment_method;
+          document.getElementById('modalDate').value = transaction.date;
+          title.textContent = 'Edit Transaction';
+        }
       } else {
         // Add mode
         title.textContent = 'Add New Transaction';
@@ -885,55 +810,205 @@
       document.getElementById('transactionModal').style.display = 'none';
     }
 
-    function saveTransaction() {
+    // === SUPABASE CRUD ===
+    async function addTransaction(type, description, amount, payment_method, date) {
+      const { data, error } = await supabase
+        .from('transactions')
+        .insert([{ type, description, amount: parseFloat(amount), payment_method, date }])
+        .select();
+      
+      if (error) throw error;
+      return data[0];
+    }
+
+    async function updateTransaction(id, updates) {
+      const { error } = await supabase
+        .from('transactions')
+        .update(updates)
+        .eq('id', id);
+      if (error) throw error;
+    }
+
+    async function deleteTransactionFromDB(id) {
+      const { error } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+    }
+
+    async function fetchAllTransactions() {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .order('date', { ascending: false })
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    }
+
+    // === SAVE TRANSACTION (ADD/EDIT) ===
+    async function saveTransaction() {
       const desc = document.getElementById('modalDesc').value.trim();
-      const amount = parseFloat(document.getElementById('modalAmount').value);
+      const amount = document.getElementById('modalAmount').value;
       const type = document.getElementById('modalType').value;
       const payment = document.getElementById('modalPayment').value;
       const date = document.getElementById('modalDate').value;
 
-      if (!desc || isNaN(amount) || amount <= 0) {
+      if (!desc || !amount || isNaN(amount) || parseFloat(amount) <= 0) {
         alert('Please fill all fields with valid data.');
         return;
       }
 
-      if (currentTransactionId) {
-        // Edit logic
-        alert('✅ Transaction updated successfully!');
-      } else {
-        // Add logic
-        alert('✅ New transaction added successfully!');
+      try {
+        if (currentTransactionId) {
+          await updateTransaction(currentTransactionId, {
+            description: desc,
+            amount: parseFloat(amount),
+            type,
+            payment_method: payment,
+            date
+          });
+          alert('✅ Transaction updated successfully!');
+        } else {
+          await addTransaction(type, desc, amount, payment, date);
+          alert('✅ New transaction added successfully!');
+        }
+        closeModal();
+        await refreshData();
+      } catch (err) {
+        console.error(err);
+        alert('❌ Error saving transaction: ' + (err.message || 'Unknown error'));
       }
-      closeModal();
-      loadRecentActivity();
-      loadTransactions();
+    }
+
+    // === DELETE ===
+    async function deleteTransaction(id) {
+      if (!confirm('⚠️ Are you sure you want to delete this transaction? This cannot be undone.')) return;
+      
+      try {
+        await deleteTransactionFromDB(id);
+        alert('✅ Transaction deleted.');
+        await refreshData();
+      } catch (err) {
+        console.error(err);
+        alert('❌ Error deleting transaction: ' + (err.message || 'Unknown error'));
+      }
+    }
+
+    // === RENDER DATA ===
+    function renderSummary(transactions) {
+      const today = new Date().toISOString().split('T')[0];
+      const thisMonth = new Date().toISOString().substring(0, 7); // "2025-11"
+
+      const todaySales = transactions
+        .filter(t => t.type === 'sale' && t.date === today)
+        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+
+      const monthSales = transactions
+        .filter(t => t.type === 'sale' && t.date.startsWith(thisMonth))
+        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+      
+      const monthExpenses = transactions
+        .filter(t => t.type === 'expense' && t.date.startsWith(thisMonth))
+        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+
+      document.getElementById('todaySales').textContent = formatMVR(todaySales);
+      document.getElementById('monthProfit').textContent = formatMVR(monthSales - monthExpenses);
+      document.getElementById('inventoryCount').textContent = '42 items'; // mock
+    }
+
+    function renderRecentActivity(transactions) {
+      const recent = transactions.slice(0, 5);
+      const tbody = document.getElementById('recentActivityBody');
+      
+      if (recent.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:1.5rem;">No transactions yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = recent.map(t => {
+        const isSale = t.type === 'sale';
+        const amountClass = isSale ? 'value-sales' : 'value-expense';
+        const sign = isSale ? '+' : '–';
+        const badgeColor = isSale ? 'style="background:#E8F5E9;color:#2E7D32;"' : 'style="background:#FFEBEE;color:#C62828;"';
+        const badgeText = isSale ? 'Sale' : 'Expense';
+
+        return `
+          <tr>
+            <td>${t.description}</td>
+            <td>${formatDate(t.date)}</td>
+            <td class="${amountClass}" style="color:${isSale ? '#A8C3B1' : '#D97777'};">${sign}${formatMVR(t.amount)}</td>
+            <td><span class="status-badge" ${badgeColor}>${badgeText}</span></td>
+            <td class="actions-cell">
+              <span class="icon-btn edit" onclick="openTransactionModal('${t.id}')"><i class="fas fa-edit"></i></span>
+              <span class="icon-btn delete" onclick="deleteTransaction('${t.id}')"><i class="fas fa-trash"></i></span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderTransactionsTable(transactions) {
+      const tbody = document.getElementById('transactionsTableBody');
+      
+      if (transactions.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;">No transactions found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = transactions.map(t => {
+        return `
+          <tr>
+            <td>#TR-${String(t.id).padStart(4, '0')}</td>
+            <td>${t.description}</td>
+            <td>${formatDate(t.date)}</td>
+            <td>${formatMVR(t.amount)}</td>
+            <td>${t.type.charAt(0).toUpperCase() + t.type.slice(1)}</td>
+            <td>${t.payment_method === 'cash' ? 'Cash' : 'Bank Transfer'}</td>
+            <td class="actions-cell">
+              <span class="icon-btn edit" onclick="openTransactionModal('${t.id}')"><i class="fas fa-edit"></i></span>
+              <span class="icon-btn delete" onclick="deleteTransaction('${t.id}')"><i class="fas fa-trash"></i></span>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     // === CHARTS ===
-    function renderRevenueChart() {
+    function renderRevenueChart(transactions) {
       const ctx = document.getElementById('revenueChart').getContext('2d');
       if (revenueChart) revenueChart.destroy();
 
-      // Mock data - replace with Supabase query
-      const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-      const salesData = [12500, 18900, 21000, 19800, 24500, 26000];
-      const expenseData = [4200, 5100, 6300, 5800, 7200, 6900];
+      // Group by month
+      const monthly = {};
+      transactions.forEach(t => {
+        const month = t.date.substring(0, 7); // "2025-11"
+        if (!monthly[month]) monthly[month] = { sales: 0, expenses: 0 };
+        if (t.type === 'sale') monthly[month].sales += parseFloat(t.amount);
+        else monthly[month].expenses += parseFloat(t.amount);
+      });
+
+      const labels = Object.keys(monthly).sort();
+      const salesData = labels.map(m => monthly[m].sales);
+      const expenseData = labels.map(m => monthly[m].expenses);
 
       revenueChart = new Chart(ctx, {
         type: 'bar',
-        data: {
+         {
           labels: labels,
           datasets: [
             {
               label: 'Sales (MVR)',
-              data: salesData,
+               salesData,
               backgroundColor: '#A8C3B1',
               borderRadius: 6,
               borderSkipped: false,
             },
             {
               label: 'Expenses (MVR)',
-              data: expenseData,
+               expenseData,
               backgroundColor: '#D97777',
               borderRadius: 6,
               borderSkipped: false,
@@ -943,9 +1018,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'top' }
-          },
+          plugins: { legend: { position: 'top' } },
           scales: {
             y: {
               beginAtZero: true,
@@ -960,20 +1033,21 @@
       });
     }
 
-    function renderReportChart() {
+    function renderReportChart(transactions) {
       const ctx = document.getElementById('reportChart').getContext('2d');
       if (reportChart) reportChart.destroy();
 
+      // Mock quarterly for now — can be enhanced
       const labels = ['Q1', 'Q2', 'Q3', 'Q4'];
       const data = [42500, 48900, 51200, 47800];
 
       reportChart = new Chart(ctx, {
         type: 'line',
-        data: {
+         {
           labels: labels,
           datasets: [{
             label: 'Quarterly Revenue (MVR)',
-            data: data,
+             data,
             borderColor: '#D4B8A0',
             backgroundColor: 'rgba(212, 184, 160, 0.1)',
             tension: 0.3,
@@ -998,106 +1072,50 @@
       });
     }
 
-    // === DATA LOADING ===
-    async function loadRecentActivity() {
-      const tbody = document.getElementById('recentActivityBody');
-      // In real app: fetch from Supabase
-      tbody.innerHTML = `
-        <tr>
-          <td>Wedding Bouquet - Premium</td>
-          <td>${formatDate(new Date())}</td>
-          <td class="value-sales" style="color:#A8C3B1;">+${formatMVR(1200.00)}</td>
-          <td><span class="status-badge" style="background:#E8F5E9;color:#2E7D32;">Sale</span></td>
-          <td class="actions-cell">
-            <span class="icon-btn edit" onclick="openTransactionModal('1')"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete" onclick="deleteTransaction('1')"><i class="fas fa-trash"></i></span>
-          </td>
-        </tr>
-        <tr>
-          <td>Floral Supplies - Roses</td>
-          <td>${formatDate(new Date(Date.now() - 86400000))}</td>
-          <td class="value-expense" style="color:#D97777;">–${formatMVR(850.00)}</td>
-          <td><span class="status-badge" style="background:#FFEBEE;color:#C62828;">Expense</span></td>
-          <td class="actions-cell">
-            <span class="icon-btn edit" onclick="openTransactionModal('2')"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete" onclick="deleteTransaction('2')"><i class="fas fa-trash"></i></span>
-          </td>
-        </tr>
-      `;
-    }
-
-    async function loadTransactions() {
-      const tbody = document.getElementById('transactionsTableBody');
-      // In real app: fetch full list from Supabase
-      tbody.innerHTML = `
-        <tr>
-          <td>#TR-1001</td>
-          <td>Wedding Bouquet - Premium</td>
-          <td>${formatDate(new Date())}</td>
-          <td style="color:#A8C3B1;">${formatMVR(1200.00)}</td>
-          <td>Sale</td>
-          <td>Cash</td>
-          <td class="actions-cell">
-            <span class="icon-btn edit" onclick="openTransactionModal('1')"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete" onclick="deleteTransaction('1')"><i class="fas fa-trash"></i></span>
-          </td>
-        </tr>
-        <tr>
-          <td>#TR-1002</td>
-          <td>Floral Supplies - Roses</td>
-          <td>${formatDate(new Date(Date.now() - 86400000))}</td>
-          <td style="color:#D97777;">${formatMVR(850.00)}</td>
-          <td>Expense</td>
-          <td>Transfer</td>
-          <td class="actions-cell">
-            <span class="icon-btn edit" onclick="openTransactionModal('2')"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete" onclick="deleteTransaction('2')"><i class="fas fa-trash"></i></span>
-          </td>
-        </tr>
-      `;
-    }
-
-    function deleteTransaction(id) {
-      if (confirm('⚠️ Are you sure you want to delete this transaction?')) {
-        alert('✅ Transaction deleted.');
-        loadRecentActivity();
-        loadTransactions();
-      }
-    }
-
     // === EXPORT ===
-    function exportToCSV(section) {
-      let csvContent = "data:text/csv;charset=utf-8,";
-      
-      if (section === 'transactions') {
-        csvContent += "ID,Description,Date,Amount (MVR),Type,Payment\n";
-        csvContent += "#TR-1001,Wedding Bouquet - Premium,03 Nov 2025,1,200.00,Sale,Cash\n";
-        csvContent += "#TR-1002,Floral Supplies - Roses,02 Nov 2025,850.00,Expense,Transfer";
-      } else {
-        csvContent += "Period,Revenue (MVR),Expenses (MVR),Profit (MVR)\n";
-        csvContent += "Q1 2025,42500.00,15200.00,27300.00\n";
-        csvContent += "Q2 2025,48900.00,17800.00,31100.00";
+    function exportTransactionsToCSV() {
+      if (allTransactions.length === 0) {
+        alert('No transactions to export.');
+        return;
       }
 
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `bloomkraft_${section}_report.csv`);
+      let csv = 'ID,Description,Date,Amount (MVR),Type,Payment Method\n';
+      allTransactions.forEach(t => {
+        csv += `"#TR-${String(t.id).padStart(4, '0')}","${t.description}","${t.date}",${t.amount},${t.type},${t.payment_method}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `bloomkraft_transactions_${new Date().toISOString().slice(0,10)}.csv`);
+      link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // === INIT APP ===
-    function initApp() {
-      renderRevenueChart();
-      renderReportChart();
-      loadRecentActivity();
-      loadTransactions();
+    // === REFRESH ALL DATA ===
+    async function refreshData() {
+      try {
+        allTransactions = await fetchAllTransactions();
+        renderSummary(allTransactions);
+        renderRecentActivity(allTransactions);
+        renderTransactionsTable(allTransactions);
+        renderRevenueChart(allTransactions);
+      } catch (err) {
+        console.error('Failed to refresh data:', err);
+        alert('❌ Failed to load data. Please check your connection.');
+      }
+    }
 
-      // Set today's date in forms
-      const today = new Date().toISOString().substring(0, 10);
-      document.getElementById('modalDate').value = today;
+    // === INIT APP ===
+    async function initApp() {
+      await refreshData();
+      renderReportChart(); // uses mock data for now
+
+      // Set today in modal
+      document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
     }
 
     // Close modal on outside click
