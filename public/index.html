@@ -184,6 +184,7 @@
       display: flex;
       gap: 0.8rem;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .form-row {
@@ -319,7 +320,7 @@
     }
 
     .chart-container {
-      height: 250px;
+      height: 280px;
       margin: 1.5rem 0;
     }
 
@@ -458,14 +459,12 @@
     }
 
     @media (max-width: 768px) {
-      .filter-section {
+      .filter-section, .btn-group {
         flex-direction: column;
+        align-items: stretch;
       }
       .filter-input {
         min-width: auto;
-      }
-      .btn-group {
-        flex-wrap: wrap;
       }
       header {
         padding: 1rem;
@@ -493,7 +492,8 @@
 
     <header>
       <div class="logo-container">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABKdSURBVHhe7d15jF1Vncfx731vX9pO27V0aUtbpLRQKJQiIKKAgoKKi4gLihsqLqhRUYkx0cQYTdyixhijxiQqJpqIi4ooIigKyEJZKgVKWWhL933p3nv3j3M6c5nOzLz33n33vef3SXrfe+7Z5565vzn33HPPORcEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQk1L1Qc3MzMxUX19f1dbWFn7b2NiYqqurq3oNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA......" alt="Bloomkraft Logo">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABKdSURBVHhe7d15jF1Vncfx731vX9pO27V0aUtbpLRQKJQiIKKAgoKKi4gLihsqLqhRUYkx0cQYTdyixhijxiQqJpqIi4ooIigKyEJZKgVKWWhL933p3nv3j3M6c5nOzLz33n33vef3SXrfe+7Z5565vzn33HPPORcEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA......" 
+             alt="Bloomkraft Logo">
       </div>
       <div class="user-info">
         <div>Abdulla Jailam</div>
@@ -547,8 +547,10 @@
           <div class="btn-group">
             <select id="monthSelector" onchange="updateDashboard()">
               <option value="">Select Month...</option>
-              <!-- Options populated by JavaScript -->
+              <!-- Populated by JS -->
             </select>
+            <input type="date" id="dashStartDate" class="filter-input" style="width:130px; padding:0.6rem; font-size:0.95rem;" onchange="updateDashboard()">
+            <input type="date" id="dashEndDate" class="filter-input" style="width:130px; padding:0.6rem; font-size:0.95rem;" onchange="updateDashboard()">
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
             <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
@@ -730,75 +732,187 @@
       }).join('');
     }
 
-    // ✅ CHART
+    // ✅ CHART & DASHBOARD LOGIC
+    function updateDashboard() {
+      const selectedMonth = document.getElementById('monthSelector').value;
+      const startDate = document.getElementById('dashStartDate').value;
+      const endDate = document.getElementById('dashEndDate').value;
+
+      if (selectedMonth) {
+        document.getElementById('dashStartDate').value = '';
+        document.getElementById('dashEndDate').value = '';
+        const filtered = allTransactions.filter(t => t.date.startsWith(selectedMonth));
+        renderSummary(filtered);
+        renderChart(filtered, selectedMonth);
+      } else if (startDate || endDate) {
+        document.getElementById('monthSelector').value = '';
+        const filtered = allTransactions.filter(t => {
+          if (startDate && t.date < startDate) return false;
+          if (endDate && t.date > endDate) return false;
+          return true;
+        });
+        renderSummary(filtered);
+        renderChart(filtered);
+      } else {
+        renderSummary(allTransactions);
+        renderChart(allTransactions);
+      }
+    }
+
+    function renderSummary(transactions) {
+      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const profit = sales - expenses;
+
+      const salesEl = document.getElementById('totalSales');
+      const expensesEl = document.getElementById('totalExpenses');
+      const profitEl = document.getElementById('netProfit');
+
+      salesEl.textContent = formatMVR(sales);
+      salesEl.style.color = sales > 0 ? 'var(--profit)' : 'var(--text)';
+
+      expensesEl.textContent = formatMVR(expenses);
+      expensesEl.style.color = 'var(--expense)';
+
+      profitEl.textContent = formatMVR(profit);
+      profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
+    }
+
     function renderChart(transactions, selectedMonth = null) {
       const ctx = document.getElementById('profitChart').getContext('2d');
 
-      // Group by YYYY-MM
-      const grouped = {};
-      transactions.forEach(t => {
-        const key = t.date.slice(0, 7);
-        if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
-        if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
-        else grouped[key].expenses += parseFloat(t.amount || 0);
-      });
-
-      // Sort keys chronologically
-      const labels = Object.keys(grouped).sort();
-      const salesData = labels.map(k => grouped[k].sales);
-      const expensesData = labels.map(k => grouped[k].expenses);
-      const profitData = labels.map(k => grouped[k].sales - grouped[k].expenses);
-
       if (chartInstance) chartInstance.destroy();
 
-      chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels.map(k => {
-            const d = new Date(k + '-01');
-            return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-          }),
-          datasets: [
-            {
-              label: 'Sales (MVR)',
-              data: salesData,
-              backgroundColor: 'rgba(168, 195, 177, 0.7)',
-              borderColor: '#A8C3B1',
-              borderWidth: 1
-            },
-            {
-              label: 'Expenses (MVR)',
-              data: expensesData,
-              backgroundColor: 'rgba(217, 119, 119, 0.7)',
-              borderColor: '#D97777',
-              borderWidth: 1
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: true },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return `${context.dataset.label}: ${formatMVR(context.parsed.y)}`;
+      if (selectedMonth) {
+        const daily = {};
+        transactions.forEach(t => {
+          if (!daily[t.date]) daily[t.date] = { sales: 0, expenses: 0 };
+          if (t.type === 'sale') daily[t.date].sales += parseFloat(t.amount || 0);
+          else daily[t.date].expenses += parseFloat(t.amount || 0);
+        });
+
+        const labels = Object.keys(daily).sort();
+        const salesData = labels.map(d => daily[d].sales);
+        const expensesData = labels.map(d => daily[d].expenses);
+
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels.map(d => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })),
+            datasets: [
+              {
+                label: 'Sales (MVR)',
+                data: salesData,
+                backgroundColor: 'rgba(168, 195, 177, 0.8)',
+                borderColor: '#A8C3B1',
+                borderWidth: 1
+              },
+              {
+                label: 'Expenses (MVR)',
+                data: expensesData,
+                backgroundColor: 'rgba(217, 119, 119, 0.8)',
+                borderColor: '#D97777',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: ctx => `${ctx.dataset.label}: ${formatMVR(ctx.parsed.y)}`
                 }
               }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(0,0,0,0.03)' },
-              ticks: { callback: v => `MVR ${v}` }
             },
-            x: {
-              grid: { display: false }
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.03)' },
+                ticks: { callback: v => `MVR ${v}` }
+              },
+              x: { grid: { display: false } }
             }
           }
-        }
+        });
+      } else {
+        const grouped = {};
+        transactions.forEach(t => {
+          const key = t.date.slice(0, 7);
+          if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
+          if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
+          else grouped[key].expenses += parseFloat(t.amount || 0);
+        });
+
+        const labels = Object.keys(grouped).sort();
+        const salesData = labels.map(k => grouped[k].sales);
+        const expensesData = labels.map(k => grouped[k].expenses);
+
+        chartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels.map(k => {
+              const d = new Date(k + '-01');
+              return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+            }),
+            datasets: [
+              {
+                label: 'Sales (MVR)',
+                data: salesData,
+                backgroundColor: 'rgba(168, 195, 177, 0.8)',
+                borderColor: '#A8C3B1',
+                borderWidth: 1
+              },
+              {
+                label: 'Expenses (MVR)',
+                data: expensesData,
+                backgroundColor: 'rgba(217, 119, 119, 0.8)',
+                borderColor: '#D97777',
+                borderWidth: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: ctx => `${ctx.dataset.label}: ${formatMVR(ctx.parsed.y)}`
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(0,0,0,0.03)' },
+                ticks: { callback: v => `MVR ${v}` }
+              },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+    }
+
+    // ✅ MONTH SELECTOR POPULATION
+    function populateMonthSelector(transactions) {
+      const monthSelector = document.getElementById('monthSelector');
+      monthSelector.innerHTML = '<option value="">Select Month...</option>';
+      
+      if (!transactions.length) return;
+      
+      const months = [...new Set(transactions.map(t => t.date.slice(0,7)))].sort();
+      
+      months.forEach(month => {
+        const option = document.createElement('option');
+        option.value = month;
+        const date = new Date(month + '-01');
+        option.textContent = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        monthSelector.appendChild(option);
       });
     }
 
@@ -812,24 +926,21 @@
       const paymentMethod = method === 'cash' ? 'Cash' : 'Bank Transfer';
       const total = parseFloat(amount);
 
-      // Header
-      doc.setFont("Playfair Display", "bold");
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(22);
       doc.setTextColor(62, 58, 53);
       doc.text(logoText, 20, 20);
 
-      doc.setFont("Inter", "normal");
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
       doc.setTextColor(169, 162, 154);
       doc.text("Invoice", 170, 20);
 
-      // Customer Info
       doc.setFontSize(11);
       doc.setTextColor(62, 58, 53);
       doc.text("Abdulla Jailam", 20, 35);
       doc.text("#777488484848848", 20, 42);
 
-      // Invoice Details
       doc.setFontSize(10);
       doc.setTextColor(169, 162, 154);
       doc.text("Invoice Date:", 140, 35);
@@ -841,33 +952,27 @@
       doc.setTextColor(62, 58, 53);
       doc.text(paymentMethod, 170, 42);
 
-      // Divider
       doc.setDrawColor(245, 239, 232);
       doc.setLineWidth(0.7);
       doc.line(20, 50, 190, 50);
 
-      // Item Table Header
       doc.setFontSize(12);
       doc.setTextColor(62, 58, 53);
       doc.text("Description", 20, 60);
       doc.text("Amount (MVR)", 160, 60);
 
-      // Item
       doc.setFontSize(11);
       doc.text(desc, 20, 70);
       doc.text(formatMVR(total), 160, 70);
 
-      // Total Section
       doc.setLineWidth(0.5);
       doc.line(20, 80, 190, 80);
       doc.setFontSize(14);
-      doc.setFont("Playfair Display", "bold");
+      doc.setFont("helvetica", "bold");
       doc.text("Total:", 120, 95);
       doc.text(formatMVR(total), 160, 95);
 
-      // Footer
       doc.setFontSize(9);
-      doc.setFont("Inter", "italic");
       doc.setTextColor(169, 162, 154);
       doc.text("Thank you for your business!", 20, 110);
 
@@ -879,9 +984,6 @@
       showToast('Generating PDF... Please wait.', 'success');
 
       const dashboardPanel = document.querySelectorAll('.panel')[1];
-      const originalDisplay = dashboardPanel.style.display;
-      dashboardPanel.style.display = 'block';
-
       const clone = dashboardPanel.cloneNode(true);
       clone.style.width = '794px';
       clone.style.padding = '20px';
@@ -902,7 +1004,6 @@
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
         const imgWidth = 210;
-        const pageHeight = 297;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
         pdf.save(`Bloomkraft_Dashboard_${new Date().toISOString().slice(0,10)}.pdf`);
@@ -912,62 +1013,34 @@
         showToast('PDF export failed. Try again.', 'error');
       } finally {
         document.body.removeChild(clone);
-        dashboardPanel.style.display = originalDisplay;
       }
     }
 
-    // ✅ DASHBOARD UPDATE LOGIC
-    function updateDashboard() {
-      const selectedMonth = document.getElementById('monthSelector').value;
-      renderSummary(allTransactions, selectedMonth);
-      // Keep chart showing all months for trend visibility
-      renderChart(allTransactions);
-    }
-
-    function renderSummary(transactions, selectedMonth = null) {
-      let relevant = transactions;
-      if (selectedMonth) {
-        relevant = transactions.filter(t => t.date.startsWith(selectedMonth));
+    // ✅ EXPORT TO CSV
+    function exportToCSV() {
+      if (allTransactions.length === 0) {
+        showToast('No data to export.', 'error');
+        return;
       }
 
-      const sales = relevant.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-      const expenses = relevant.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
-      const profit = sales - expenses;
-
-      const salesEl = document.getElementById('totalSales');
-      const expensesEl = document.getElementById('totalExpenses');
-      const profitEl = document.getElementById('netProfit');
-
-      salesEl.textContent = formatMVR(sales);
-      salesEl.style.color = sales > 0 ? 'var(--profit)' : 'var(--text)';
-
-      expensesEl.textContent = formatMVR(expenses);
-      expensesEl.style.color = 'var(--expense)';
-
-      profitEl.textContent = formatMVR(profit);
-      profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
-    }
-
-    function populateMonthSelector(transactions) {
-      const monthSelector = document.getElementById('monthSelector');
-      // Clear all options except first
-      monthSelector.innerHTML = '<option value="">Select Month...</option>';
-      
-      if (!transactions.length) return;
-      
-      // Get unique YYYY-MM values
-      const months = [...new Set(transactions.map(t => t.date.slice(0,7)))].sort();
-      
-      months.forEach(month => {
-        const option = document.createElement('option');
-        option.value = month;
-        const date = new Date(month + '-01');
-        option.textContent = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-        monthSelector.appendChild(option);
+      let csv = 'Date,Type,Description,Amount (MVR),Payment Method\n';
+      allTransactions.forEach(t => {
+        csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.amount}","${t.payment_method}"\n`;
       });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Bloomkraft_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('CSV exported successfully!');
     }
 
-    // ✅ SUPABASE FUNCTIONS
+    // ✅ TRANSACTION CRUD
     async function addTransaction() {
       const type = document.getElementById('type').value;
       const description = document.getElementById('description').value.trim();
@@ -1046,29 +1119,7 @@
       }
     }
 
-    function exportToCSV() {
-      if (allTransactions.length === 0) {
-        showToast('No data to export.', 'error');
-        return;
-      }
-
-      let csv = 'Date,Type,Description,Amount (MVR),Payment Method\n';
-      allTransactions.forEach(t => {
-        csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.amount}","${t.payment_method}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Bloomkraft_Transactions_${new Date().toISOString().slice(0,10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('CSV exported successfully!');
-    }
-
+    // ✅ FETCH & RENDER
     async function fetchAndRender() {
       showSkeletons();
       try {
@@ -1081,9 +1132,9 @@
         if (error) throw error;
 
         allTransactions = data;
-        renderSummary(data);
-        renderChart(data);
-        renderTransactions(data);
+        renderSummary(allTransactions);
+        renderChart(allTransactions);
+        renderTransactions(allTransactions);
         populateMonthSelector(data);
       } catch (err) {
         console.error('Fetch error:', err);
