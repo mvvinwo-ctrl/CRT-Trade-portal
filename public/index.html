@@ -7,7 +7,7 @@
   <title>Bloomkraft – Business Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
@@ -96,6 +96,7 @@
       font-size: 1.1rem;
       transition: all 0.3s ease;
       box-shadow: 0 5px 15px rgba(212, 184, 160, 0.3);
+      font-family: 'Inter', sans-serif;
     }
 
     .pin-btn:hover {
@@ -140,7 +141,7 @@
     .logo-text {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text);
     }
 
@@ -163,6 +164,7 @@
       text-decoration: none;
       font-weight: 500;
       transition: all 0.25s ease;
+      font-size: 1.02rem;
     }
 
     .nav-link:hover, .nav-link.active {
@@ -173,14 +175,16 @@
     .nav-link i {
       width: 24px;
       text-align: center;
+      font-size: 1.1rem;
     }
 
     .user-info-sidebar {
       margin-top: auto;
       padding-top: 1.5rem;
       border-top: 1px solid var(--divider);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--subtle);
+      text-align: center;
     }
 
     /* === MAIN CONTENT === */
@@ -204,13 +208,13 @@
 
     .page-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.1rem;
+      font-weight: 800;
     }
 
     .user-info-top {
       text-align: right;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
     }
 
     .container {
@@ -238,14 +242,15 @@
     }
 
     .stat-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--subtle);
       margin-bottom: 0.8rem;
+      font-weight: 600;
     }
 
     .stat-value {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.1rem;
+      font-weight: 800;
       font-family: 'Playfair Display', serif;
     }
 
@@ -255,7 +260,7 @@
       padding: 1.8rem;
       box-shadow: var(--shadow);
       margin-bottom: 2.2rem;
-      height: 320px;
+      height: 340px;
     }
 
     .panel {
@@ -275,23 +280,25 @@
 
     .panel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
+      font-size: 1.8rem;
       color: var(--text);
+      font-weight: 700;
     }
 
     .btn {
       background: var(--accent);
       color: white;
       border: none;
-      padding: 0.85rem 1.6rem;
+      padding: 0.88rem 1.6rem;
       border-radius: 12px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.02rem;
       transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: 'Inter', sans-serif;
     }
 
     .btn:hover {
@@ -299,20 +306,31 @@
       transform: translateY(-2px);
     }
 
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-outline:hover {
+      background: var(--accent);
+      color: white;
+    }
+
     /* FORM STYLES */
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.6rem;
       margin-bottom: 1.8rem;
     }
 
     label {
       display: block;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       color: var(--subtle);
-      margin-bottom: 0.6rem;
-      font-weight: 500;
+      margin-bottom: 0.65rem;
+      font-weight: 600;
     }
 
     input, select, textarea {
@@ -334,15 +352,17 @@
 
     .data-table th {
       text-align: left;
-      padding: 1rem 1.2rem;
+      padding: 1.1rem 1.2rem;
       background: var(--card-light);
-      font-weight: 600;
+      font-weight: 700;
       color: var(--subtle);
+      font-size: 1.02rem;
     }
 
     .data-table td {
-      padding: 1.1rem 1.2rem;
+      padding: 1.15rem 1.2rem;
       border-bottom: 1px solid var(--divider);
+      font-size: 1rem;
     }
 
     .data-table tr:last-child td {
@@ -350,9 +370,9 @@
     }
 
     .status-badge {
-      padding: 0.3rem 0.8rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
     }
 
@@ -362,33 +382,74 @@
 
     .actions-cell {
       display: flex;
-      gap: 0.7rem;
+      gap: 0.8rem;
     }
 
     .icon-btn {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
+      font-size: 0.9rem;
     }
 
     .icon-btn.edit { background: #E3F2FD; color: #1976D2; }
     .icon-btn.delete { background: #FFEBEE; color: #D32F2F; }
 
     .icon-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.15);
     }
 
     footer {
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       color: var(--subtle);
       margin-top: 2rem;
       padding: 1rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 2.2rem;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      animation: popIn 0.4s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal h3 {
+      margin-bottom: 1.4rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.8rem;
     }
 
     /* Responsive */
@@ -425,7 +486,10 @@
         padding: 1.2rem;
       }
       .page-title {
-        font-size: 1.7rem;
+        font-size: 1.8rem;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -441,6 +505,45 @@
       <button class="pin-btn" onclick="checkPin()">
         <i class="fas fa-lock-open"></i> Unlock Dashboard
       </button>
+    </div>
+  </div>
+
+  <!-- TRANSACTION MODAL -->
+  <div id="transactionModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add New Transaction</h3>
+      <div class="form-grid">
+        <div>
+          <label for="modalType">Type</label>
+          <select id="modalType">
+            <option value="sale">Sale</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+        <div>
+          <label for="modalAmount">Amount (MVR)</label>
+          <input type="number" id="modalAmount" min="0" step="0.01" placeholder="0.00">
+        </div>
+        <div>
+          <label for="modalDesc">Description</label>
+          <input type="text" id="modalDesc" placeholder="e.g., Wedding Bouquet">
+        </div>
+        <div>
+          <label for="modalDate">Date</label>
+          <input type="date" id="modalDate">
+        </div>
+        <div>
+          <label for="modalPayment">Payment Method</label>
+          <select id="modalPayment">
+            <option value="cash">Cash</option>
+            <option value="transfer">Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn" onclick="saveTransaction()">Save</button>
+      </div>
     </div>
   </div>
 
@@ -460,12 +563,11 @@
       </div>
       
       <ul class="nav-links">
-        <li class="nav-item"><a href="#" class="nav-link active"><i class="fas fa-home"></i> <span class="nav-text">Dashboard</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-file-invoice-dollar"></i> <span class="nav-text">Transactions</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-boxes"></i> <span class="nav-text">Inventory</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-users"></i> <span class="nav-text">Customers</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-chart-line"></i> <span class="nav-text">Reports</span></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-cog"></i> <span class="nav-text">Settings</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> <span class="nav-text">Dashboard</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('transactions')"><i class="fas fa-file-invoice-dollar"></i> <span class="nav-text">Transactions</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('inventory')"><i class="fas fa-boxes"></i> <span class="nav-text">Inventory</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('customers')"><i class="fas fa-users"></i> <span class="nav-text">Customers</span></a></li>
+        <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('reports')"><i class="fas fa-chart-line"></i> <span class="nav-text">Reports</span></a></li>
       </ul>
 
       <div class="user-info-sidebar">
@@ -477,7 +579,7 @@
     <!-- MAIN CONTENT -->
     <main class="main-content">
       <div class="header-bar">
-        <h1 class="page-title">Business Dashboard</h1>
+        <h1 class="page-title" id="currentPageTitle">Business Dashboard</h1>
         <div class="user-info-top">
           <div><strong>Welcome back,</strong></div>
           <div>Abdulla Jailam</div>
@@ -485,80 +587,199 @@
       </div>
 
       <div class="container">
-        <!-- STATS CARDS -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-title">Today's Sales</div>
-            <div class="stat-value" id="todaySales">MVR 0.00</div>
+        <!-- DASHBOARD -->
+        <div id="dashboardSection">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-title">Today's Sales</div>
+              <div class="stat-value" id="todaySales">MVR 0.00</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">This Month Profit</div>
+              <div class="stat-value" style="color: var(--profit);" id="monthProfit">MVR 0.00</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Active Inventory</div>
+              <div class="stat-value" id="inventoryCount">0 items</div>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-title">This Month Profit</div>
-            <div class="stat-value" style="color: var(--profit);" id="monthProfit">MVR 0.00</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-title">Active Inventory</div>
-            <div class="stat-value" id="inventoryCount">0 items</div>
-          </div>
-        </div>
 
-        <!-- CHART -->
-        <div class="chart-container">
-          <canvas id="revenueChart"></canvas>
-        </div>
-
-        <!-- QUICK ACTIONS -->
-        <div class="panel">
-          <div class="panel-header">
-            <h2 class="panel-title">Quick Actions</h2>
+          <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
           </div>
-          <div class="form-grid">
-            <div>
-              <label for="quickType">Transaction Type</label>
-              <select id="quickType">
-                <option value="sale">New Sale</option>
-                <option value="expense">New Expense</option>
-                <option value="inventory">Add Inventory</option>
-              </select>
-            </div>
-            <div>
-              <label for="quickAmount">Amount (MVR)</label>
-              <input type="number" id="quickAmount" placeholder="0.00" min="0" step="0.01">
-            </div>
-            <div>
-              <label for="quickDesc">Description</label>
-              <input type="text" id="quickDesc" placeholder="e.g., Rose Bouquet">
-            </div>
-            <div>
-              <label>&nbsp;</label>
-              <button class="btn" onclick="quickAdd()">
-                <i class="fas fa-plus"></i> Add Record
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Recent Activity</h2>
+              <button class="btn" onclick="openTransactionModal()">
+                <i class="fas fa-plus"></i> Add Transaction
               </button>
             </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="recentActivityBody">
+                <tr><td colspan="5" style="text-align:center;padding:1.5rem;">Loading recent activity…</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- RECENT TRANSACTIONS -->
-        <div class="panel">
-          <div class="panel-header">
-            <h2 class="panel-title">Recent Transactions</h2>
-            <button class="btn" onclick="viewAllTransactions()">
-              <i class="fas fa-list"></i> View All
-            </button>
+        <!-- TRANSACTIONS -->
+        <div id="transactionsSection" style="display:none;">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">All Transactions</h2>
+              <div style="display:flex;gap:0.8rem;">
+                <button class="btn btn-outline" onclick="exportToCSV('transactions')">
+                  <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+                <button class="btn" onclick="openTransactionModal()">
+                  <i class="fas fa-plus"></i> Add Transaction
+                </button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th>Amount (MVR)</th>
+                  <th>Type</th>
+                  <th>Payment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactionsTableBody">
+                <tr><td colspan="7" style="text-align:center;padding:1.5rem;">Loading transactions…</td></tr>
+              </tbody>
+            </table>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="recentTransactionsBody">
-              <tr><td colspan="5" class="status">Loading recent activity…</td></tr>
-            </tbody>
-          </table>
+        </div>
+
+        <!-- INVENTORY -->
+        <div id="inventorySection" style="display:none;">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Inventory Management</h2>
+              <button class="btn" onclick="alert('Feature ready for extension!')">
+                <i class="fas fa-plus"></i> Add Item
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Category</th>
+                  <th>Stock</th>
+                  <th>Unit Price (MVR)</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Rose Bouquet (Premium)</td>
+                  <td>Arrangements</td>
+                  <td>18</td>
+                  <td>1,200.00</td>
+                  <td><span class="status-badge status-instock">In Stock</span></td>
+                  <td class="actions-cell">
+                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
+                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>White Lilies</td>
+                  <td>Flowers</td>
+                  <td>5</td>
+                  <td>350.00</td>
+                  <td><span class="status-badge status-low">Low Stock</span></td>
+                  <td class="actions-cell">
+                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
+                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CUSTOMERS -->
+        <div id="customersSection" style="display:none;">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Customer Directory</h2>
+              <button class="btn" onclick="alert('Feature ready for extension!')">
+                <i class="fas fa-user-plus"></i> Add Customer
+              </button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Last Purchase</th>
+                  <th>Total Spent (MVR)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Aisha Mohamed</td>
+                  <td>+960 7712345</td>
+                  <td>aisha@email.com</td>
+                  <td>12 Oct 2025</td>
+                  <td>4,850.00</td>
+                  <td class="actions-cell">
+                    <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
+                    <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REPORTS -->
+        <div id="reportsSection" style="display:none;">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Financial Reports</h2>
+              <button class="btn" onclick="exportToCSV('reports')">
+                <i class="fas fa-file-export"></i> Export Report
+              </button>
+            </div>
+            <div class="form-grid" style="margin-bottom:2rem;">
+              <div>
+                <label for="reportPeriod">Period</label>
+                <select id="reportPeriod">
+                  <option>Monthly</option>
+                  <option>Quarterly</option>
+                  <option>Yearly</option>
+                </select>
+              </div>
+              <div>
+                <label for="reportYear">Year</label>
+                <select id="reportYear">
+                  <option>2025</option>
+                  <option>2024</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="reportChart"></canvas>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -578,7 +799,7 @@
         document.getElementById('pinLock').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
         localStorage.setItem('bloomkraft_unlocked', 'true');
-        initDashboard();
+        initApp();
       } else {
         alert('❌ Incorrect PIN. Please try again.');
         document.getElementById('pinInput').value = '';
@@ -588,13 +809,17 @@
     if (localStorage.getItem('bloomkraft_unlocked') === 'true') {
       document.getElementById('pinLock').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
-      setTimeout(initDashboard, 300);
+      setTimeout(initApp, 300);
     }
 
     // === SUPABASE ===
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const supabase = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
+
+    let currentTransactionId = null;
+    let revenueChart = null;
+    let reportChart = null;
 
     // === FORMATTING ===
     function formatMVR(value) {
@@ -614,15 +839,85 @@
       });
     }
 
-    // === CHART ===
-    let revenueChart = null;
-    function renderChart(data) {
+    // === NAVIGATION ===
+    function showSection(section) {
+      document.querySelectorAll('[id$="Section"]').forEach(el => el.style.display = 'none');
+      document.getElementById(section + 'Section').style.display = 'block';
+      document.getElementById('currentPageTitle').textContent = 
+        section === 'dashboard' ? 'Business Dashboard' :
+        section === 'transactions' ? 'Transactions' :
+        section === 'inventory' ? 'Inventory' :
+        section === 'customers' ? 'Customers' : 'Reports';
+      
+      // Update active nav
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      event.target.closest('.nav-link').classList.add('active');
+    }
+
+    // === MODAL ===
+    function openTransactionModal(id = null) {
+      currentTransactionId = id;
+      const modal = document.getElementById('transactionModal');
+      const title = document.getElementById('modalTitle');
+      
+      if (id) {
+        // Edit mode
+        title.textContent = 'Edit Transaction';
+        // In real app: fetch data by id and populate fields
+        document.getElementById('modalDesc').value = 'Wedding Bouquet - Premium';
+        document.getElementById('modalAmount').value = '1200.00';
+        document.getElementById('modalType').value = 'sale';
+        document.getElementById('modalPayment').value = 'cash';
+        document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
+      } else {
+        // Add mode
+        title.textContent = 'Add New Transaction';
+        document.getElementById('modalDesc').value = '';
+        document.getElementById('modalAmount').value = '';
+        document.getElementById('modalType').value = 'sale';
+        document.getElementById('modalPayment').value = 'cash';
+        document.getElementById('modalDate').value = new Date().toISOString().substring(0, 10);
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('transactionModal').style.display = 'none';
+    }
+
+    function saveTransaction() {
+      const desc = document.getElementById('modalDesc').value.trim();
+      const amount = parseFloat(document.getElementById('modalAmount').value);
+      const type = document.getElementById('modalType').value;
+      const payment = document.getElementById('modalPayment').value;
+      const date = document.getElementById('modalDate').value;
+
+      if (!desc || isNaN(amount) || amount <= 0) {
+        alert('Please fill all fields with valid data.');
+        return;
+      }
+
+      if (currentTransactionId) {
+        // Edit logic
+        alert('✅ Transaction updated successfully!');
+      } else {
+        // Add logic
+        alert('✅ New transaction added successfully!');
+      }
+      closeModal();
+      loadRecentActivity();
+      loadTransactions();
+    }
+
+    // === CHARTS ===
+    function renderRevenueChart() {
       const ctx = document.getElementById('revenueChart').getContext('2d');
       if (revenueChart) revenueChart.destroy();
 
-      const labels = data.map(d => d.month);
-      const sales = data.map(d => d.sales);
-      const expenses = data.map(d => d.expenses);
+      // Mock data - replace with Supabase query
+      const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      const salesData = [12500, 18900, 21000, 19800, 24500, 26000];
+      const expenseData = [4200, 5100, 6300, 5800, 7200, 6900];
 
       revenueChart = new Chart(ctx, {
         type: 'bar',
@@ -631,14 +926,14 @@
           datasets: [
             {
               label: 'Sales (MVR)',
-              data: sales,
+              data: salesData,
               backgroundColor: '#A8C3B1',
               borderRadius: 6,
               borderSkipped: false,
             },
             {
               label: 'Expenses (MVR)',
-              data: expenses,
+              data: expenseData,
               backgroundColor: '#D97777',
               borderRadius: 6,
               borderSkipped: false,
@@ -649,9 +944,7 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: {
-              position: 'top',
-            }
+            legend: { position: 'top' }
           },
           scales: {
             y: {
@@ -667,79 +960,152 @@
       });
     }
 
-    // === DUMMY CHART DATA (replace with real Supabase query) ===
-    function getMonthlyData() {
-      return [
-        { month: 'Jan', sales: 12500, expenses: 4200 },
-        { month: 'Feb', sales: 18900, expenses: 5100 },
-        { month: 'Mar', sales: 21000, expenses: 6300 },
-        { month: 'Apr', sales: 19800, expenses: 5800 },
-        { month: 'May', sales: 24500, expenses: 7200 },
-        { month: 'Jun', sales: 26000, expenses: 6900 }
-      ];
+    function renderReportChart() {
+      const ctx = document.getElementById('reportChart').getContext('2d');
+      if (reportChart) reportChart.destroy();
+
+      const labels = ['Q1', 'Q2', 'Q3', 'Q4'];
+      const data = [42500, 48900, 51200, 47800];
+
+      reportChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Quarterly Revenue (MVR)',
+            data: data,
+            borderColor: '#D4B8A0',
+            backgroundColor: 'rgba(212, 184, 160, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return 'MVR ' + value.toLocaleString();
+                }
+              }
+            }
+          }
+        }
+      });
     }
 
-    // === DASHBOARD INIT ===
-    async function initDashboard() {
-      // Mock stats
-      document.getElementById('todaySales').textContent = formatMVR(4850.00);
-      document.getElementById('monthProfit').textContent = formatMVR(12600.00);
-      document.getElementById('inventoryCount').textContent = '42 items';
-
-      // Render chart
-      renderChart(getMonthlyData());
-
-      // Load recent transactions
-      loadRecentTransactions();
-    }
-
-    async function loadRecentTransactions() {
-      const tbody = document.getElementById('recentTransactionsBody');
+    // === DATA LOADING ===
+    async function loadRecentActivity() {
+      const tbody = document.getElementById('recentActivityBody');
       // In real app: fetch from Supabase
       tbody.innerHTML = `
         <tr>
           <td>Wedding Bouquet - Premium</td>
           <td>${formatDate(new Date())}</td>
-          <td class="value-sales">+${formatMVR(1200.00)}</td>
+          <td class="value-sales" style="color:#A8C3B1;">+${formatMVR(1200.00)}</td>
           <td><span class="status-badge" style="background:#E8F5E9;color:#2E7D32;">Sale</span></td>
           <td class="actions-cell">
-            <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+            <span class="icon-btn edit" onclick="openTransactionModal('1')"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete" onclick="deleteTransaction('1')"><i class="fas fa-trash"></i></span>
           </td>
         </tr>
         <tr>
           <td>Floral Supplies - Roses</td>
           <td>${formatDate(new Date(Date.now() - 86400000))}</td>
-          <td class="value-expense">–${formatMVR(850.00)}</td>
+          <td class="value-expense" style="color:#D97777;">–${formatMVR(850.00)}</td>
           <td><span class="status-badge" style="background:#FFEBEE;color:#C62828;">Expense</span></td>
           <td class="actions-cell">
-            <span class="icon-btn edit"><i class="fas fa-edit"></i></span>
-            <span class="icon-btn delete"><i class="fas fa-trash"></i></span>
+            <span class="icon-btn edit" onclick="openTransactionModal('2')"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete" onclick="deleteTransaction('2')"><i class="fas fa-trash"></i></span>
           </td>
         </tr>
       `;
     }
 
-    // === QUICK ADD ===
-    function quickAdd() {
-      const type = document.getElementById('quickType').value;
-      const amount = parseFloat(document.getElementById('quickAmount').value);
-      const desc = document.getElementById('quickDesc').value.trim();
-
-      if (!desc || isNaN(amount) || amount <= 0) {
-        alert('Please fill all fields with valid data.');
-        return;
-      }
-
-      // In real app: save to Supabase
-      alert(`✅ ${type === 'sale' ? 'Sale' : type === 'expense' ? 'Expense' : 'Inventory'} added successfully!`);
-      document.getElementById('quickAmount').value = '';
-      document.getElementById('quickDesc').value = '';
-      loadRecentTransactions(); // refresh
+    async function loadTransactions() {
+      const tbody = document.getElementById('transactionsTableBody');
+      // In real app: fetch full list from Supabase
+      tbody.innerHTML = `
+        <tr>
+          <td>#TR-1001</td>
+          <td>Wedding Bouquet - Premium</td>
+          <td>${formatDate(new Date())}</td>
+          <td style="color:#A8C3B1;">${formatMVR(1200.00)}</td>
+          <td>Sale</td>
+          <td>Cash</td>
+          <td class="actions-cell">
+            <span class="icon-btn edit" onclick="openTransactionModal('1')"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete" onclick="deleteTransaction('1')"><i class="fas fa-trash"></i></span>
+          </td>
+        </tr>
+        <tr>
+          <td>#TR-1002</td>
+          <td>Floral Supplies - Roses</td>
+          <td>${formatDate(new Date(Date.now() - 86400000))}</td>
+          <td style="color:#D97777;">${formatMVR(850.00)}</td>
+          <td>Expense</td>
+          <td>Transfer</td>
+          <td class="actions-cell">
+            <span class="icon-btn edit" onclick="openTransactionModal('2')"><i class="fas fa-edit"></i></span>
+            <span class="icon-btn delete" onclick="deleteTransaction('2')"><i class="fas fa-trash"></i></span>
+          </td>
+        </tr>
+      `;
     }
 
-    function viewAllTransactions() {
-      alert('Opening full transactions view...');
+    function deleteTransaction(id) {
+      if (confirm('⚠️ Are you sure you want to delete this transaction?')) {
+        alert('✅ Transaction deleted.');
+        loadRecentActivity();
+        loadTransactions();
+      }
+    }
+
+    // === EXPORT ===
+    function exportToCSV(section) {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      
+      if (section === 'transactions') {
+        csvContent += "ID,Description,Date,Amount (MVR),Type,Payment\n";
+        csvContent += "#TR-1001,Wedding Bouquet - Premium,03 Nov 2025,1,200.00,Sale,Cash\n";
+        csvContent += "#TR-1002,Floral Supplies - Roses,02 Nov 2025,850.00,Expense,Transfer";
+      } else {
+        csvContent += "Period,Revenue (MVR),Expenses (MVR),Profit (MVR)\n";
+        csvContent += "Q1 2025,42500.00,15200.00,27300.00\n";
+        csvContent += "Q2 2025,48900.00,17800.00,31100.00";
+      }
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `bloomkraft_${section}_report.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // === INIT APP ===
+    function initApp() {
+      renderRevenueChart();
+      renderReportChart();
+      loadRecentActivity();
+      loadTransactions();
+
+      // Set today's date in forms
+      const today = new Date().toISOString().substring(0, 10);
+      document.getElementById('modalDate').value = today;
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      const modal = document.getElementById('transactionModal');
+      if (event.target === modal) {
+        closeModal();
+      }
     }
   </script>
 </body>
