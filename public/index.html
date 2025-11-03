@@ -5,8 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bloomkraft – Business Management</title>
+  <!-- External Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -167,6 +171,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .panel-title {
@@ -180,6 +186,7 @@
     .btn-group {
       display: flex;
       gap: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .form-row {
@@ -270,6 +277,21 @@
       background: #95af9e;
     }
 
+    .pdf-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--divider);
+      padding: 0.45rem 0.9rem;
+      border-radius: 9px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .pdf-btn:hover {
+      background: var(--card-light);
+    }
+
     .summary-row {
       display: flex;
       gap: 1.3rem;
@@ -300,7 +322,7 @@
     }
 
     .chart-container {
-      height: 200px;
+      height: 250px;
       margin: 1.5rem 0;
     }
 
@@ -387,6 +409,7 @@
       display: flex;
       gap: 0.75rem;
       margin-top: 0.8rem;
+      flex-wrap: wrap;
     }
 
     .edit-btn, .delete-btn {
@@ -446,6 +469,12 @@
       }
       .btn-group {
         flex-wrap: wrap;
+      }
+      header {
+        padding: 1rem;
+      }
+      .logo-text {
+        font-size: 1.6rem;
       }
     }
   </style>
@@ -520,7 +549,9 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
+            <button class="btn" id="viewToggle" onclick="setView(currentView === 'monthly' ? 'yearly' : 'monthly')">Switch to Yearly</button>
             <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
+            <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
           </div>
         </div>
         <div class="summary-row">
@@ -600,11 +631,12 @@
     const SUPABASE_URL = 'https://bchygqpxmrovtetxwmrp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjaHlncXB4bXJvdnRldHh3bXJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAyMDE0MjgsImV4cCI6MjA3NTc3NzQyOH0.q-FPZb1yqHKBwmPQkJfly49UBNLMJToStsXwrwMVB-M';
     const { createClient } = supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
     let allTransactions = [];
-    let currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
+    let currentFilter = { search: '', startDate: '', endDate: '' };
     let chartInstance = null;
+    let currentView = 'monthly'; // 'monthly' or 'yearly'
 
     // ✅ FORMATTING
     function formatMVR(value) {
@@ -623,6 +655,10 @@
       });
     }
 
+    function formatMonthYear(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+    }
+
     // ✅ FILTERS
     function applyFilters() {
       currentFilter.search = document.getElementById('searchInput').value.toLowerCase();
@@ -635,7 +671,7 @@
       document.getElementById('searchInput').value = '';
       document.getElementById('startDate').value = '';
       document.getElementById('endDate').value = '';
-      currentFilter = { type: 'all', search: '', startDate: '', endDate: '' };
+      currentFilter = { search: '', startDate: '', endDate: '' };
       renderTransactions(allTransactions);
     }
 
@@ -653,14 +689,11 @@
       const list = document.getElementById('transactionList');
       let filtered = [...transactions];
 
-      // Type filter (if you add type buttons later, hook here)
-      // Search filter
       if (currentFilter.search) {
         filtered = filtered.filter(t => 
           t.description.toLowerCase().includes(currentFilter.search)
         );
       }
-      // Date range
       if (currentFilter.startDate) {
         filtered = filtered.filter(t => t.date >= currentFilter.startDate);
       }
@@ -679,6 +712,8 @@
         const sign = isSale ? '+' : '–';
         const paymentText = t.payment_method === 'cash' ? 'Cash' : 'Transfer';
 
+        const invoiceBtn = isSale ? `<button class="pdf-btn" onclick="generateInvoice('${t.id}', '${t.description}', '${t.amount}', '${t.date}', '${t.payment_method}')">📄 Invoice</button>` : '';
+
         return `
           <div class="transaction-card">
             <div class="trans-main">
@@ -691,6 +726,7 @@
                 <span class="payment-tag">${paymentText}</span>
               </div>
               <div class="action-buttons">
+                ${invoiceBtn}
                 <button class="edit-btn" onclick="editTransaction('${t.id}')">Edit</button>
                 <button class="delete-btn" onclick="deleteTransaction('${t.id}')">Delete</button>
               </div>
@@ -700,51 +736,59 @@
       }).join('');
     }
 
-    // ✅ CHART
+    // ✅ CHART (Beautiful Bar Chart)
     function renderChart(transactions) {
       const ctx = document.getElementById('profitChart').getContext('2d');
 
-      // Group by month
-      const monthlyData = {};
+      const groupBy = currentView === 'monthly' ? (t) => t.date.slice(0, 7) : (t) => t.date.slice(0, 4);
+      const formatLabel = currentView === 'monthly' ? (key) => {
+        const d = new Date(key + '-01');
+        return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+      } : (key) => key;
+
+      const grouped = {};
       transactions.forEach(t => {
-        const month = new Date(t.date).toISOString().slice(0,7); // YYYY-MM
-        if (!monthlyData[month]) monthlyData[month] = { sales: 0, expenses: 0 };
-        if (t.type === 'sale') monthlyData[month].sales += t.amount;
-        else monthlyData[month].expenses += t.amount;
+        const key = groupBy(t);
+        if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
+        if (t.type === 'sale') grouped[key].sales += t.amount;
+        else grouped[key].expenses += t.amount;
       });
 
-      const labels = Object.keys(monthlyData).sort();
-      const profits = labels.map(m => monthlyData[m].sales - monthlyData[m].expenses);
+      const labels = Object.keys(grouped).sort();
+      const profitData = labels.map(k => grouped[k].sales - grouped[k].expenses);
 
       if (chartInstance) chartInstance.destroy();
 
       chartInstance = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-          labels: labels.map(m => {
-            const d = new Date(m + '-01');
-            return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-          }),
+          labels: labels.map(formatLabel),
           datasets: [{
-            label: 'Monthly Net Profit (MVR)',
-            data: profits,
-            borderColor: '#A8C3B1',
-            backgroundColor: 'rgba(168, 195, 177, 0.1)',
-            tension: 0.3,
-            fill: true,
-            pointRadius: 4,
-            pointBackgroundColor: '#A8C3B1'
+            label: 'Net Profit (MVR)',
+            data: profitData,
+            backgroundColor: profitData.map(p => p >= 0 ? 'rgba(134, 178, 146, 0.7)' : 'rgba(217, 119, 119, 0.7)'),
+            borderColor: profitData.map(p => p >= 0 ? '#86B292' : '#D97777'),
+            borderWidth: 1,
+            borderRadius: 6,
+            borderSkipped: false
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false }
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `Net Profit: ${formatMVR(context.parsed.y)}`;
+                }
+              }
+            }
           },
           scales: {
             y: {
-              beginAtZero: false,
+              beginAtZero: true,
               grid: { color: 'rgba(0,0,0,0.03)' },
               ticks: { callback: v => `MVR ${v}` }
             },
@@ -754,6 +798,129 @@
           }
         }
       });
+    }
+
+    // ✅ INVOICE PDF GENERATION
+    async function generateInvoice(id, desc, amount, date, method) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const logoText = "Bloomkraft";
+      const formattedDate = new Date(date).toLocaleDateString('en-GB');
+      const paymentMethod = method === 'cash' ? 'Cash' : 'Bank Transfer';
+      const total = parseFloat(amount);
+
+      // Header
+      doc.setFont("Playfair Display", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(62, 58, 53);
+      doc.text(logoText, 20, 20);
+
+      doc.setFont("Inter", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(169, 162, 154);
+      doc.text("Invoice", 170, 20);
+
+      // Customer Info
+      doc.setFontSize(11);
+      doc.setTextColor(62, 58, 53);
+      doc.text("Abdulla Jailam", 20, 35);
+      doc.text("#777488484848848", 20, 42);
+
+      // Invoice Details
+      doc.setFontSize(10);
+      doc.setTextColor(169, 162, 154);
+      doc.text("Invoice Date:", 140, 35);
+      doc.setTextColor(62, 58, 53);
+      doc.text(formattedDate, 170, 35);
+
+      doc.setTextColor(169, 162, 154);
+      doc.text("Payment Method:", 140, 42);
+      doc.setTextColor(62, 58, 53);
+      doc.text(paymentMethod, 170, 42);
+
+      // Divider
+      doc.setDrawColor(245, 239, 232);
+      doc.setLineWidth(0.7);
+      doc.line(20, 50, 190, 50);
+
+      // Item Table Header
+      doc.setFontSize(12);
+      doc.setTextColor(62, 58, 53);
+      doc.text("Description", 20, 60);
+      doc.text("Amount (MVR)", 160, 60);
+
+      // Item
+      doc.setFontSize(11);
+      doc.text(desc, 20, 70);
+      doc.text(formatMVR(total), 160, 70);
+
+      // Total Section
+      doc.setLineWidth(0.5);
+      doc.line(20, 80, 190, 80);
+      doc.setFontSize(14);
+      doc.setFont("Playfair Display", "bold");
+      doc.text("Total:", 120, 95);
+      doc.text(formatMVR(total), 160, 95);
+
+      // Footer
+      doc.setFontSize(9);
+      doc.setFont("Inter", "italic");
+      doc.setTextColor(169, 162, 154);
+      doc.text("Thank you for your business!", 20, 110);
+
+      doc.save(`Bloomkraft_Invoice_${id}.pdf`);
+    }
+
+    // ✅ DASHBOARD PDF EXPORT
+    async function exportDashboardPDF() {
+      showToast('Generating PDF... Please wait.', 'success');
+
+      const dashboardPanel = document.querySelectorAll('.panel')[1]; // Financial Dashboard
+      const originalDisplay = dashboardPanel.style.display;
+      dashboardPanel.style.display = 'block';
+
+      const clone = dashboardPanel.cloneNode(true);
+      clone.style.width = '794px'; // A4 width in px approx
+      clone.style.padding = '20px';
+      clone.style.margin = '0';
+      clone.style.boxShadow = 'none';
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      clone.style.top = '0';
+      clone.style.backgroundColor = 'white';
+      document.body.appendChild(clone);
+
+      try {
+        const canvas = await html2canvas(clone, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true
+        });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 297;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`Bloomkraft_Dashboard_${new Date().toISOString().slice(0,10)}.pdf`);
+        showToast('Dashboard PDF exported!', 'success');
+      } catch (e) {
+        console.error(e);
+        showToast('PDF export failed. Try again.', 'error');
+      } finally {
+        document.body.removeChild(clone);
+        dashboardPanel.style.display = originalDisplay;
+      }
+    }
+
+    // ✅ VIEW TOGGLE
+    function setView(view) {
+      currentView = view;
+      document.getElementById('viewToggle').textContent = 
+        view === 'monthly' ? 'Switch to Yearly' : 'Switch to Monthly';
+      renderSummary(allTransactions);
+      renderChart(allTransactions);
     }
 
     // ✅ SUPABASE FUNCTIONS
@@ -790,7 +957,6 @@
       }
     }
 
-    // ✅ MODAL-BASED EDIT (more professional)
     async function editTransaction(id) {
       const transaction = allTransactions.find(t => t.id === id);
       if (!transaction) return;
@@ -836,7 +1002,6 @@
       }
     }
 
-    // ✅ EXPORT
     function exportToCSV() {
       if (allTransactions.length === 0) {
         showToast('No data to export.', 'error');
@@ -857,10 +1022,41 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('Exported successfully!');
+      showToast('CSV exported successfully!');
     }
 
-    // ✅ FETCH & RENDER
+    function renderSummary(transactions) {
+      const now = new Date();
+      const currentKey = currentView === 'monthly'
+        ? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+        : `${now.getFullYear()}`;
+
+      const relevant = transactions.filter(t => {
+        const key = currentView === 'monthly'
+          ? t.date.slice(0, 7)
+          : t.date.slice(0, 4);
+        return key === currentKey;
+      });
+
+      const sales = relevant.filter(t => t.type === 'sale').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const expenses = relevant.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0);
+      const profit = sales - expenses;
+
+      // Update DOM with colors
+      const salesEl = document.getElementById('totalSales');
+      const expensesEl = document.getElementById('totalExpenses');
+      const profitEl = document.getElementById('netProfit');
+
+      salesEl.textContent = formatMVR(sales);
+      salesEl.style.color = sales > 0 ? 'var(--profit)' : 'var(--text)';
+
+      expensesEl.textContent = formatMVR(expenses);
+      expensesEl.style.color = 'var(--expense)';
+
+      profitEl.textContent = formatMVR(profit);
+      profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
+    }
+
     async function fetchAndRender() {
       showSkeletons();
       try {
@@ -884,22 +1080,11 @@
       }
     }
 
-    function renderSummary(transactions) {
-      const sales = transactions.filter(t => t.type === 'sale').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-      const profit = sales - expenses;
-
-      document.getElementById('totalSales').textContent = formatMVR(sales);
-      document.getElementById('totalExpenses').textContent = formatMVR(expenses);
-      document.getElementById('netProfit').textContent = formatMVR(profit);
-    }
-
     // Initialize
     if (document.getElementById('app').style.display === 'block') {
       fetchAndRender();
     }
 
-    // Auto-refresh filters on input
     document.getElementById('searchInput').addEventListener('input', applyFilters);
   </script>
 </body>
