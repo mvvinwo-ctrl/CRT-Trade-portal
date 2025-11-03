@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -458,6 +457,34 @@
       line-height: 1.6;
     }
 
+    /* TABS FOR SALES / EXPENSES */
+    .tab-container {
+      display: flex;
+      border-bottom: 1px solid var(--divider);
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      border: 1px solid transparent;
+      border-bottom: none;
+      background: var(--card-light);
+      border-radius: 8px 8px 0 0;
+      transition: background 0.2s;
+    }
+
+    .tab.active {
+      background: var(--card);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tab:hover:not(.active) {
+      background: var(--card);
+    }
+
     @media (max-width: 768px) {
       .filter-section, .btn-group {
         flex-direction: column;
@@ -492,7 +519,7 @@
 
     <header>
       <div class="logo-container">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABKdSURBVHhe7d15jF1Vncfx731vX9pO27V0aUtbpLRQKJQiIKKAgoKKi4gLihsqLqhRUYkx0cQYTdyixhijxiQqJpqIi4ooIigKyEJZKgVKWWhL933p3nv3j3M6c5nOzLz33n33vef3SXrfe+7Z5565vzn33HPPORcEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA......" 
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABKdSURBVHhe7d15jF1Vncfx731vX9pO27V0aUtbpLRQKJQiIKKAgoKKi4gLihsqLgqIqoIiigKyEJZKgVKWWhL933p3nv3vef3SXrfe+7Z5565vzn33PPORcEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA......" 
              alt="Bloomkraft Logo">
       </div>
       <div class="user-info">
@@ -545,14 +572,10 @@
         <div class="panel-header">
           <h2 class="panel-title">Financial Dashboard</h2>
           <div class="btn-group">
-            <select id="monthSelector" onchange="updateDashboard()">
-              <option value="">Select Month...</option>
-              <!-- Populated by JS -->
-            </select>
             <input type="date" id="dashStartDate" class="filter-input" style="width:130px; padding:0.6rem; font-size:0.95rem;" onchange="updateDashboard()">
             <input type="date" id="dashEndDate" class="filter-input" style="width:130px; padding:0.6rem; font-size:0.95rem;" onchange="updateDashboard()">
-            <button class="btn export-btn" onclick="exportToCSV()">Export CSV</button>
-            <button class="btn export-btn" onclick="exportDashboardPDF()">PDF Report</button>
+            <button class="btn btn-outline" onclick="applyDashboardFilters()">Apply</button>
+            <button class="btn btn-outline" onclick="resetDashboardFilters()">Reset</button>
           </div>
         </div>
         <div class="summary-row">
@@ -577,6 +600,12 @@
       <div class="panel">
         <div class="panel-header">
           <h2 class="panel-title">Your Records</h2>
+        </div>
+
+        <div class="tab-container">
+          <div class="tab active" data-tab="all" onclick="switchTab('all')">All</div>
+          <div class="tab" data-tab="sale" onclick="switchTab('sale')">Sales</div>
+          <div class="tab" data-tab="expense" onclick="switchTab('expense')">Expenses</div>
         </div>
 
         <div class="filter-section">
@@ -635,7 +664,7 @@
     const supabaseClient = createClient(SUPABASE_URL.trim(), SUPABASE_ANON_KEY.trim());
 
     let allTransactions = [];
-    let currentFilter = { search: '', startDate: '', endDate: '' };
+    let currentFilter = { search: '', startDate: '', endDate: '', tab: 'all' };
     let chartInstance = null;
 
     // ✅ FORMATTING
@@ -667,7 +696,26 @@
       document.getElementById('searchInput').value = '';
       document.getElementById('startDate').value = '';
       document.getElementById('endDate').value = '';
-      currentFilter = { search: '', startDate: '', endDate: '' };
+      currentFilter = { search: '', startDate: '', endDate: '', tab: currentFilter.tab };
+      renderTransactions(allTransactions);
+    }
+
+    // ✅ DASHBOARD DATE FILTERS
+    function applyDashboardFilters() {
+      updateDashboard();
+    }
+
+    function resetDashboardFilters() {
+      document.getElementById('dashStartDate').value = '';
+      document.getElementById('dashEndDate').value = '';
+      updateDashboard();
+    }
+
+    // ✅ TAB SWITCHER
+    function switchTab(tab) {
+      currentFilter.tab = tab;
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
       renderTransactions(allTransactions);
     }
 
@@ -685,11 +733,19 @@
       const list = document.getElementById('transactionList');
       let filtered = [...transactions];
 
+      // Apply tab filter
+      if (currentFilter.tab !== 'all') {
+        filtered = filtered.filter(t => t.type === currentFilter.tab);
+      }
+
+      // Apply search
       if (currentFilter.search) {
         filtered = filtered.filter(t => 
           t.description.toLowerCase().includes(currentFilter.search)
         );
       }
+
+      // Apply date range
       if (currentFilter.startDate) {
         filtered = filtered.filter(t => t.date >= currentFilter.startDate);
       }
@@ -734,29 +790,21 @@
 
     // ✅ CHART & DASHBOARD LOGIC
     function updateDashboard() {
-      const selectedMonth = document.getElementById('monthSelector').value;
       const startDate = document.getElementById('dashStartDate').value;
       const endDate = document.getElementById('dashEndDate').value;
 
-      if (selectedMonth) {
-        document.getElementById('dashStartDate').value = '';
-        document.getElementById('dashEndDate').value = '';
-        const filtered = allTransactions.filter(t => t.date.startsWith(selectedMonth));
-        renderSummary(filtered);
-        renderChart(filtered, selectedMonth);
-      } else if (startDate || endDate) {
-        document.getElementById('monthSelector').value = '';
-        const filtered = allTransactions.filter(t => {
+      let filtered = allTransactions;
+
+      if (startDate || endDate) {
+        filtered = allTransactions.filter(t => {
           if (startDate && t.date < startDate) return false;
           if (endDate && t.date > endDate) return false;
           return true;
         });
-        renderSummary(filtered);
-        renderChart(filtered);
-      } else {
-        renderSummary(allTransactions);
-        renderChart(allTransactions);
       }
+
+      renderSummary(filtered);
+      renderChart(filtered);
     }
 
     function renderSummary(transactions) {
@@ -778,141 +826,67 @@
       profitEl.style.color = profit >= 0 ? 'var(--profit)' : 'var(--expense)';
     }
 
-    function renderChart(transactions, selectedMonth = null) {
+    function renderChart(transactions) {
       const ctx = document.getElementById('profitChart').getContext('2d');
 
       if (chartInstance) chartInstance.destroy();
 
-      if (selectedMonth) {
-        const daily = {};
-        transactions.forEach(t => {
-          if (!daily[t.date]) daily[t.date] = { sales: 0, expenses: 0 };
-          if (t.type === 'sale') daily[t.date].sales += parseFloat(t.amount || 0);
-          else daily[t.date].expenses += parseFloat(t.amount || 0);
-        });
+      const grouped = {};
+      transactions.forEach(t => {
+        const key = t.date.slice(0, 7);
+        if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
+        if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
+        else grouped[key].expenses += parseFloat(t.amount || 0);
+      });
 
-        const labels = Object.keys(daily).sort();
-        const salesData = labels.map(d => daily[d].sales);
-        const expensesData = labels.map(d => daily[d].expenses);
+      const labels = Object.keys(grouped).sort();
+      const salesData = labels.map(k => grouped[k].sales);
+      const expensesData = labels.map(k => grouped[k].expenses);
 
-        chartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels.map(d => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })),
-            datasets: [
-              {
-                label: 'Sales (MVR)',
-                data: salesData,
-                backgroundColor: 'rgba(168, 195, 177, 0.8)',
-                borderColor: '#A8C3B1',
-                borderWidth: 1
-              },
-              {
-                label: 'Expenses (MVR)',
-                data: expensesData,
-                backgroundColor: 'rgba(217, 119, 119, 0.8)',
-                borderColor: '#D97777',
-                borderWidth: 1
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: 'top' },
-              tooltip: {
-                callbacks: {
-                  label: ctx => `${ctx.dataset.label}: ${formatMVR(ctx.parsed.y)}`
-                }
-              }
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels.map(k => {
+            const d = new Date(k + '-01');
+            return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+          }),
+          datasets: [
+            {
+              label: 'Sales (MVR)',
+              data: salesData,
+              backgroundColor: 'rgba(168, 195, 177, 0.8)',
+              borderColor: '#A8C3B1',
+              borderWidth: 1
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.03)' },
-                ticks: { callback: v => `MVR ${v}` }
-              },
-              x: { grid: { display: false } }
+            {
+              label: 'Expenses (MVR)',
+              data: expensesData,
+              backgroundColor: 'rgba(217, 119, 119, 0.8)',
+              borderColor: '#D97777',
+              borderWidth: 1
             }
-          }
-        });
-      } else {
-        const grouped = {};
-        transactions.forEach(t => {
-          const key = t.date.slice(0, 7);
-          if (!grouped[key]) grouped[key] = { sales: 0, expenses: 0 };
-          if (t.type === 'sale') grouped[key].sales += parseFloat(t.amount || 0);
-          else grouped[key].expenses += parseFloat(t.amount || 0);
-        });
-
-        const labels = Object.keys(grouped).sort();
-        const salesData = labels.map(k => grouped[k].sales);
-        const expensesData = labels.map(k => grouped[k].expenses);
-
-        chartInstance = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels.map(k => {
-              const d = new Date(k + '-01');
-              return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-            }),
-            datasets: [
-              {
-                label: 'Sales (MVR)',
-                data: salesData,
-                backgroundColor: 'rgba(168, 195, 177, 0.8)',
-                borderColor: '#A8C3B1',
-                borderWidth: 1
-              },
-              {
-                label: 'Expenses (MVR)',
-                data: expensesData,
-                backgroundColor: 'rgba(217, 119, 119, 0.8)',
-                borderColor: '#D97777',
-                borderWidth: 1
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${formatMVR(ctx.parsed.y)}`
               }
-            ]
+            }
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { position: 'top' },
-              tooltip: {
-                callbacks: {
-                  label: ctx => `${ctx.dataset.label}: ${formatMVR(ctx.parsed.y)}`
-                }
-              }
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(0,0,0,0.03)' },
+              ticks: { callback: v => `MVR ${v}` }
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: { color: 'rgba(0,0,0,0.03)' },
-                ticks: { callback: v => `MVR ${v}` }
-              },
-              x: { grid: { display: false } }
-            }
+            x: { grid: { display: false } }
           }
-        });
-      }
-    }
-
-    // ✅ MONTH SELECTOR POPULATION
-    function populateMonthSelector(transactions) {
-      const monthSelector = document.getElementById('monthSelector');
-      monthSelector.innerHTML = '<option value="">Select Month...</option>';
-      
-      if (!transactions.length) return;
-      
-      const months = [...new Set(transactions.map(t => t.date.slice(0,7)))].sort();
-      
-      months.forEach(month => {
-        const option = document.createElement('option');
-        option.value = month;
-        const date = new Date(month + '-01');
-        option.textContent = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-        monthSelector.appendChild(option);
+        }
       });
     }
 
@@ -1135,7 +1109,6 @@
         renderSummary(allTransactions);
         renderChart(allTransactions);
         renderTransactions(allTransactions);
-        populateMonthSelector(data);
       } catch (err) {
         console.error('Fetch error:', err);
         document.getElementById('transactionList').innerHTML = 
